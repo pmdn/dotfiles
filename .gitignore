@@ -4,3 +4,5 @@
 .emacs.d/eshell/history
 .emacs.d/eshell/lastdir
 .emacs.d/auto-save-list/
+.emacs.d/custom.el
+.emacs.d/transient/
