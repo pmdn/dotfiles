@@ -6,3 +6,4 @@
 .emacs.d/auto-save-list/
 .emacs.d/custom.el
 .emacs.d/transient/
+.emacs.d/projectile-bookmarks.eld

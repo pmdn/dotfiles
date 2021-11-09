@@ -20,7 +20,7 @@
 (setq visible-bell t)
 
 ;; Theme
-(load-theme 'wombat)
+(load-theme 'misterioso)
 
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
@@ -47,12 +47,12 @@
 (use-package diminish
   :ensure t)
 
-;; Ivy / Counsel configuration
+;; Ivy / Counsel / Swiper configuratio. Counsel contains the rest.
 (use-package counsel
   :diminish ivy-mode
-  :diminish counsel-mode
   :demand
   :bind (("C-s" . swiper)
+	 ("M-x" . counsel-M-x)
          :map ivy-minibuffer-map
          ("TAB" . ivy-alt-done)	
          ("C-l" . ivy-alt-done)
@@ -66,8 +66,7 @@
          ("C-k" . ivy-previous-line)
          ("C-d" . ivy-reverse-i-search-kill))
   :config
-  (ivy-mode 1)
-  (counsel-mode 1))
+  (ivy-mode 1))
 
 ;; Enrich Ivy
 (use-package ivy-rich
@@ -78,8 +77,15 @@
 ;; Magit for git
 (use-package magit
   :ensure t
-  :bind (("C-x g" . magit-status)
-         ("C-x C-g" . magit-status)))
+  :bind (("C-x g" . magit-status)))
+
+;; Git gutter.Show git changes.
+(use-package git-gutter
+  :ensure t
+  :defer 0.3
+  :diminish git-gutter-mode
+  :delight
+  :init (global-git-gutter-mode))
 
 ;; To show next commands
 (use-package which-key
@@ -94,3 +100,34 @@
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
+
+;; Htmlize. To retain code coloring at html export
+(use-package htmlize)
+
+;; Pojectile for working with projects
+(use-package projectile
+  :diminish projectile-mode
+  :config (projectile-mode)
+  :custom ((projectile-completion-system 'ivy))
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
+  :init
+  ;; NOTE: Set this to the folder where you keep your Git repos!
+  (when (file-directory-p "~/Projects/Code")
+    (setq projectile-project-search-path '("~/Projects/Code")))
+  (setq projectile-switch-project-action #'projectile-dired))
+
+(use-package counsel-projectile
+  :after projectile
+  :config (counsel-projectile-mode))
+
+;; Easier to see if parenthesis are well closed
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+;; Prettier bullets
+(use-package org-bullets
+  :ensure t
+  :hook (org-mode . org-bullets-mode)
+  ;;:custom
+  ;;(org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
