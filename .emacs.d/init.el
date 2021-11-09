@@ -19,6 +19,18 @@
 ;; Set up the visible bell
 (setq visible-bell t)
 
+;; Show column numbers in mode line and line numbers on window
+(column-number-mode)
+(global-display-line-numbers-mode t)
+
+;; Disable line numbers for some modes
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+                shell-mode-hook
+                treemacs-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
 ;; Theme
 (load-theme 'misterioso)
 
@@ -53,6 +65,8 @@
   :demand
   :bind (("C-s" . swiper)
 	 ("M-x" . counsel-M-x)
+	 ("C-x C-f" . counsel-find-file)
+	 ("C-c C-r" . iny-resume)
          :map ivy-minibuffer-map
          ("TAB" . ivy-alt-done)	
          ("C-l" . ivy-alt-done)
@@ -102,7 +116,8 @@
       `((".*" ,temporary-file-directory t)))
 
 ;; Htmlize. To retain code coloring at html export
-(use-package htmlize)
+(use-package htmlize
+  :ensure t)
 
 ;; Pojectile for working with projects
 (use-package projectile
