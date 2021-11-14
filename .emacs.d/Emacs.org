@@ -16,6 +16,17 @@ The configuration is inspired by [[https://github.com/daviwil/emacs-from-scratch
 
 Emacs has a built in package manager but it doesn't make it easy to automatically install packages on a new system the first time you pull down your configuration.  [[https://github.com/jwiegley/use-package][use-package]] is a really helpful package used in this configuration to make it a lot easier to automate the installation and configuration of everything else we use.
 
+ Syntax example:
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package package-name      ; use the package package-name
+    :straight t                  ; use straight to manage it
+    :init                        ; execute code BEFORE package load
+    (setq foo-variable t)
+    :config                      ; execute code AFTER package load
+    (foo-mode 1)
+  )
+#+END_SRC
+
 #+begin_src emacs-lisp
 
 ;; Initialize package sources
@@ -73,7 +84,9 @@ This section configures basic UI settings that remove unneeded elements to make 
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;; Theme
-(load-theme 'misterioso)
+;(load-theme 'misterioso)
+(use-package sublime-themes
+    :init (load-theme 'spolsky t))
 
 #+end_src
 
@@ -94,6 +107,7 @@ This section contains the basic configuration for =org-mode=.
     (visual-line-mode 1))
 
   (use-package org
+    :pin org
     :hook (org-mode . efs/org-mode-setup)
     :config
     (setq org-ellipsis " ▾")
@@ -103,9 +117,9 @@ This section contains the basic configuration for =org-mode=.
     (setq org-log-into-drawer t)
 
     (setq org-agenda-files
-          '("~/Projects/Code/OrgFiles/Tasks.org"
-            "~/Projects/Code/Habits.org"
-            "~/Projects/Code/OrgFiles/Birthdays.org"))
+          '("~/Nextcloud/Notes/OrgFiles/Tasks.org"
+            "~/Nextcloud/Notes/OrgFiles/Habits.org"
+            "~/Nextcloud/Notes/OrgFiles/Birthdays.org"))
 
     (require 'org-habit)
     (add-to-list 'org-modules 'org-habit)
@@ -186,27 +200,27 @@ This section contains the basic configuration for =org-mode=.
 
     (setq org-capture-templates
       `(("t" "Tasks / Projects")
-        ("tt" "Task" entry (file+olp "~/Projects/Code/OrgFiles/Tasks.org" "Inbox")
+        ("tt" "Task" entry (file+olp "~/Nextcloud/Notes/OrgFiles/Tasks.org" "Inbox")
              "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
         ("j" "Journal Entries")
         ("jj" "Journal" entry
-             (file+olp+datetree "~/Projects/Code/OrgFiles/Journal.org")
+             (file+olp+datetree "~/Nextcloud/Notes/OrgFiles/Journal.org")
              "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
              :clock-in :clock-resume
              :empty-lines 1)
         ("jm" "Meeting" entry
-             (file+olp+datetree "~/Projects/Code/OrgFiles/Journal.org")
+             (file+olp+datetree "~/Nextcloud/Notes/OrgFiles/Journal.org")
              "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
              :clock-in :clock-resume
              :empty-lines 1)
 
         ("w" "Workflows")
-        ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/OrgFiles/Journal.org")
+        ("we" "Checking Email" entry (file+olp+datetree "~/Nextcloud/Notes/OrgFiles/Journal.org")
              "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
         ("m" "Metrics Capture")
-        ("mw" "Weight" table-line (file+headline "~/Projects/Code/OrgFiles/Metrics.org" "Weight")
+        ("mw" "Weight" table-line (file+headline "~Nextcloud/Notes/OrgFiles/Metrics.org" "Weight")
          "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
     (define-key global-map (kbd "C-c j")
@@ -309,6 +323,21 @@ In this section global key bindings are added.
 
 * UI configurations
 
+** Better Modeline
+
+[[https://github.com/seagle0128/doom-modeline][doom-modeline]] is a very attractive and rich (yet still minimal) mode line configuration for Emacs.  The default configuration is quite good but you can check out the [[https://github.com/seagle0128/doom-modeline#customize][configuration options]] for more things you can enable or disable.
+
+*NOTE:* The first time you load your configuration on a new machine, you'll need to run `M-x all-the-icons-install-fonts` so that mode line icons display correctly.
+
+#+begin_src emacs-lisp
+
+(use-package all-the-icons)
+
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
+  :custom ((doom-modeline-height 13)))
+
+#+end_src
 ** Diminish  
 
 [[https://github.com/emacsmirror/diminish][Diminish]] implements hiding or abbreviation of the mode line displays (lighters) of minor-modes.
@@ -375,6 +404,35 @@ In this section global key bindings are added.
   (setq which-key-idle-delay 0.5))
 
 #+end_src
+
+** Dashboard
+
+[[https://github.com/emacs-dashboard/emacs-dashboard][Dashboard]] is an extensible emacs startup screen showing you what’s most important.
+
+#+BEGIN_SRC emacs-lisp
+
+  (use-package dashboard
+    :ensure t
+    :config
+    (dashboard-setup-startup-hook)
+    ; set the title
+    (setq dashboard-banner-logo-title "Bienvenido a Emacs!")
+    ; set the banner
+    (setq dashboard-startup-banner 'logo)
+    ; set the sections I'd like displayed and how many of each
+    (setq dashboard-items '((recents . 5) (projects . 5)))
+    ; center it all
+    (setq dashboard-center-content t)
+    ; don't show shortcut keys
+    (setq dashboard-show-shortcuts t)
+    ; use nice icons for the files
+    (setq dashboard-set-file-icons t)
+    ; use nice section icons
+    (setq dashboard-set-heading-icons t)
+    ; disable the snarky footer
+    (setq dashboard-set-footer nil))
+
+#+END_SRC
 
 * Development
 
@@ -473,6 +531,16 @@ background of code to whatever theme I'm using's background"
 
 #+END_SRC
 
+** Flycheck
 
+[[https://www.flycheck.org/en/latest/][FLycheck]] is a modern on-the-fly syntax checking extension for GNU Emacs.
 
-
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :config
+    (setq-default flycheck-highlighting-mode 'lines)
+    (global-flycheck-mode)
+    (add-hook 'ruby-mode-hook
+      (lambda ()
+        (setq flycheck-disabled-checkers '(ruby-reek)))))
+#+end_src

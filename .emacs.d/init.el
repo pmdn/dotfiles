@@ -47,7 +47,9 @@
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;; Theme
-(load-theme 'misterioso)
+;(load-theme 'misterioso)
+(use-package sublime-themes
+    :init (load-theme 'spolsky t))
 
 ;; Org mode configuration
   (defun efs/org-mode-setup ()
@@ -56,6 +58,7 @@
     (visual-line-mode 1))
 
   (use-package org
+    :pin org
     :hook (org-mode . efs/org-mode-setup)
     :config
     (setq org-ellipsis " ▾")
@@ -65,9 +68,9 @@
     (setq org-log-into-drawer t)
 
     (setq org-agenda-files
-          '("~/Projects/Code/OrgFiles/Tasks.org"
-            "~/Projects/Code/Habits.org"
-            "~/Projects/Code/OrgFiles/Birthdays.org"))
+          '("~/Nextcloud/Notes/OrgFiles/Tasks.org"
+            "~/Nextcloud/Notes/OrgFiles/Habits.org"
+            "~/Nextcloud/Notes/OrgFiles/Birthdays.org"))
 
     (require 'org-habit)
     (add-to-list 'org-modules 'org-habit)
@@ -148,27 +151,27 @@
 
     (setq org-capture-templates
       `(("t" "Tasks / Projects")
-        ("tt" "Task" entry (file+olp "~/Projects/Code/OrgFiles/Tasks.org" "Inbox")
+        ("tt" "Task" entry (file+olp "~/Nextcloud/Notes/OrgFiles/Tasks.org" "Inbox")
              "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
         ("j" "Journal Entries")
         ("jj" "Journal" entry
-             (file+olp+datetree "~/Projects/Code/OrgFiles/Journal.org")
+             (file+olp+datetree "~/Nextcloud/Notes/OrgFiles/Journal.org")
              "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
              :clock-in :clock-resume
              :empty-lines 1)
         ("jm" "Meeting" entry
-             (file+olp+datetree "~/Projects/Code/OrgFiles/Journal.org")
+             (file+olp+datetree "~/Nextcloud/Notes/OrgFiles/Journal.org")
              "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
              :clock-in :clock-resume
              :empty-lines 1)
 
         ("w" "Workflows")
-        ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/OrgFiles/Journal.org")
+        ("we" "Checking Email" entry (file+olp+datetree "~/Nextcloud/Notes/OrgFiles/Journal.org")
              "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
         ("m" "Metrics Capture")
-        ("mw" "Weight" table-line (file+headline "~/Projects/Code/OrgFiles/Metrics.org" "Weight")
+        ("mw" "Weight" table-line (file+headline "~Nextcloud/Notes/OrgFiles/Metrics.org" "Weight")
          "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
     (define-key global-map (kbd "C-c j")
@@ -218,6 +221,12 @@
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
+(use-package all-the-icons)
+
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
+  :custom ((doom-modeline-height 13)))
+
 ;; Diminish minor modes
 (use-package diminish
   :ensure t)
@@ -259,6 +268,27 @@
   (which-key-mode)
   (setq which-key-idle-delay 0.5))
 
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook)
+  ; set the title
+  (setq dashboard-banner-logo-title "Bienvenido a Emacs!")
+  ; set the banner
+  (setq dashboard-startup-banner 'logo)
+  ; set the sections I'd like displayed and how many of each
+  (setq dashboard-items '((recents . 5) (projects . 5)))
+  ; center it all
+  (setq dashboard-center-content t)
+  ; don't show shortcut keys
+  (setq dashboard-show-shortcuts t)
+  ; use nice icons for the files
+  (setq dashboard-set-file-icons t)
+  ; use nice section icons
+  (setq dashboard-set-heading-icons t)
+  ; disable the snarky footer
+  (setq dashboard-set-footer nil))
+
 ;; Magit for git
 (use-package magit
   :ensure t
@@ -296,3 +326,28 @@
 ;; Htmlize. To retain code coloring at html export
 (use-package htmlize
   :ensure t)
+  
+;; To retain the background color of the used theme
+
+(defun my/org-inline-css-hook (exporter)
+  "Insert custom inline css to automatically set the
+background of code to whatever theme I'm using's background"
+  (when (eq exporter 'html)
+    (let* ((my-pre-bg (face-background 'default))
+           (my-pre-fg (face-foreground 'default)))
+      (setq
+       org-html-head-extra
+       (concat
+        org-html-head-extra
+        (format "<style type=\"text/css\">\n pre.src {background-color: %s; color: %s;}</style>\n"
+                my-pre-bg my-pre-fg))))))
+
+(add-hook 'org-export-before-processing-hook 'my/org-inline-css-hook)
+
+(use-package flycheck
+  :config
+  (setq-default flycheck-highlighting-mode 'lines)
+  (global-flycheck-mode)
+  (add-hook 'ruby-mode-hook
+    (lambda ()
+      (setq flycheck-disabled-checkers '(ruby-reek)))))
