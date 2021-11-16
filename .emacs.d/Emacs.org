@@ -4,7 +4,7 @@
 * Welcome
 
 This is my configuration, now written as an Org Mode document.  This file generates [[file:init.el][init.el]] which can be loaded by Emacs at startup.
-The configuration is inspired by [[https://github.com/daviwil/emacs-from-scratch][System Crafters]].
+The configuration is inspired by [[https://github.com/daviwil/emacs-from-scratch][System Crafters]], [[https://github.com/hrs][Harry R. Schwartz]], [[https://github.com/geolessel][Geoffrey Lessel]] and more.
 
 #+begin_src emacs-lisp
 
@@ -88,7 +88,28 @@ This section configures basic UI settings that remove unneeded elements to make 
 (use-package sublime-themes
     :init (load-theme 'spolsky t))
 
+;; When something changes a file, automatically refresh the buffer containing it.
+(global-auto-revert-mode t)
+
+;; Visually indicate matching pairs of parentheses.
+(show-paren-mode t)
+
+;; global-hl-line-mode softly highlights the background color of the line containing point. It makes it a bit easier to find point, and it’s useful when pairing or presenting code.
+(global-hl-line-mode 1)
+
 #+end_src
+
+
+* Who am I?
+
+Personal information.
+
+#+BEGIN_SRC emacs-lisp
+
+(setq user-full-name "Patxi Madina"
+          user-mail-address "pmdn@mailbox.org")
+
+#+END_SRC
 
 * Org Mode
 
@@ -536,11 +557,8 @@ background of code to whatever theme I'm using's background"
 [[https://www.flycheck.org/en/latest/][FLycheck]] is a modern on-the-fly syntax checking extension for GNU Emacs.
 
 #+begin_src emacs-lisp
-  (use-package flycheck
-    :config
-    (setq-default flycheck-highlighting-mode 'lines)
-    (global-flycheck-mode)
-    (add-hook 'ruby-mode-hook
-      (lambda ()
-        (setq flycheck-disabled-checkers '(ruby-reek)))))
+
+(use-package flycheck
+  :init (global-flycheck-mode)) 
+  
 #+end_src

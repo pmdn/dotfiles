@@ -51,6 +51,18 @@
 (use-package sublime-themes
     :init (load-theme 'spolsky t))
 
+;; When something changes a file, automatically refresh the buffer containing it.
+(global-auto-revert-mode t)
+
+;; Visually indicate matching pairs of parentheses.
+(show-paren-mode t)
+
+;; global-hl-line-mode softly highlights the background color of the line containing point. It makes it a bit easier to find point, and it’s useful when pairing or presenting code.
+(global-hl-line-mode 1)
+
+(setq user-full-name "Patxi Madina"
+          user-mail-address "pmdn@mailbox.org")
+
 ;; Org mode configuration
   (defun efs/org-mode-setup ()
     (org-indent-mode)
@@ -345,9 +357,4 @@ background of code to whatever theme I'm using's background"
 (add-hook 'org-export-before-processing-hook 'my/org-inline-css-hook)
 
 (use-package flycheck
-  :config
-  (setq-default flycheck-highlighting-mode 'lines)
-  (global-flycheck-mode)
-  (add-hook 'ruby-mode-hook
-    (lambda ()
-      (setq flycheck-disabled-checkers '(ruby-reek)))))
+  :init (global-flycheck-mode))
