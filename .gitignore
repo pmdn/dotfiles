@@ -7,3 +7,6 @@
 .emacs.d/custom.el
 .emacs.d/transient/
 .emacs.d/projectile-bookmarks.eld
+.emacs.d/.python-environments/
+.emacs.d/elpy/
+.emacs.d/recentf

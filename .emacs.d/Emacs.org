@@ -111,6 +111,19 @@ Personal information.
 
 #+END_SRC
 
+* Custom functions
+
+Funtions to be used.
+
+#+BEGIN_SRC  emacs-lisp
+
+(defun hrs/append-to-path (path)
+  "Add a path both to the $PATH variable and to Emacs' exec-path."
+  (setenv "PATH" (concat (getenv "PATH") ":" path))
+  (add-to-list 'exec-path path))
+
+#+END_SRC
+
 * Org Mode
 
 [[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
@@ -579,9 +592,34 @@ background of code to whatever theme I'm using's background"
 #+end_src
 ** Python
 
+Make sure you install virtualenv by: ~sudo apt install virtualenv~
+Also install pip: ~sudo apt install python3-pip~
+And also install pep8: ~pip3 install autopep8~
+And jedi: ~pip3 install jedi~ 
+And flake8: ~sudo apt install flake8~
+
+
+Set interpreter to python 3.
+
+#+BEGIN_SRC  emacs-lisp
+
+(setq py-interpreter "python3")
+(setq elpy-rpc-python-command "python3")
+
+#+END_SRC
+
+
 #+begin_src emacs-lisp
   (use-package python-mode)
 #+end_src
+
+Add =~/.local/bin= to load path. That’s where ~virtualenv~ is installed, and we’ll need that for ~jedi~.
+
+#+BEGIN_SRC  emacs-lisp
+
+(hrs/append-to-path "~/.local/bin")
+
+#+END_SRC
 
 Enable =elpy=. This provides automatic indentation, auto-completion, syntax
 checking, etc.
@@ -600,7 +638,21 @@ Use =flycheck= for syntax checking:
 Format code according to PEP8 on save:
 
 #+begin_src emacs-lisp
+
   (use-package py-autopep8)
   (require 'py-autopep8)
   (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+
 #+end_src
+
+Configure Jedi along with the associated company mode:
+
+#+BEGIN_SRC  emacs-lisp
+
+(use-package company-jedi)
+(add-to-list 'company-backends 'company-jedi)
+
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+
+#+END_SRC

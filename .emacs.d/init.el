@@ -64,6 +64,11 @@
 (setq user-full-name "Patxi Madina"
           user-mail-address "pmdn@mailbox.org")
 
+(defun hrs/append-to-path (path)
+  "Add a path both to the $PATH variable and to Emacs' exec-path."
+  (setenv "PATH" (concat (getenv "PATH") ":" path))
+  (add-to-list 'exec-path path))
+
 ;; Org mode configuration
   (defun efs/org-mode-setup ()
     (org-indent-mode)
@@ -367,7 +372,12 @@ background of code to whatever theme I'm using's background"
 (use-package flycheck
  :init (global-flycheck-mode))
 
+(setq py-interpreter "python3")
+(setq elpy-rpc-python-command "python3")
+
 (use-package python-mode)
+
+(hrs/append-to-path "~/.local/bin")
 
 (use-package elpy)
 (elpy-enable)
@@ -377,3 +387,9 @@ background of code to whatever theme I'm using's background"
 (use-package py-autopep8)
 (require 'py-autopep8)
 (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+
+(use-package company-jedi)
+(add-to-list 'company-backends 'company-jedi)
+
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
