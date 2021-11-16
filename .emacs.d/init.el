@@ -59,6 +59,7 @@
 
 ;; global-hl-line-mode softly highlights the background color of the line containing point. It makes it a bit easier to find point, and it’s useful when pairing or presenting code.
 (global-hl-line-mode 1)
+(set-face-attribute hl-line-face nil :underline nil)
 
 (setq user-full-name "Patxi Madina"
           user-mail-address "pmdn@mailbox.org")
@@ -301,6 +302,13 @@
   ; disable the snarky footer
   (setq dashboard-set-footer nil))
 
+(use-package company
+  :custom
+  (company-idle-delay 0)
+  (company-tooltip-align-annotations t)
+  :config
+  (add-hook 'prog-mode-hook 'company-mode))
+
 ;; Magit for git
 (use-package magit
   :ensure t
@@ -357,4 +365,15 @@ background of code to whatever theme I'm using's background"
 (add-hook 'org-export-before-processing-hook 'my/org-inline-css-hook)
 
 (use-package flycheck
-  :init (global-flycheck-mode))
+ :init (global-flycheck-mode))
+
+(use-package python-mode)
+
+(use-package elpy)
+(elpy-enable)
+
+(add-hook 'elpy-mode-hook 'flycheck-mode)
+
+(use-package py-autopep8)
+(require 'py-autopep8)
+(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)

@@ -96,9 +96,9 @@ This section configures basic UI settings that remove unneeded elements to make 
 
 ;; global-hl-line-mode softly highlights the background color of the line containing point. It makes it a bit easier to find point, and it’s useful when pairing or presenting code.
 (global-hl-line-mode 1)
+(set-face-attribute hl-line-face nil :underline nil)
 
 #+end_src
-
 
 * Who am I?
 
@@ -455,6 +455,21 @@ In this section global key bindings are added.
 
 #+END_SRC
 
+** Company
+
+[[https://company-mode.github.io/][Company]] is a text completion framework for Emacs. The name stands for "complete anything". It uses pluggable back-ends and front-ends to retrieve and display completion candidates.
+
+#+BEGIN_SRC  emacs-lisp
+
+(use-package company
+  :custom
+  (company-idle-delay 0)
+  (company-tooltip-align-annotations t)
+  :config
+  (add-hook 'prog-mode-hook 'company-mode))
+
+
+#+END_SRC
 * Development
 
 ** Magit
@@ -559,6 +574,33 @@ background of code to whatever theme I'm using's background"
 #+begin_src emacs-lisp
 
 (use-package flycheck
-  :init (global-flycheck-mode)) 
+ :init (global-flycheck-mode)) 
   
+#+end_src
+** Python
+
+#+begin_src emacs-lisp
+  (use-package python-mode)
+#+end_src
+
+Enable =elpy=. This provides automatic indentation, auto-completion, syntax
+checking, etc.
+
+#+begin_src emacs-lisp
+  (use-package elpy)
+  (elpy-enable)
+#+end_src
+
+Use =flycheck= for syntax checking:
+
+#+begin_src emacs-lisp
+  (add-hook 'elpy-mode-hook 'flycheck-mode)
+#+end_src
+
+Format code according to PEP8 on save:
+
+#+begin_src emacs-lisp
+  (use-package py-autopep8)
+  (require 'py-autopep8)
+  (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 #+end_src
