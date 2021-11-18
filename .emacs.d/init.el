@@ -46,11 +46,6 @@
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-;; Theme
-;(load-theme 'misterioso)
-(use-package sublime-themes
-    :init (load-theme 'spolsky t))
-
 ;; When something changes a file, automatically refresh the buffer containing it.
 (global-auto-revert-mode t)
 
@@ -226,6 +221,12 @@
 
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
 
+(use-package org-download
+  :ensure t
+  :config
+  ;; add support to dired
+  (add-hook 'dired-mode-hook 'org-download-enable))
+
 ;; Custom command stored on its own file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
@@ -239,11 +240,21 @@
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
+(use-package doom-themes
+  :init (load-theme 'doom-one t))
+
+(use-package doom-themes
+  :init (load-theme 'doom-one t))
+
+(use-package sublime-themes)
+
 (use-package all-the-icons)
 
 (use-package doom-modeline
   :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 13)))
+  :custom ((doom-modeline-height 13)
+    (doom-modeline-buffer-file-name-style 'truncate-except-project)
+    (doom-modeline-bar-width 6)))
 
 ;; Diminish minor modes
 (use-package diminish

@@ -83,11 +83,6 @@ This section configures basic UI settings that remove unneeded elements to make 
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-;; Theme
-;(load-theme 'misterioso)
-(use-package sublime-themes
-    :init (load-theme 'spolsky t))
-
 ;; When something changes a file, automatically refresh the buffer containing it.
 (global-auto-revert-mode t)
 
@@ -327,6 +322,20 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 
 #+end_src
 
+** Org download
+
+[[https://github.com/abo-abo/org-download][org-download]]  facilitates inserting images into org files.
+
+#+BEGIN_SRC  emacs-lisp
+
+(use-package org-download
+  :ensure t
+  :config
+  ;; add support to dired
+  (add-hook 'dired-mode-hook 'org-download-enable))
+
+#+END_SRC
+
 * Directory organizing
 This sections makes sure the directory stays organized
 
@@ -357,6 +366,38 @@ In this section global key bindings are added.
 
 * UI configurations
 
+** Color theme
+
+Default themes may be good options:
+
+;(load-theme 'misterioso)
+
+#+begin_src emacs-lisp
+
+(use-package doom-themes
+  :init (load-theme 'doom-one t))
+
+#+end_src
+
+[[https://github.com/hlissner/emacs-doom-themes][doom-themes]] is a great set of themes with a lot of variety and support for many different Emacs modes.  Taking a look at the [[https://github.com/hlissner/emacs-doom-themes/tree/screenshots][screenshots]] might help you decide which one you like best.  You can also run =M-x counsel-load-theme= to choose between them easily.
+
+#+begin_src emacs-lisp
+
+(use-package doom-themes
+  :init (load-theme 'doom-one t))
+
+#+end_src
+
+[[https://github.com/owainlewis/emacs-color-themes][Emacs color themes]]  is a package of themes named after influential programmers. Spolsky is a good one.
+
+#+BEGIN_SRC  emacs-lisp
+
+(use-package sublime-themes)
+
+#+END_SRC
+
+
+
 ** Better Modeline
 
 [[https://github.com/seagle0128/doom-modeline][doom-modeline]] is a very attractive and rich (yet still minimal) mode line configuration for Emacs.  The default configuration is quite good but you can check out the [[https://github.com/seagle0128/doom-modeline#customize][configuration options]] for more things you can enable or disable.
@@ -369,7 +410,9 @@ In this section global key bindings are added.
 
 (use-package doom-modeline
   :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 13)))
+  :custom ((doom-modeline-height 13)
+    (doom-modeline-buffer-file-name-style 'truncate-except-project)
+    (doom-modeline-bar-width 6)))
 
 #+end_src
 ** Diminish  
