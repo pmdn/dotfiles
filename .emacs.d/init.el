@@ -75,7 +75,11 @@
     :hook (org-mode . efs/org-mode-setup)
     :config
     (setq org-ellipsis " ▾")
-
+    
+;; Fix image width and show inline images
+    (setq org-image-actual-width 500)
+    (setq org-startup-with-inline-images t)
+    
     (setq org-agenda-start-with-log-mode t)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
@@ -223,6 +227,11 @@
 
 (use-package org-download
   :ensure t
+  :custom
+    (org-download-method 'directory)
+    (org-download-image-dir "images")
+    (org-download-heading-lvl nil)
+    (org-download-timestamp "%Y%m%d-%H%M%S_")
   :config
   ;; add support to dired
   (add-hook 'dired-mode-hook 'org-download-enable))
