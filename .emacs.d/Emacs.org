@@ -133,6 +133,7 @@ This section contains the basic configuration for =org-mode=.
   (defun efs/org-mode-setup ()
     (org-indent-mode)
     (variable-pitch-mode 1)
+    (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
     (visual-line-mode 1))
 
   (use-package org
@@ -657,6 +658,7 @@ Set interpreter to python 3.
 
 (setq py-interpreter "python3")
 (setq elpy-rpc-python-command "python3")
+(setq org-babel-python-command "python3")
 
 #+END_SRC
 

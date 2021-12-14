@@ -68,6 +68,7 @@
   (defun efs/org-mode-setup ()
     (org-indent-mode)
     (variable-pitch-mode 1)
+    (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
     (visual-line-mode 1))
 
   (use-package org
@@ -394,6 +395,7 @@ background of code to whatever theme I'm using's background"
 
 (setq py-interpreter "python3")
 (setq elpy-rpc-python-command "python3")
+(setq org-babel-python-command "python3")
 
 (use-package python-mode)
 
