@@ -86,9 +86,9 @@
     (setq org-log-into-drawer t)
 
     (setq org-agenda-files
-          '("~/Nextcloud/Notes/OrgFiles/Tasks.org"
-            "~/Nextcloud/Notes/OrgFiles/Habits.org"
-            "~/Nextcloud/Notes/OrgFiles/Birthdays.org"))
+          '("~/Sync/Sincronizadas/Notes/OrgFiles/Tasks.org"
+            "~/Sync/Sincronizadas/Notes/OrgFiles/Habits.org"
+            "~/Sync/Sincronizadas/Notes/OrgFiles/Birthdays.org"))
 
     (require 'org-habit)
     (add-to-list 'org-modules 'org-habit)
@@ -169,27 +169,27 @@
 
     (setq org-capture-templates
       `(("t" "Tasks / Projects")
-        ("tt" "Task" entry (file+olp "~/Nextcloud/Notes/OrgFiles/Tasks.org" "Inbox")
+        ("tt" "Task" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Tasks.org" "Inbox")
              "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
         ("j" "Journal Entries")
         ("jj" "Journal" entry
-             (file+olp+datetree "~/Nextcloud/Notes/OrgFiles/Journal.org")
+             (file+olp+datetree "~/Sync/Sincronizadas/Notes/OrgFiles/Journal.org")
              "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
              :clock-in :clock-resume
              :empty-lines 1)
         ("jm" "Meeting" entry
-             (file+olp+datetree "~/Nextcloud/Notes/OrgFiles/Journal.org")
+             (file+olp+datetree "~/Sync/Sincronizadas/Notes/OrgFiles/Journal.org")
              "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
              :clock-in :clock-resume
              :empty-lines 1)
 
         ("w" "Workflows")
-        ("we" "Checking Email" entry (file+olp+datetree "~/Nextcloud/Notes/OrgFiles/Journal.org")
+        ("we" "Checking Email" entry (file+olp+datetree "~/Sync/Sincronizadas/Notes/OrgFiles/Journal.org")
              "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
         ("m" "Metrics Capture")
-        ("mw" "Weight" table-line (file+headline "~Nextcloud/Notes/OrgFiles/Metrics.org" "Weight")
+        ("mw" "Weight" table-line (file+headline "~/Sync/Sincronizadas/Notes/OrgFiles/Metrics.org" "Weight")
          "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
     (define-key global-map (kbd "C-c j")
@@ -251,10 +251,7 @@
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 (use-package doom-themes
-  :init (load-theme 'doom-one t))
-
-(use-package doom-themes
-  :init (load-theme 'doom-one t))
+  :init (load-theme 'doom-nord t))
 
 (use-package sublime-themes)
 
