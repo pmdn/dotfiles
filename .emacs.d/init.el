@@ -369,3 +369,20 @@ background of code to whatever theme I'm using's background"
 
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
+
+;; Configure Elfeed
+(use-package elfeed
+  :ensure t
+  :config
+  (setq elfeed-db-directory (expand-file-name "elfeed" user-emacs-directory)
+        elfeed-show-entry-switch 'display-buffer)
+  (setq elfeed-search-filter "@1-months-ago +unread")
+  :bind
+  ("C-x w" . elfeed ))
+
+;; Configure Elfeed with org mode
+ (use-package elfeed-org
+   :ensure t
+   :config
+   (elfeed-org)
+   (setq rmh-elfeed-org-files (list "~/Sync/Sincronizadas/Notes/OrgFiles/elfeed.org")))

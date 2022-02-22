@@ -10,3 +10,6 @@
 .emacs.d/.python-environments/
 .emacs.d/elpy/
 .emacs.d/recentf
+/.emacs.d/bookmarks
+/.emacs.d/elfeed/
+/.emacs.d/url/
