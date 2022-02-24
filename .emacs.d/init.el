@@ -56,6 +56,12 @@
 (global-hl-line-mode 1)
 (set-face-attribute hl-line-face nil :underline nil)
 
+;; Set tab width to 4 spaces and Allman indentation (bsd) in C
+(setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
+(setq c-default-style "bsd"
+      c-basic-offset 4)
+
 (setq user-full-name "Patxi Madina"
           user-mail-address "pmdn@mailbox.org")
 
@@ -96,6 +102,13 @@
     (setq org-todo-keywords
       '((sequence "TODO(t)" "ACTIVE(a)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELLED(c@)")))
 
+    (setq org-todo-keyword-faces
+     '(("TODO".(:foreground "DarkSeaGreen" :weight bold))
+	   ("ACTIVE".(:foreground "MediumSeaGreen" :weight bold))
+       ("WAITING".(:foreground "peru" :weight bold))
+       ("DONE".(:foreground "azure" :weight bold))
+       ("CANCELLED".(:foreground "IndianRed" :weight bold))))
+
     (setq org-refile-targets
       '(("Archive.org" :maxlevel . 1)))
 
@@ -117,19 +130,19 @@
          ("idea" . ?i)))
 
     ;; Configure custom agenda views
+    (setq org-tags-match-list-sublevels 'indented)
     (setq org-agenda-custom-commands
      '(("d" "Dashboard"
        ((agenda "" ((org-deadline-warning-days 7)))
-        (todo "TODO"
-          ((org-agenda-overriding-header "Todo Tasks")))
+        (todo "TODO" ((org-agenda-overriding-header "Todo Tasks")))
         (todo "ACTIVE" ((org-agenda-overriding-header "Active Tasks")))
-	(todo "WAITING" ((org-agenda-overriding-header "Waiting Tasks")))))
+        (todo "WAITING" ((org-agenda-overriding-header "Waiting Tasks")))))
       
       ("w" "Workflow Status"
        ((todo "TODO"
               ((org-agenda-overriding-header "Todo")
                (org-agenda-files org-agenda-files)))
-	(todo "WAITING"
+        (todo "WAITING"
               ((org-agenda-overriding-header "Waiting on External")
                (org-agenda-files org-agenda-files)))
         (todo "ACTIVE"
@@ -144,10 +157,11 @@
 
     ;; Capture templates
     (setq org-capture-templates
-		`(("q" "Quick Notes")
+	   `(("q" "Quick Notes")
           ("qq" "Note" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org" "Inbox")
               "* %?\n  %U\n  %i" :empty-lines 1)))
 
+    ;; Set global key for capture
     (define-key global-map (kbd "C-c q")
       (lambda () (interactive) (org-capture nil "qq"))))
 
@@ -270,7 +284,7 @@
   ; set the banner
   (setq dashboard-startup-banner 'logo)
   ; set the sections I'd like displayed and how many of each
-  (setq dashboard-items '((recents . 5) (projects . 5)))
+  (setq dashboard-items '((recents . 5) (projects . 5) (bookmarks . 5)))
   ; center it all
   (setq dashboard-center-content t)
   ; don't show shortcut keys
