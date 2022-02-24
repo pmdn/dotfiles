@@ -109,8 +109,11 @@
        ("DONE".(:foreground "azure" :weight bold))
        ("CANCELLED".(:foreground "IndianRed" :weight bold))))
 
+   (setq org-refile-use-outline-path 'file)
+   (setq org-outline-path-complete-in-steps nil)
     (setq org-refile-targets
-      '(("Archive.org" :maxlevel . 1)))
+      '(("Archive.org" :maxlevel . 1)
+      (org-agenda-files :maxlevel . 9)))
 
     ;; Save Org buffers after refiling!
     (advice-add 'org-refile :after 'org-save-all-org-buffers)
