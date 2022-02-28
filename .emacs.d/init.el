@@ -100,12 +100,13 @@
     (setq org-habit-graph-column 60)
 
     (setq org-todo-keywords
-      '((sequence "TODO(t)" "ACTIVE(a)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELLED(c@)")))
+      '((sequence "TODO(t)" "ACTIVE(a!)" "WAITING(w@/!)" "DELEGATED(d@/!)" "|" "DONE(D!)" "CANCELLED(C@)")))
 
     (setq org-todo-keyword-faces
      '(("TODO".(:foreground "DarkSeaGreen" :weight bold))
-	   ("ACTIVE".(:foreground "MediumSeaGreen" :weight bold))
+	   ("ACTIVE".(:foreground "LightSeaGreen" :weight bold))
        ("WAITING".(:foreground "peru" :weight bold))
+       ("DELEGATED".(:foreground "CornlowerBlue" :weight bold))
        ("DONE".(:foreground "azure" :weight bold))
        ("CANCELLED".(:foreground "IndianRed" :weight bold))))
 
@@ -139,17 +140,21 @@
        ((agenda "" ((org-deadline-warning-days 7)))
         (todo "TODO" ((org-agenda-overriding-header "Todo Tasks")))
         (todo "ACTIVE" ((org-agenda-overriding-header "Active Tasks")))
-        (todo "WAITING" ((org-agenda-overriding-header "Waiting Tasks")))))
+        (todo "WAITING" ((org-agenda-overriding-header "Waiting Tasks")))
+        (todo "DELEGATED" ((org-agenda-overriding-header "Delegated Tasks")))))
       
       ("w" "Workflow Status"
        ((todo "TODO"
               ((org-agenda-overriding-header "Todo")
                (org-agenda-files org-agenda-files)))
+        (todo "ACTIVE"
+              ((org-agenda-overriding-header "Active Tasks")
+               (org-agenda-files org-agenda-files)))
         (todo "WAITING"
               ((org-agenda-overriding-header "Waiting on External")
                (org-agenda-files org-agenda-files)))
-        (todo "ACTIVE"
-              ((org-agenda-overriding-header "Active Tasks")
+        (todo "DELEGATED"
+              ((org-agenda-overriding-header "Delegated on External")
                (org-agenda-files org-agenda-files)))
         (todo "DONE"
               ((org-agenda-overriding-header "Completed Tasks")
@@ -160,13 +165,16 @@
 
     ;; Capture templates
     (setq org-capture-templates
-	   `(("q" "Quick Notes")
-          ("qq" "Note" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org" "Inbox")
-              "* %?\n  %U\n  %i" :empty-lines 1)))
+		`(("q" "Quick Note" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org" "Inbox")
+           "* %?\n  %U\n  %i" :empty-lines 1)
+          ("b" "Books" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org" "Libros" "Lista Lectura")
+           "*** %\\1 %?\n :PROPERTIES:\n :Título: %^{Título}\n :Subtítulo: %^{Subtítulo}\n :Serie: %^{Serie}\n :Autor: %^{Autor [Apellido, Nombre]}\n :Año: %^{Año}\n :Categoría: %^{Categoría}\n :Puntuación: %^{Puntuación [1-5]}\n :Fecha: %^{Fecha Lectura [dd/mm/aaaa]}\n :Estado: %^{Estado|Leído|Leyendo|Pendiente}\n :END: \n" :empty-lines 1 :prepend t)))
 
     ;; Set global key for capture
     (define-key global-map (kbd "C-c q")
-      (lambda () (interactive) (org-capture nil "qq"))))
+      (lambda () (interactive) (org-capture nil "q")))
+    (define-key global-map (kbd "C-c b")
+      (lambda () (interactive) (org-capture nil "b"))))
 
 (use-package org-bullets
   :after org
