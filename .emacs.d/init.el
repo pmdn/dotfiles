@@ -319,13 +319,19 @@
   :ensure t
   :bind (("C-x g" . magit-status)))
 
-;; Git gutter.Show git changes.
+;;Git gutter.Show git changes.
 (use-package git-gutter
   :ensure t
   :defer 0.3
   :diminish git-gutter-mode
   :delight
   :init (global-git-gutter-mode))
+
+(use-package git-gutter-fringe
+  :config
+  (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
 
 ;; Pojectile for working with projects
 (use-package projectile

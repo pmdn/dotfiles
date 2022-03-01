@@ -535,17 +535,23 @@ Default themes may be good options:
 
 ** GitGutter
 
-[[https://github.com/emacsorphanage/git-gutter][GitGutter]] is a pluggin to show information about files in a git repository.
+[[https://github.com/emacsorphanage/git-gutter][GitGutter]] is a pluggin to show information about files in a git repository. [[https://ianyepan.github.io/posts/emacs-git-gutter/][Here]] is a modern looking config using [[https://github.com/emacsorphanage/git-gutter-fringe][git-gutter-fringe]].
 
 #+BEGIN_SRC emacs-lisp
 
-;; Git gutter.Show git changes.
-(use-package git-gutter
-  :ensure t
-  :defer 0.3
-  :diminish git-gutter-mode
-  :delight
-  :init (global-git-gutter-mode))
+  ;;Git gutter.Show git changes.
+  (use-package git-gutter
+    :ensure t
+    :defer 0.3
+    :diminish git-gutter-mode
+    :delight
+    :init (global-git-gutter-mode))
+
+  (use-package git-gutter-fringe
+    :config
+    (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
+    (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
+    (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
 
 #+END_SRC
 
@@ -717,4 +723,6 @@ Configure Jedi along with the associated company mode:
      (setq rmh-elfeed-org-files (list "~/Sync/Sincronizadas/Notes/OrgFiles/elfeed.org")))
 
 #+END_SRC
+
+
 
