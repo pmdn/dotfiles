@@ -167,13 +167,17 @@
     ;; Capture templates
     (setq org-capture-templates
 		`(("q" "Quick Note" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org" "Inbox")
-           "* %?\n  %U\n  %i" :empty-lines 1)
-          ("b" "Books" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org" "Libros" "Lista Lectura")
+         "* %?\n  %U\n  %i" :empty-lines 1)
+        ("t" "Tasks" entry (file+olp "C:/Dropbox (MGEP)/OrgFiles/NotasRapidas.org" "Inbox")
+         "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+        ("b" "Books" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org" "Libros" "Lista Lectura")
            "*** %\\1 %?\n :PROPERTIES:\n :Título: %^{Título}\n :Subtítulo: %^{Subtítulo}\n :Serie: %^{Serie}\n :Autor: %^{Autor [Apellido, Nombre]}\n :Año: %^{Año}\n :Categoría: %^{Categoría}\n :Puntuación: %^{Puntuación [1-5]}\n :Fecha: %^{Fecha Lectura [dd/mm/aaaa]}\n :Estado: %^{Estado|Leído|Leyendo|Pendiente}\n :END: \n" :empty-lines 1 :prepend t)))
 
     ;; Set global key for capture
     (define-key global-map (kbd "C-c q")
       (lambda () (interactive) (org-capture nil "q")))
+    (define-key global-map (kbd "C-c t")
+      (lambda () (interactive) (org-capture nil "t")))
     (define-key global-map (kbd "C-c b")
       (lambda () (interactive) (org-capture nil "b"))))
 
