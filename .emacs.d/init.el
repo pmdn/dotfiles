@@ -76,6 +76,7 @@
     (variable-pitch-mode 1)
     (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
     (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
     (visual-line-mode 1))
 
   (use-package org
