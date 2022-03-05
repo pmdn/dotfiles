@@ -77,6 +77,10 @@
     (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
     (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
     (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+    ;; Aunque habilito la opción de utilizar pitch variable, ahora utilizo fuentes mono para una mejor alineación
+    (set-face-attribute 'default nil :font "DejaVu Sans Mono")
+    (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono")
+    (set-face-attribute 'variable-pitch nil :font "DejaVu Sans Mono")
     (visual-line-mode 1))
 
   (use-package org
