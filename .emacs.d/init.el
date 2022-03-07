@@ -70,18 +70,129 @@
   (setenv "PATH" (concat (getenv "PATH") ":" path))
   (add-to-list 'exec-path path))
 
+;; Custom command stored on its own file
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
+;; Back-up directories
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
+;; Make ESC quit prompts
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+(global-set-key (kbd "C-c a") 'org-agenda)
+
+(use-package doom-themes
+  :init (load-theme 'doom-nord t))
+
+(use-package sublime-themes)
+
+;; Ahora utilizo fuentes mono para una mejor alineación
+    (set-face-attribute 'default nil :font "DejaVu Sans Mono")
+    (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono")
+    (set-face-attribute 'variable-pitch nil :font "DejaVu Sans")
+
+(use-package all-the-icons)
+
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
+  :custom ((doom-modeline-height 13)
+    (doom-modeline-buffer-file-name-style 'truncate-except-project)
+    (doom-modeline-bar-width 6)))
+
+;; Diminish minor modes
+(use-package diminish
+  :ensure t)
+
+;; Ivy / Counsel / Swiper configuration. Counsel contains the rest.
+(use-package counsel
+  :diminish ivy-mode
+  :demand
+  :bind (("C-s" . swiper)
+	 ("M-x" . counsel-M-x)
+	 ("C-x C-f" . counsel-find-file)
+	 ("C-c C-r" . iny-resume)
+         :map ivy-minibuffer-map
+         ("TAB" . ivy-alt-done)	
+         ("C-l" . ivy-alt-done)
+         ("C-j" . ivy-next-line)
+         ("C-k" . ivy-previous-line)
+         :map ivy-switch-buffer-map
+         ("C-k" . ivy-previous-line)
+         ("C-l" . ivy-done)
+         ("C-d" . ivy-switch-buffer-kill)
+         :map ivy-reverse-i-search-map
+         ("C-k" . ivy-previous-line)
+         ("C-d" . ivy-reverse-i-search-kill))
+  :config
+  (ivy-mode 1))
+
+;; Enrich Ivy
+(use-package ivy-rich
+  :after ivy
+  :init
+  (ivy-rich-mode 1))
+
+;; To show next commands
+(use-package which-key
+  :defer 0
+  :diminish which-key-mode
+  :config
+  (which-key-mode)
+  (setq which-key-idle-delay 0.5))
+
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook)
+  ; set the title
+  (setq dashboard-banner-logo-title "Bienvenido a Emacs!")
+  ; set the banner
+  (setq dashboard-startup-banner 'logo)
+  ; set the sections I'd like displayed and how many of each
+  (setq dashboard-items '((recents . 5) (projects . 5) (bookmarks . 5)))
+  ; center it all
+  (setq dashboard-center-content t)
+  ; don't show shortcut keys
+  (setq dashboard-show-shortcuts t)
+  ; use nice icons for the files
+  (setq dashboard-set-file-icons t)
+  ; use nice section icons
+  (setq dashboard-set-heading-icons t)
+  ; disable the snarky footer
+  (setq dashboard-set-footer nil))
+
+(use-package company
+  :custom
+  (company-idle-delay 0)
+  (company-tooltip-align-annotations t)
+  :config
+  (add-hook 'prog-mode-hook 'company-mode))
+
 ;; Org mode configuration
   (defun efs/org-mode-setup ()
     (org-indent-mode)
-    (variable-pitch-mode 1)
+    ;;(variable-pitch-mode 1)
     (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
     (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
     (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
-    ;; Aunque habilito la opción de utilizar pitch variable, ahora utilizo fuentes mono para una mejor alineación
-    (set-face-attribute 'default nil :font "DejaVu Sans Mono")
-    (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono")
-    (set-face-attribute 'variable-pitch nil :font "DejaVu Sans Mono")
     (visual-line-mode 1))
+
+;; Change font size for headings
+(with-eval-after-load 'org-faces
+  ;; Increase the size of various headings
+  (set-face-attribute 'org-document-title nil :weight 'bold :height 1.3))
+;;	(dolist (face '((org-level-1 . 1.2)
+;;					(org-level-2 . 1.1)
+;;					(org-level-3 . 1.05)
+;;					(org-level-4 . 1.0)
+;;					(org-level-5 . 1.1)
+;;					(org-level-6 . 1.1)
+;;					(org-level-7 . 1.1)
+;;					(org-level-8 . 1.1)))
+;;	  (set-face-attribute (car face) nil :height (cdr face))))
 
   (use-package org
     :pin org
@@ -226,102 +337,6 @@
   :config
   ;; add support to dired
   (add-hook 'dired-mode-hook 'org-download-enable))
-
-;; Custom command stored on its own file
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(when (file-exists-p custom-file)
-  (load custom-file))
-;; Back-up directories
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
-
-;; Make ESC quit prompts
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-(global-set-key (kbd "C-c a") 'org-agenda)
-
-(use-package doom-themes
-  :init (load-theme 'doom-nord t))
-
-(use-package sublime-themes)
-
-(use-package all-the-icons)
-
-(use-package doom-modeline
-  :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 13)
-    (doom-modeline-buffer-file-name-style 'truncate-except-project)
-    (doom-modeline-bar-width 6)))
-
-;; Diminish minor modes
-(use-package diminish
-  :ensure t)
-
-;; Ivy / Counsel / Swiper configuration. Counsel contains the rest.
-(use-package counsel
-  :diminish ivy-mode
-  :demand
-  :bind (("C-s" . swiper)
-	 ("M-x" . counsel-M-x)
-	 ("C-x C-f" . counsel-find-file)
-	 ("C-c C-r" . iny-resume)
-         :map ivy-minibuffer-map
-         ("TAB" . ivy-alt-done)	
-         ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
-         :map ivy-switch-buffer-map
-         ("C-k" . ivy-previous-line)
-         ("C-l" . ivy-done)
-         ("C-d" . ivy-switch-buffer-kill)
-         :map ivy-reverse-i-search-map
-         ("C-k" . ivy-previous-line)
-         ("C-d" . ivy-reverse-i-search-kill))
-  :config
-  (ivy-mode 1))
-
-;; Enrich Ivy
-(use-package ivy-rich
-  :after ivy
-  :init
-  (ivy-rich-mode 1))
-
-;; To show next commands
-(use-package which-key
-  :defer 0
-  :diminish which-key-mode
-  :config
-  (which-key-mode)
-  (setq which-key-idle-delay 0.5))
-
-(use-package dashboard
-  :ensure t
-  :config
-  (dashboard-setup-startup-hook)
-  ; set the title
-  (setq dashboard-banner-logo-title "Bienvenido a Emacs!")
-  ; set the banner
-  (setq dashboard-startup-banner 'logo)
-  ; set the sections I'd like displayed and how many of each
-  (setq dashboard-items '((recents . 5) (projects . 5) (bookmarks . 5)))
-  ; center it all
-  (setq dashboard-center-content t)
-  ; don't show shortcut keys
-  (setq dashboard-show-shortcuts t)
-  ; use nice icons for the files
-  (setq dashboard-set-file-icons t)
-  ; use nice section icons
-  (setq dashboard-set-heading-icons t)
-  ; disable the snarky footer
-  (setq dashboard-set-footer nil))
-
-(use-package company
-  :custom
-  (company-idle-delay 0)
-  (company-tooltip-align-annotations t)
-  :config
-  (add-hook 'prog-mode-hook 'company-mode))
 
 ;; Magit for git
 (use-package magit
