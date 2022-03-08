@@ -89,7 +89,7 @@
 
 (use-package sublime-themes)
 
-;; Ahora utilizo fuentes mono para una mejor alineación
+;; Utilizar fuentes mono para una mejor alineación
     (set-face-attribute 'default nil :font "DejaVu Sans Mono 10")
     (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono 10")
     (set-face-attribute 'variable-pitch nil :font "DejaVu Sans 10")
@@ -175,7 +175,7 @@
 ;; Org mode configuration
   (defun efs/org-mode-setup ()
     (org-indent-mode)
-    ;;(variable-pitch-mode 1)
+    (variable-pitch-mode 1)
     (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
     (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
     (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
