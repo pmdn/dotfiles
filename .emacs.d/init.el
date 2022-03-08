@@ -200,7 +200,6 @@
     :hook (org-mode . efs/org-mode-setup)
     :config
     (setq org-ellipsis " ▾")
-    
 ;; Fix image width and show inline images
     (setq org-image-actual-width 500)
     (setq org-startup-with-inline-images t)
@@ -310,13 +309,13 @@
 
 (push '("conf-unix" . conf-unix) org-src-lang-modes)
 
-;;(with-eval-after-load 'org
-  ;; This is needed as of Org 9.2
- ;; (require 'org-tempo)
+(with-eval-after-load 'org
+ ;; This is needed as of Org 9.2
+ (require 'org-tempo)
 
-  ;;(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-  ;;(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-  ;;(add-to-list 'org-structure-template-alist '("py" . "src python")))
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python")))
 
 ;; Automatically tangle our Emacs.org config file when we save it
 (defun efs/org-babel-tangle-config ()

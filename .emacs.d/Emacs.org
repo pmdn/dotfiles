@@ -360,7 +360,6 @@ Some inspiration from:
     :hook (org-mode . efs/org-mode-setup)
     :config
     (setq org-ellipsis " ▾")
-    
 ;; Fix image width and show inline images
     (setq org-image-actual-width 500)
     (setq org-startup-with-inline-images t)
@@ -498,13 +497,13 @@ You can add more =src= block templates below by copying one of the lines and cha
 
 #+begin_src emacs-lisp
 
-;;(with-eval-after-load 'org
-  ;; This is needed as of Org 9.2
- ;; (require 'org-tempo)
+  (with-eval-after-load 'org
+   ;; This is needed as of Org 9.2
+   (require 'org-tempo)
 
-  ;;(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-  ;;(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-  ;;(add-to-list 'org-structure-template-alist '("py" . "src python")))
+    (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+    (add-to-list 'org-structure-template-alist '("py" . "src python")))
 
 #+end_src
 
