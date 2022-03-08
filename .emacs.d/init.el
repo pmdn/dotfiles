@@ -90,9 +90,10 @@
 (use-package sublime-themes)
 
 ;; Ahora utilizo fuentes mono para una mejor alineación
-    (set-face-attribute 'default nil :font "DejaVu Sans Mono")
-    (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono")
-    (set-face-attribute 'variable-pitch nil :font "DejaVu Sans")
+    (set-face-attribute 'default nil :font "DejaVu Sans Mono 10")
+    (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono 10")
+    (set-face-attribute 'variable-pitch nil :font "DejaVu Sans 10")
+    (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono 10"))
 
 (use-package all-the-icons)
 
