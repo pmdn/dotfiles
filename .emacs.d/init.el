@@ -179,6 +179,8 @@
     (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
     (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
     (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
     (visual-line-mode 1))
 
 ;; Change font size for headings
