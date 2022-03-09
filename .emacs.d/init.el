@@ -4,7 +4,8 @@
 (require 'package)
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
+                         ("nongnu" . "https://elpa.nongnu.org/nongnu/") 
+                         ;("org" . "https://orgmode.org/elpa/")
                          ("elpa" . "https://elpa.gnu.org/packages/")))
 
 (package-initialize)
@@ -59,6 +60,7 @@
 ;; Set tab width to 4 spaces and Allman indentation (bsd) in C
 (setq-default tab-width 4)
 (setq-default indent-tabs-mode nil)
+(setq indent-line-function 'insert-tab)
 (setq c-default-style "bsd"
       c-basic-offset 4)
 
@@ -83,6 +85,7 @@
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c l") 'org-store-link)
 
 (use-package doom-themes
   :init (load-theme 'doom-nord t))
@@ -174,7 +177,7 @@
 
 ;; Org mode configuration
   (defun efs/org-mode-setup ()
-    (org-indent-mode)
+    (org-indent-mode 0)
     (variable-pitch-mode 1)
     (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
     (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
@@ -198,14 +201,15 @@
 ;;	  (set-face-attribute (car face) nil :height (cdr face))))
 
   (use-package org
-    :pin org
+    :pin elpa
     :hook (org-mode . efs/org-mode-setup)
     :config
     (setq org-ellipsis " ▾")
+    (setq org-adapt-indentation 'headline-data)
 ;; Fix image width and show inline images
-    (setq org-image-actual-width 500)
+    (setq org-image-actual-width 600)
     (setq org-startup-with-inline-images t)
-    
+
     (setq org-agenda-start-with-log-mode t)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
@@ -222,7 +226,7 @@
 
     (setq org-todo-keyword-faces
      '(("TODO".(:foreground "DarkSeaGreen" :weight bold))
-	   ("ACTIVE".(:foreground "LightSeaGreen" :weight bold))
+       ("ACTIVE".(:foreground "LightSeaGreen" :weight bold))
        ("WAITING".(:foreground "peru" :weight bold))
        ("DELEGATED".(:foreground "CornlowerBlue" :weight bold))
        ("DONE".(:foreground "azure" :weight bold))
@@ -234,6 +238,7 @@
       '(("Archive.org" :maxlevel . 1)
       (org-agenda-files :maxlevel . 9)))
 
+    (setq org-log-refile 'note)
     ;; Save Org buffers after refiling!
     (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
@@ -260,7 +265,7 @@
         (todo "ACTIVE" ((org-agenda-overriding-header "Active Tasks")))
         (todo "WAITING" ((org-agenda-overriding-header "Waiting Tasks")))
         (todo "DELEGATED" ((org-agenda-overriding-header "Delegated Tasks")))))
-      
+
       ("w" "Workflow Status"
        ((todo "TODO"
               ((org-agenda-overriding-header "Todo")
@@ -283,7 +288,7 @@
 
     ;; Capture templates
     (setq org-capture-templates
-		`(("q" "Quick Note" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org" "Inbox")
+        `(("q" "Quick Note" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org" "Inbox")
          "* %?\n  %U\n  %i" :empty-lines 1)
         ("t" "Tasks" entry (file+olp "C:/Dropbox (MGEP)/OrgFiles/NotasRapidas.org" "Inbox")
          "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
