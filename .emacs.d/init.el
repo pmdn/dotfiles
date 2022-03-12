@@ -156,7 +156,7 @@
   ; set the banner
   (setq dashboard-startup-banner 'logo)
   ; set the sections I'd like displayed and how many of each
-  (setq dashboard-items '((recents . 5) (projects . 5) (bookmarks . 5)))
+  (setq dashboard-items '((recents . 5) (projects . 5) (bookmarks . 5) (agenda . 5)))
   ; center it all
   (setq dashboard-center-content t)
   ; don't show shortcut keys
@@ -217,6 +217,8 @@
     (setq org-agenda-files
           '("~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org"))
 
+    (setq org-archive-location "~/Sync/Sincronizadas/Notes/OrgFiles/Archivo.org::datetree/")
+
     (require 'org-habit)
     (add-to-list 'org-modules 'org-habit)
     (setq org-habit-graph-column 60)
@@ -235,7 +237,7 @@
    (setq org-refile-use-outline-path 'file)
    (setq org-outline-path-complete-in-steps nil)
     (setq org-refile-targets
-      '(("Archive.org" :maxlevel . 1)
+      '(("Archivo.org" :maxlevel . 1)
       (org-agenda-files :maxlevel . 9)))
 
     (setq org-log-refile 'note)
