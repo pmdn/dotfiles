@@ -44,7 +44,8 @@
                 term-mode-hook
                 shell-mode-hook
                 treemacs-mode-hook
-                eshell-mode-hook))
+                eshell-mode-hook
+                deft-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;; When something changes a file, automatically refresh the buffer containing it.
@@ -381,12 +382,14 @@
 (use-package deft
   :after org
   :bind
-  ("C-c n d" . deft)
+  ("C-c n t" . deft)
   :custom
   (deft-recursive t)
-  (deft-use-filter-string-for-filename t)
+  (deft-use-filename-as-title t)
+  (deft-strip-summary-regexp ":PROPERTIES:\n\\(.+\n\\)+:END:\n")
+  (deft-use-filter-string-for-filename nil)
   (deft-default-extension "org")
-  (deft-directory org-roam-directory))
+  (deft-directory "~/Sync/Sincronizadas/Notes/OrgFiles/RoamNotes"))
 
 (use-package org-roam-ui
 ;;  :straight
