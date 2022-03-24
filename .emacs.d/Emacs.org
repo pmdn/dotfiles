@@ -457,7 +457,7 @@ Some inspiration from:
              "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
             ("b" "Books" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org" "Libros" "Lista Lectura")
                "*** %\\1 %?\n :PROPERTIES:\n :Título: %^{Título}\n :Subtítulo: %^{Subtítulo}\n :Serie: %^{Serie}\n :Autor: %^{Autor [Apellido, Nombre]}\n :Año: %^{Año}\n :Categoría: %^{Categoría}\n :Puntuación: %^{Puntuación [1-5]}\n :Fecha: %^{Fecha Lectura [dd/mm/aaaa]}\n :Estado: %^{Estado|Leído|Leyendo|Pendiente}\n :END: \n" :empty-lines 1 :prepend t)
-            ("n" "Notes" entry (file+datetree "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org")
+            ("d" "Dailies" entry (file+datetree "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org")
               "* %^{Description} %^g %?\n Added: %U")))
 
         ;; Set global key for capture
@@ -467,8 +467,8 @@ Some inspiration from:
           (lambda () (interactive) (org-capture nil "t")))
         (define-key global-map (kbd "C-c b")
           (lambda () (interactive) (org-capture nil "b")))
-        (define-key global-map (kbd "C-c n")
-          (lambda () (interactive) (org-capture nil "n"))))
+        (define-key global-map (kbd "C-c d")
+          (lambda () (interactive) (org-capture nil "d"))))
 
 #+end_src
 
@@ -555,6 +555,62 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
   (add-hook 'dired-mode-hook 'org-download-enable))
 
 #+END_SRC
+
+** Org roam
+
+The [[https://www.orgroam.com/][Org-Roam]] package extends the Org mode functionality by saving all the links between files and headings in a database. This method allows you to also view the backlinks. The database stores a list of nodes, which are files or registered headings. This additional functionality allows you to navigate through your network of notes like you would in a personal wiki. It's inspired by a program called [[https://roamresearch.com/][Roam]] and a note-taking strategy called [[https://en.wikipedia.org/wiki/Zettelkasten][Zettelkasten]] where the goal is to create many individual single-topic notes that are linked together to create a "networked" knowledge base. 
+
+Org Roam v2 depends on a customized build of the SQLite database tool to operate. Org Roam will take care of compiling this code for you as long as you have a compatible compiler installed!
+
+For Linux and macOS users, make sure you have a C/C++ compiler like gcc or clang installed.
+
+Also make sure that the directories =RoamNotes= and =daily= inside it exist.
+
+#+begin_src emacs-lisp
+(use-package org-roam
+  :ensure t
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory "~/Sync/Sincronizadas/Notes/OrgFiles/RoamNotes")
+  (org-roam-completion-everywhere t)
+  (org-roam-capture-templates
+    '(("d" "default" plain "%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+      :unnarrowed t)))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n r" . org-roam-node-random)	
+         :map org-mode-map
+         ("C-M-i"    . completion-at-point)
+         :map org-roam-dailies-map
+         ("Y" . org-roam-dailies-capture-yesterday)
+         ("T" . org-roam-dailies-capture-tomorrow))
+  :bind-keymap
+  ("C-c n d" . org-roam-dailies-map)
+  :config
+  (require 'org-roam-dailies) ;; Ensure the keymap is available
+  (org-roam-db-autosync-mode))
+#+end_src
+
+** Deft
+
+[[https://jblevins.org/projects/deft/][Deft]] provides a nice interface for browsing and filtering org-roam notes.
+
+   #+begin_src emacs-lisp
+(use-package deft
+  :after org
+  :bind
+  ("C-c n d" . deft)
+  :custom
+  (deft-recursive t)
+  (deft-use-filter-string-for-filename t)
+  (deft-default-extension "org")
+  (deft-directory org-roam-directory))
+   #+end_src
+
+
 
 * Development
 

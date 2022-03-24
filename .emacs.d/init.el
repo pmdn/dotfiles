@@ -296,7 +296,7 @@
          "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
         ("b" "Books" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org" "Libros" "Lista Lectura")
            "*** %\\1 %?\n :PROPERTIES:\n :Título: %^{Título}\n :Subtítulo: %^{Subtítulo}\n :Serie: %^{Serie}\n :Autor: %^{Autor [Apellido, Nombre]}\n :Año: %^{Año}\n :Categoría: %^{Categoría}\n :Puntuación: %^{Puntuación [1-5]}\n :Fecha: %^{Fecha Lectura [dd/mm/aaaa]}\n :Estado: %^{Estado|Leído|Leyendo|Pendiente}\n :END: \n" :empty-lines 1 :prepend t)
-        ("n" "Notes" entry (file+datetree "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org")
+        ("d" "Dailies" entry (file+datetree "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org")
           "* %^{Description} %^g %?\n Added: %U")))
 
     ;; Set global key for capture
@@ -306,8 +306,8 @@
       (lambda () (interactive) (org-capture nil "t")))
     (define-key global-map (kbd "C-c b")
       (lambda () (interactive) (org-capture nil "b")))
-    (define-key global-map (kbd "C-c n")
-      (lambda () (interactive) (org-capture nil "n"))))
+    (define-key global-map (kbd "C-c d")
+      (lambda () (interactive) (org-capture nil "d"))))
 
 (use-package org-bullets
   :after org
@@ -350,6 +350,42 @@
   :config
   ;; add support to dired
   (add-hook 'dired-mode-hook 'org-download-enable))
+
+(use-package org-roam
+  :ensure t
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory "~/Sync/Sincronizadas/Notes/OrgFiles/RoamNotes")
+  (org-roam-completion-everywhere t)
+  (org-roam-capture-templates
+    '(("d" "default" plain "%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+      :unnarrowed t)))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n r" . org-roam-node-random)	
+         :map org-mode-map
+         ("C-M-i"    . completion-at-point)
+         :map org-roam-dailies-map
+         ("Y" . org-roam-dailies-capture-yesterday)
+         ("T" . org-roam-dailies-capture-tomorrow))
+  :bind-keymap
+  ("C-c n d" . org-roam-dailies-map)
+  :config
+  (require 'org-roam-dailies) ;; Ensure the keymap is available
+  (org-roam-db-autosync-mode))
+
+(use-package deft
+  :after org
+  :bind
+  ("C-c n d" . deft)
+  :custom
+  (deft-recursive t)
+  (deft-use-filter-string-for-filename t)
+  (deft-default-extension "org")
+  (deft-directory org-roam-directory))
 
 ;; Magit for git
 (use-package magit
