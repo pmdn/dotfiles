@@ -230,7 +230,7 @@
      '(("TODO".(:foreground "DarkSeaGreen" :weight bold))
        ("ACTIVE".(:foreground "LightSeaGreen" :weight bold))
        ("WAITING".(:foreground "peru" :weight bold))
-       ("DELEGATED".(:foreground "CornlowerBlue" :weight bold))
+       ("DELEGATED".(:foreground "CornflowerBlue" :weight bold))
        ("DONE".(:foreground "azure" :weight bold))
        ("CANCELLED".(:foreground "IndianRed" :weight bold))))
 
