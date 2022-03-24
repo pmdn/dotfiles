@@ -567,31 +567,32 @@ For Linux and macOS users, make sure you have a C/C++ compiler like gcc or clang
 Also make sure that the directories =RoamNotes= and =daily= inside it exist.
 
 #+begin_src emacs-lisp
-(use-package org-roam
-  :ensure t
-  :init
-  (setq org-roam-v2-ack t)
-  :custom
-  (org-roam-directory "~/Sync/Sincronizadas/Notes/OrgFiles/RoamNotes")
-  (org-roam-completion-everywhere t)
-  (org-roam-capture-templates
-    '(("d" "default" plain "%?"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
-      :unnarrowed t)))
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n i" . org-roam-node-insert)
-         ("C-c n r" . org-roam-node-random)	
-         :map org-mode-map
-         ("C-M-i"    . completion-at-point)
-         :map org-roam-dailies-map
-         ("Y" . org-roam-dailies-capture-yesterday)
-         ("T" . org-roam-dailies-capture-tomorrow))
-  :bind-keymap
-  ("C-c n d" . org-roam-dailies-map)
-  :config
-  (require 'org-roam-dailies) ;; Ensure the keymap is available
-  (org-roam-db-autosync-mode))
+  (use-package org-roam
+    :ensure t
+    :init
+    (setq org-roam-v2-ack t)
+    :custom
+    (org-roam-directory "~/Sync/Sincronizadas/Notes/OrgFiles/RoamNotes")
+    (org-roam-completion-everywhere t)
+    (org-roam-capture-templates
+      '(("d" "default" plain "%?"
+        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+        :unnarrowed t)))
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n i" . org-roam-node-insert)
+           ("C-c n r" . org-roam-node-random)	
+           :map org-mode-map
+           ("C-M-i"    . completion-at-point)
+           ("C-c n o" . org-id-get-create)
+           :map org-roam-dailies-map
+           ("Y" . org-roam-dailies-capture-yesterday)
+           ("T" . org-roam-dailies-capture-tomorrow))
+    :bind-keymap
+    ("C-c n d" . org-roam-dailies-map)
+    :config
+    (require 'org-roam-dailies) ;; Ensure the keymap is available
+    (org-roam-db-autosync-mode))
 #+end_src
 
 ** Deft

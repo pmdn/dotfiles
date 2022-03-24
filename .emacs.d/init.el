@@ -368,6 +368,7 @@
          ("C-c n r" . org-roam-node-random)	
          :map org-mode-map
          ("C-M-i"    . completion-at-point)
+         ("C-c n o" . org-id-get-create)
          :map org-roam-dailies-map
          ("Y" . org-roam-dailies-capture-yesterday)
          ("T" . org-roam-dailies-capture-tomorrow))
