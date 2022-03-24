@@ -297,7 +297,7 @@
         ("b" "Books" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org" "Libros" "Lista Lectura")
            "*** %\\1 %?\n :PROPERTIES:\n :Título: %^{Título}\n :Subtítulo: %^{Subtítulo}\n :Serie: %^{Serie}\n :Autor: %^{Autor [Apellido, Nombre]}\n :Año: %^{Año}\n :Categoría: %^{Categoría}\n :Puntuación: %^{Puntuación [1-5]}\n :Fecha: %^{Fecha Lectura [dd/mm/aaaa]}\n :Estado: %^{Estado|Leído|Leyendo|Pendiente}\n :END: \n" :empty-lines 1 :prepend t)
         ("d" "Dailies" entry (file+datetree "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org")
-          "* %^{Description} %^g %?\n Added: %U")))
+          "* %^{Description} %^g %?\nAdded: %U")))
 
     ;; Set global key for capture
     (define-key global-map (kbd "C-c q")
