@@ -195,13 +195,13 @@
   ;; Increase the size of various headings
   (set-face-attribute 'org-document-title nil :font "DejaVu Sans" :weight 'bold :height 1.3)
     (dolist (face '((org-level-1 . 1.2)
-    				(org-level-2 . 1.1)
-    				(org-level-3 . 1.05)
-    				(org-level-4 . 1.0)
-    				(org-level-5 . 1.1)
-    				(org-level-6 . 1.1)
-    				(org-level-7 . 1.1)
-    				(org-level-8 . 1.1)))
+                    (org-level-2 . 1.1)
+                    (org-level-3 . 1.05)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 1.1)
+                    (org-level-6 . 1.1)
+                    (org-level-7 . 1.1)
+                    (org-level-8 . 1.1)))
       (set-face-attribute (car face) nil :font "DejaVu Sans" :weight 'regular :height (cdr face))))
 
   (use-package org
@@ -228,7 +228,8 @@
     (setq org-habit-graph-column 60)
 
     (setq org-todo-keywords
-      '((sequence "TODO(t)" "ACTIVE(a!)" "WAITING(w@/!)" "DELEGATED(d@/!)" "|" "DONE(D!)" "CANCELLED(C@)")))
+      '((sequence "TODO(t)" "ACTIVE(a!)" "WAITING(w@/!)" "DELEGATED(d@/!)" "|" "DONE(D!)" "CANCELLED(C@)")
+        (sequence "LEYENDO(y)" "|" "LEÍDO(i)")))
 
     (setq org-todo-keyword-faces
      '(("TODO".(:foreground "DarkSeaGreen" :weight bold))
@@ -236,7 +237,9 @@
        ("WAITING".(:foreground "peru" :weight bold))
        ("DELEGATED".(:foreground "CornflowerBlue" :weight bold))
        ("DONE".(:foreground "azure" :weight bold))
-       ("CANCELLED".(:foreground "IndianRed" :weight bold))))
+       ("CANCELLED".(:foreground "IndianRed" :weight bold))
+       ("LEYENDO".(:foreground "peru" :weight bold))
+       ("LEÍDO".(:foreground "DarkSeaGreen" :weight bold))))
 
    (setq org-refile-use-outline-path 'file)
    (setq org-outline-path-complete-in-steps nil)
@@ -359,6 +362,8 @@
   :ensure t
   :init
   (setq org-roam-v2-ack t)
+  (setq org-roam-node-display-template
+    (concat "${title:*} " (propertize "${tags:50}" 'face 'org-tag)))
   :custom
   (org-roam-directory "~/Sync/Sincronizadas/Notes/OrgFiles/RoamNotes")
   (org-roam-completion-everywhere t)
