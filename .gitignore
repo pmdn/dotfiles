@@ -16,3 +16,4 @@
 /.emacs.d/srecode-map.el
 /.emacs.d/.org-id-locations
 /.emacs.d/org-roam.db
+/.emacs.d/.cache/

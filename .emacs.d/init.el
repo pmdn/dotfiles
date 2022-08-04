@@ -56,7 +56,8 @@
                 shell-mode-hook
                 treemacs-mode-hook
                 eshell-mode-hook
-                deft-mode-hook))
+                deft-mode-hook
+                org-agenda-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;; When something changes a file, automatically refresh the buffer containing it.
@@ -76,8 +77,14 @@
 (setq c-default-style "bsd"
       c-basic-offset 4)
 
-(setq user-full-name "Patxi Madina"
-          user-mail-address "pmdn@mailbox.org")
+(setq user-full-name "Patxi Madina")
+(cond ((eq system-type 'windows-nt)
+       ;; Windows-specific code goes here.
+       (setq user-mail-address "pmadina@mondragon.edu"))
+      ((eq system-type 'gnu/linux)
+       ;; Linux-specific code goes here.
+       (setq user-mail-address "pmdn@mailbox.org")
+       ))
 
 (defun hrs/append-to-path (path)
   "Add a path both to the $PATH variable and to Emacs' ~exec-path~."
@@ -105,11 +112,20 @@
 
 (use-package sublime-themes)
 
+(cond ((eq system-type 'windows-nt)
+     ;; Windows-specific code goes here.
+     ;; Spacing
+     (setq-default line-spacing 0.25)
+     )
+    ((eq system-type 'gnu/linux)
+     ;; Linux-specific code goes here.
+     ))
+
 ;; Utilizar fuentes mono para una mejor alineación
-    (set-face-attribute 'default nil :font "DejaVu Sans Mono 10")
-    (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono 10")
-    (set-face-attribute 'variable-pitch nil :font "DejaVu Sans 10")
-    (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono 10"))
+(set-face-attribute 'default nil :font "DejaVu Sans Mono 10")
+(set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono 10")
+(set-face-attribute 'variable-pitch nil :font "DejaVu Sans 10")
+(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono 10"))
 
 (use-package all-the-icons)
 
@@ -160,6 +176,7 @@
   (which-key-mode)
   (setq which-key-idle-delay 0.5))
 
+;; Dashboard configuration
 (use-package dashboard
   :ensure t
   :config
@@ -181,12 +198,19 @@
   ; disable the snarky footer
   (setq dashboard-set-footer nil))
 
+;; Company completion framework configuration
 (use-package company
   :custom
   (company-idle-delay 0)
   (company-tooltip-align-annotations t)
   :config
   (add-hook 'prog-mode-hook 'company-mode))
+
+;; Treemacs configuration
+(use-package treemacs
+  :ensure t
+  :defer t
+  :bind ("C-c s" . treemacs))
 
 ;; Org mode configuration
   (defun efs/org-mode-setup ()
@@ -220,17 +244,26 @@
     (setq org-ellipsis " ▾")
     (setq org-adapt-indentation 'headline-data)
 ;; Fix image width and show inline images
-    (setq org-image-actual-width 600)
+    (setq org-image-actual-width 700)
     (setq org-startup-with-inline-images t)
 
     (setq org-agenda-start-with-log-mode t)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
 
-    (setq org-agenda-files
-          '("~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org"))
+    (cond ((eq system-type 'windows-nt)
+           ;; Windows-specific code goes here.
+           (setq org-directory "C:/Dropbox (MGEP)/OrgFiles")
+           )
+          ((eq system-type 'gnu/linux)
+           ;; Linux-specific code goes here.
+           (setq org-directory "~/Sync/Sincronizadas/Notes/OrgFiles")
+           ))
 
-    (setq org-archive-location "~/Sync/Sincronizadas/Notes/OrgFiles/Archivo.org::datetree/")
+    (setq org-agenda-files
+          (list
+             (concat org-directory "/Notas.org")))
+    (setq org-archive-location (concat org-directory "/Archivo.org::datetree/"))
 
     (require 'org-habit)
     (add-to-list 'org-modules 'org-habit)
@@ -250,8 +283,8 @@
        ("LEYENDO".(:foreground "peru" :weight bold))
        ("LEÍDO".(:foreground "DarkSeaGreen" :weight bold))))
 
-   (setq org-refile-use-outline-path 'file)
-   (setq org-outline-path-complete-in-steps nil)
+    (setq org-refile-use-outline-path 'file)
+    (setq org-outline-path-complete-in-steps nil)
     (setq org-refile-targets
       '(("Archivo.org" :maxlevel . 1)
       (org-agenda-files :maxlevel . 9)))
@@ -306,13 +339,13 @@
 
     ;; Capture templates
     (setq org-capture-templates
-        `(("r" "Quick Note" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org" "Inbox")
+        `(("r" "Quick Note" entry (file+olp (concat org-directory "/Notas.org") "Inbox")
          "* %?\n  %U\n  %i" :empty-lines 1)
-        ("t" "Tasks" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org" "Inbox")
+        ("t" "Tasks" entry (file+olp (concat org-directory "/Notas.org") "Inbox")
          "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-        ("b" "Books" entry (file+olp "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org" "Libros" "Lista Lectura")
+        ("b" "Books" entry (file+olp (concat org-directory "/Notas.org") "Libros" "Lista Lectura")
            "*** %\\1 %?\n :PROPERTIES:\n :Título: %^{Título}\n :Subtítulo: %^{Subtítulo}\n :Serie: %^{Serie}\n :Autor: %^{Autor [Apellido, Nombre]}\n :Año: %^{Año}\n :Categoría: %^{Categoría}\n :Puntuación: %^{Puntuación [1-5]}\n :Fecha: %^{Fecha Lectura [dd/mm/aaaa]}\n :Estado: %^{Estado|Leído|Leyendo|Pendiente}\n :END: \n" :empty-lines 1 :prepend t)
-        ("d" "Dailies" entry (file+datetree "~/Sync/Sincronizadas/Notes/OrgFiles/Notas.org")
+        ("n" "Notes" entry (file+datetree (concat org-directory "/Notas.org"))
           "* %^{Description} %^g %?\nAdded: %U")))
 
     ;; Set global key for capture
@@ -375,39 +408,54 @@
     (org-download-heading-lvl nil)
     (org-download-timestamp "%Y%m%d-%H%M%S_")
   :config
+  (require 'org-download)
   ;; add support to dired
-  (add-hook 'dired-mode-hook 'org-download-enable))
+  (add-hook 'dired-mode-hook 'org-download-enable)
+  ;; Add handlers for drag-and-drop when Org is loaded.
+  (with-eval-after-load 'org
+    (org-download-enable)))
 
-(use-package org-roam
-  :ensure t
-  :init
-  (setq org-roam-v2-ack t)
-  (setq org-roam-node-display-template
-    (concat "${title:*} " (propertize "${tags:50}" 'face 'org-tag)))
-  :custom
-  (org-roam-directory "~/Sync/Sincronizadas/Notes/OrgFiles/RoamNotes")
-  (org-roam-completion-everywhere t)
-  (org-roam-capture-templates
-    '(("d" "default" plain "%?"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
-      :unnarrowed t)))
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n i" . org-roam-node-insert)
-         ("C-c n r" . org-roam-node-random)
-         :map org-mode-map
-         ("C-M-i"    . completion-at-point)
-         ("C-c n o" . org-id-get-create)
-         :map org-roam-dailies-map
-         ("Y" . org-roam-dailies-capture-yesterday)
-         ("T" . org-roam-dailies-capture-tomorrow))
-  :bind-keymap
-  ("C-c n d" . org-roam-dailies-map)
-  :config
-  (require 'org-roam-dailies) ;; Ensure the keymap is available
-  (org-roam-db-autosync-mode))
+(cond ((eq system-type 'windows-nt)
+     ;; Windows-specific code goes here.
+     )
+    ((eq system-type 'gnu/linux)
+     ;; Linux-specific code goes here.
+     (use-package org-roam
+     :ensure t
+     :init
+     (setq org-roam-v2-ack t)
+     (setq org-roam-node-display-template
+       (concat "${title:*} " (propertize "${tags:50}" 'face 'org-tag)))
+     :custom
+     (org-roam-directory "~/Sync/Sincronizadas/Notes/OrgFiles/RoamNotes")
+     (org-roam-completion-everywhere t)
+     (org-roam-capture-templates
+       '(("d" "default" plain "%?"
+         :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+         :unnarrowed t)))
+         :bind (("C-c n l" . org-roam-buffer-toggle)
+                ("C-c n f" . org-roam-node-find)
+                ("C-c n i" . org-roam-node-insert)
+                ("C-c n r" . org-roam-node-random)
+                :map org-mode-map
+                ("C-M-i"    . completion-at-point)
+                ("C-c n o" . org-id-get-create)
+                :map org-roam-dailies-map
+                ("Y" . org-roam-dailies-capture-yesterday)
+                ("T" . org-roam-dailies-capture-tomorrow))
+         :bind-keymap
+         ("C-c n d" . org-roam-dailies-map)
+         :config
+         (require 'org-roam-dailies) ;; Ensure the keymap is available
+         (org-roam-db-autosync-mode))
+        ))
 
-(use-package deft
+(cond ((eq system-type 'windows-nt)
+  ;; Windows-specific code goes here.
+  )
+ ((eq system-type 'gnu/linux)
+  ;; Linux-specific code goes here.
+  (use-package deft
   :after org
   :bind
   ("C-c n t" . deft)
@@ -418,20 +466,27 @@
   (deft-use-filter-string-for-filename nil)
   (deft-default-extension "org")
   (deft-directory "~/Sync/Sincronizadas/Notes/OrgFiles/RoamNotes"))
+  ))
 
-(use-package org-roam-ui
-;;  :straight
-  ;;  (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
-    :after org-roam
-;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-;;         a hookable mode anymore, you're advised to pick something yourself
-;;         if you don't care about startup time, use
-;;  :hook (after-init . org-roam-ui-mode)
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start nil))
+(cond ((eq system-type 'windows-nt)
+     ;; Windows-specific code goes here.
+     )
+    ((eq system-type 'gnu/linux)
+     ;; Linux-specific code goes here.
+     (use-package org-roam-ui
+     ;;  :straight
+     ;;  (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+     :after org-roam
+     ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+     ;;         a hookable mode anymore, you're advised to pick something yourself
+     ;;         if you don't care about startup time, use
+     ;;  :hook (after-init . org-roam-ui-mode)
+     :config
+     (setq org-roam-ui-sync-theme t
+           org-roam-ui-follow t
+           org-roam-ui-update-on-save t
+           org-roam-ui-open-on-start nil))
+     ))
 
 ;; Magit for git
 (use-package magit
@@ -534,7 +589,7 @@
    :ensure t
    :config
    (elfeed-org)
-   (setq rmh-elfeed-org-files (list "~/Sync/Sincronizadas/Notes/OrgFiles/elfeed.org")))
+   (setq rmh-elfeed-org-files (list  (concat org-directory "/elfeed.org"))))
 
 ;; Local Variables:
 ;; byte-compile-warnings: (not free-vars noruntime)
