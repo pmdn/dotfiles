@@ -65,55 +65,58 @@ This section configures basic UI settings that remove unneeded elements to make 
 
 #+begin_src emacs-lisp
 
-    ;; UTF-8 everywhere
-    (prefer-coding-system 'utf-8)
-    (set-default-coding-systems 'utf-8)
-    (set-terminal-coding-system 'utf-8)
-    (set-keyboard-coding-system 'utf-8)
+  ;; UTF-8 everywhere
+  (prefer-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
 
-    ;; User interface
-    (menu-bar-mode -1)          ; Disable the menu bar
-    (scroll-bar-mode -1)        ; Disable visible scrollbar
-    (tool-bar-mode -1)          ; Disable the toolbar
-    (tooltip-mode -1)           ; Disable tooltips
-    (set-fringe-mode 10)        ; Give some breathing room
+  ;; User interface
+  (menu-bar-mode -1)          ; Disable the menu bar
+  (scroll-bar-mode -1)        ; Disable visible scrollbar
+  (tool-bar-mode -1)          ; Disable the toolbar
+  (tooltip-mode -1)           ; Disable tooltips
+  (set-fringe-mode 10)        ; Give some breathing room
 
-    ;; Set up the visible bell
-    (setq visible-bell t)
+  ;; Set up the visible bell
+  (setq visible-bell t)
 
-    ;; Calendar stars on monday
-    (setq calendar-week-start-day 1)
+  ;; Calendar stars on monday
+  (setq calendar-week-start-day 1)
 
-    ;; Show column numbers in mode line and line numbers on window
-    (column-number-mode)
-    (global-display-line-numbers-mode t)
+  ;; Show column numbers in mode line and line numbers on window
+  (column-number-mode)
+  (global-display-line-numbers-mode t)
 
-    ;; Disable line numbers for some modes
-    (dolist (mode '(org-mode-hook
-                    term-mode-hook
-                    shell-mode-hook
-                    treemacs-mode-hook
-                    eshell-mode-hook
-                    deft-mode-hook
-                    org-agenda-mode-hook))
-      (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  ;; Disable line numbers for some modes
+  (dolist (mode '(org-mode-hook
+                  term-mode-hook
+                  shell-mode-hook
+                  treemacs-mode-hook
+                  eshell-mode-hook
+                  deft-mode-hook
+                  org-agenda-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-    ;; When something changes a file, automatically refresh the buffer containing it.
-    (global-auto-revert-mode t)
+  ;; When something changes a file, automatically refresh the buffer containing it.
+  (global-auto-revert-mode t)
 
-    ;; Visually indicate matching pairs of parentheses.
-    (show-paren-mode t)
+  ;; Visually indicate matching pairs of parentheses.
+  (show-paren-mode t)
 
-    ;; global-hl-line-mode softly highlights the background color of the line containing point. It makes it a bit easier to find point, and it’s useful when pairing or presenting code.
-    (global-hl-line-mode 1)
-    (set-face-attribute hl-line-face nil :underline nil)
+  ;; y-or-n answers
+  (fset 'yes-or-no-p 'y-or-n-p)	
 
-    ;; Set tab width to 4 spaces and Allman indentation (bsd) in C
-    (setq-default tab-width 4)
-    (setq-default indent-tabs-mode nil)
-    (setq indent-line-function 'insert-tab)
-    (setq c-default-style "bsd"
-          c-basic-offset 4)
+  ;; global-hl-line-mode softly highlights the background color of the line containing point. It makes it a bit easier to find point, and it’s useful when pairing or presenting code.
+  (global-hl-line-mode 1)
+  (set-face-attribute hl-line-face nil :underline nil)
+
+  ;; Set tab width to 4 spaces and Allman indentation (bsd) in C
+  (setq-default tab-width 4)
+  (setq-default indent-tabs-mode nil)
+  (setq indent-line-function 'insert-tab)
+  (setq c-default-style "bsd"
+        c-basic-offset 4)
 
 #+end_src
 
@@ -853,14 +856,20 @@ Also install pip: ~sudo apt install python3-pip~
 And also install pep8: ~pip3 install autopep8~
 And jedi: ~pip3 install jedi~ 
 And flake8: ~sudo apt install flake8~
+And pyright: ~pip3 install pyright~
 
+I initially used elpy as described in this tutorial https://realpython.com/emacs-the-best-python-editor/.
+
+On 2022/08/04 I changed to [[https://github.com/joaotavora/eglot][eglot]]. Configuration examples used:
+- https://gist.github.com/Nathan-Furnal/b327f14e861f009c014af36c1790ec49
+- https://www.reddit.com/r/emacs/comments/ushfzn/comment/ii0pbg7/?utm_source=share&utm_medium=web2x&context=3
+- https://cestlaz.github.io/post/using-emacs-74-eglot/
 
 Set interpreter to python 3.
 
 #+BEGIN_SRC  emacs-lisp
 
 (setq py-interpreter "python3")
-(setq elpy-rpc-python-command "python3")
 (setq org-babel-python-command "python3")
 
 #+END_SRC
@@ -870,7 +879,7 @@ Set interpreter to python 3.
   (use-package python-mode)
 #+end_src
 
-Add =~/.local/bin= to load path. That’s where ~virtualenv~ is installed, and we’ll need that for ~jedi~.
+Add =~/.local/bin= to load path. That’s where ~virtualenv~ is installed, and we’ll need that for ~jedi~. Check with ~which virtualenv~ on the shell.
 
 #+BEGIN_SRC  emacs-lisp
 
@@ -878,41 +887,50 @@ Add =~/.local/bin= to load path. That’s where ~virtualenv~ is installed, and w
 
 #+END_SRC
 
-Enable =elpy=. This provides automatic indentation, auto-completion, syntax
-checking, etc.
+[[https://github.com/jorgenschaefer/pyvenv][pyvenv]] for virtual environments. Use ~M-x pyvenv-workon~ to select a virtual env and then ~M-x eglot~.
+
+   #+begin_src emacs-lisp
+
+     (use-package pyvenv
+       :ensure t
+       :init
+       (setenv "WORKON_HOME" "~/.pyenv/versions"))
+     
+   #+end_src
+
+Using Eglot with [[https://github.com/emacs-lsp/lsp-pyright][pyright]], a language server for Python.
+
+   #+begin_src emacs-lisp
+
+     ;; Eglot configuration
+     (use-package eglot
+       :ensure t
+       :defer t
+       :hook (python-mode . eglot-ensure))
+     ;; Avoid flymake diagnostic warnings (interferes with flycheck)
+     (setq eglot-stay-out-of '(flymake))
+     (add-hook 'eglot--managed-mode-hook (lambda () (add-hook 'flymake-diagnostic-functions 'eglot-flymake-backend nil t)))
+
+   #+end_src
+
+   
+   #+begin_src emacs-lisp
+
+     (use-package lsp-pyright
+       :ensure t
+       :hook (python-mode . (lambda ()
+                              (require 'lsp-pyright)
+                              (lsp))))  ; or lsp-deferred
+   #+end_src
+   
+Format code according to PEP8 on save with [[https://github.com/emacsmirror/py-autopep8][py-autopep8]]:
 
 #+begin_src emacs-lisp
-  (use-package elpy)
-  (elpy-enable)
-#+end_src
 
-Use =flycheck= for syntax checking:
-
-#+begin_src emacs-lisp
-  (add-hook 'elpy-mode-hook 'flycheck-mode)
-#+end_src
-
-Format code according to PEP8 on save:
-
-#+begin_src emacs-lisp
-
-  (use-package py-autopep8)
-  (require 'py-autopep8)
-  (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+  (use-package py-autopep8
+    :hook ((python-mode) . py-autopep8-mode))
 
 #+end_src
-
-Configure Jedi along with the associated company mode:
-
-#+BEGIN_SRC  emacs-lisp
-
-(use-package company-jedi)
-(add-to-list 'company-backends 'company-jedi)
-
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
-
-#+END_SRC
 
 * RSS with Elfeed
 

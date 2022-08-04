@@ -66,6 +66,9 @@
 ;; Visually indicate matching pairs of parentheses.
 (show-paren-mode t)
 
+;; y-or-n answers
+(fset 'yes-or-no-p 'y-or-n-p)	
+
 ;; global-hl-line-mode softly highlights the background color of the line containing point. It makes it a bit easier to find point, and it’s useful when pairing or presenting code.
 (global-hl-line-mode 1)
 (set-face-attribute hl-line-face nil :underline nil)
@@ -552,27 +555,34 @@
  :init (global-flycheck-mode))
 
 (setq py-interpreter "python3")
-(setq elpy-rpc-python-command "python3")
 (setq org-babel-python-command "python3")
 
 (use-package python-mode)
 
 (hrs/append-to-path "~/.local/bin")
 
-(use-package elpy)
-(elpy-enable)
+(use-package pyvenv
+  :ensure t
+  :init
+  (setenv "WORKON_HOME" "~/.pyenv/versions"))
 
-(add-hook 'elpy-mode-hook 'flycheck-mode)
+;; Eglot configuration
+(use-package eglot
+  :ensure t
+  :defer t
+  :hook (python-mode . eglot-ensure))
+;; Avoid flymake diagnostic warnings (interferes with flycheck)
+(setq eglot-stay-out-of '(flymake))
+(add-hook 'eglot--managed-mode-hook (lambda () (add-hook 'flymake-diagnostic-functions 'eglot-flymake-backend nil t)))
 
-(use-package py-autopep8)
-(require 'py-autopep8)
-(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+(use-package lsp-pyright
+  :ensure t
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                         (lsp))))  ; or lsp-deferred
 
-(use-package company-jedi)
-(add-to-list 'company-backends 'company-jedi)
-
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
+(use-package py-autopep8
+  :hook ((python-mode) . py-autopep8-mode))
 
 ;; Configure Elfeed
 (use-package elfeed

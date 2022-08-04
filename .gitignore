@@ -17,3 +17,4 @@
 /.emacs.d/.org-id-locations
 /.emacs.d/org-roam.db
 /.emacs.d/.cache/
+/.emacs.d/.lsp-session-v1
