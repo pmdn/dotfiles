@@ -344,7 +344,18 @@
 
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-  (add-to-list 'org-structure-template-alist '("py" . "src python")))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  ;; For more complicated expansions now ~tempo-define-template must be used. n: newline, p: point after expansion
+  (tempo-define-template "org-header"
+       '("#+TITLE: " p n
+         "#+DESCRITION: " n
+         "#+AUTHOR: " n
+         "#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup" n
+         "#+TAGS: " n
+         "#+STARTUP: overview")
+       "<t"
+       "Insert an header in the org file"
+       'org-tempo-tags))
 
 ;; Automatically tangle our Emacs.org config file when we save it
 (defun efs/org-babel-tangle-config ()
