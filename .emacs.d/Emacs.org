@@ -845,8 +845,8 @@ Use ~M-x org-roam-ui-mode RET~ to enable the global mode. It will start a web se
 
 #+begin_src emacs-lisp
 
-(use-package flycheck
- :init (global-flycheck-mode)) 
+;;(use-package flycheck
+;; :init (global-flycheck-mode)) 
   
 #+end_src
 ** Python
@@ -874,7 +874,6 @@ Set interpreter to python 3.
 
 #+END_SRC
 
-
 #+begin_src emacs-lisp
   (use-package python-mode)
 #+end_src
@@ -898,7 +897,7 @@ Add =~/.local/bin= to load path. That’s where ~virtualenv~ is installed, and w
      
    #+end_src
 
-Using Eglot with [[https://github.com/emacs-lsp/lsp-pyright][pyright]], a language server for Python.
+Using [[https://github.com/joaotavora/eglot][eglot]], a language server for Python.
 
    #+begin_src emacs-lisp
 
@@ -907,20 +906,7 @@ Using Eglot with [[https://github.com/emacs-lsp/lsp-pyright][pyright]], a langua
        :ensure t
        :defer t
        :hook (python-mode . eglot-ensure))
-     ;; Avoid flymake diagnostic warnings (interferes with flycheck)
-     (setq eglot-stay-out-of '(flymake))
-     (add-hook 'eglot--managed-mode-hook (lambda () (add-hook 'flymake-diagnostic-functions 'eglot-flymake-backend nil t)))
 
-   #+end_src
-
-   
-   #+begin_src emacs-lisp
-
-     (use-package lsp-pyright
-       :ensure t
-       :hook (python-mode . (lambda ()
-                              (require 'lsp-pyright)
-                              (lsp))))  ; or lsp-deferred
    #+end_src
    
 Format code according to PEP8 on save with [[https://github.com/emacsmirror/py-autopep8][py-autopep8]]:

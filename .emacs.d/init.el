@@ -551,8 +551,8 @@
 
 (add-hook 'org-export-before-processing-hook 'my/org-inline-css-hook)
 
-(use-package flycheck
- :init (global-flycheck-mode))
+;;(use-package flycheck
+;; :init (global-flycheck-mode))
 
 (setq py-interpreter "python3")
 (setq org-babel-python-command "python3")
@@ -571,15 +571,6 @@
   :ensure t
   :defer t
   :hook (python-mode . eglot-ensure))
-;; Avoid flymake diagnostic warnings (interferes with flycheck)
-(setq eglot-stay-out-of '(flymake))
-(add-hook 'eglot--managed-mode-hook (lambda () (add-hook 'flymake-diagnostic-functions 'eglot-flymake-backend nil t)))
-
-(use-package lsp-pyright
-  :ensure t
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-pyright)
-                         (lsp))))  ; or lsp-deferred
 
 (use-package py-autopep8
   :hook ((python-mode) . py-autopep8-mode))
