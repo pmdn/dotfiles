@@ -28,57 +28,59 @@
 (setq use-package-always-ensure t)
 
 ;; UTF-8 everywhere
-(prefer-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
+ (prefer-coding-system 'utf-8)
+ (set-default-coding-systems 'utf-8)
+ (set-terminal-coding-system 'utf-8)
+ (set-keyboard-coding-system 'utf-8)
 
-;; User interface
-(menu-bar-mode -1)          ; Disable the menu bar
-(scroll-bar-mode -1)        ; Disable visible scrollbar
-(tool-bar-mode -1)          ; Disable the toolbar
-(tooltip-mode -1)           ; Disable tooltips
-(set-fringe-mode 10)        ; Give some breathing room
+ ;; User interface
+ (menu-bar-mode -1)          ; Disable the menu bar
+ (scroll-bar-mode -1)        ; Disable visible scrollbar
+ (tool-bar-mode -1)          ; Disable the toolbar
+ (tooltip-mode -1)           ; Disable tooltips
+ (set-fringe-mode 10)        ; Give some breathing room
 
-;; Set up the visible bell
-(setq visible-bell t)
+ ;; Set up the visible bell
+ (setq visible-bell t)
 
-;; Calendar stars on monday
-(setq calendar-week-start-day 1)
+ ;; Calendar stars on monday
+ (setq calendar-week-start-day 1)
 
-;; Show column numbers in mode line and line numbers on window
-(column-number-mode)
-(global-display-line-numbers-mode t)
+ ;; Show column numbers in mode line and line numbers on window
+ (column-number-mode)
+;; (global-display-line-numbers-mode t)
+;;
+;; ;; Disable line numbers for some modes
+;; (dolist (mode '(org-mode-hook
+;;                 term-mode-hook
+;;                 shell-mode-hook
+;;                 treemacs-mode-hook
+;;                 eshell-mode-hook
+;;                 deft-mode-hook
+;;                 org-agenda-mode-hook))
+;;   (add-hook mode (lambda () (display-line-numbers-mode 0))))
+ ;; Show line numbers only on prog modes
+ (add-hook 'prog-mode-hook 'display-line-numbers-mode)  
 
-;; Disable line numbers for some modes
-(dolist (mode '(org-mode-hook
-                term-mode-hook
-                shell-mode-hook
-                treemacs-mode-hook
-                eshell-mode-hook
-                deft-mode-hook
-                org-agenda-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+ ;; When something changes a file, automatically refresh the buffer containing it.
+ (global-auto-revert-mode t)
 
-;; When something changes a file, automatically refresh the buffer containing it.
-(global-auto-revert-mode t)
+ ;; Visually indicate matching pairs of parentheses.
+ (show-paren-mode t)
 
-;; Visually indicate matching pairs of parentheses.
-(show-paren-mode t)
+ ;; y-or-n answers
+ (fset 'yes-or-no-p 'y-or-n-p)	
 
-;; y-or-n answers
-(fset 'yes-or-no-p 'y-or-n-p)	
+ ;; global-hl-line-mode softly highlights the background color of the line containing point. It makes it a bit easier to find point, and it’s useful when pairing or presenting code.
+ (global-hl-line-mode 1)
+ (set-face-attribute hl-line-face nil :underline nil)
 
-;; global-hl-line-mode softly highlights the background color of the line containing point. It makes it a bit easier to find point, and it’s useful when pairing or presenting code.
-(global-hl-line-mode 1)
-(set-face-attribute hl-line-face nil :underline nil)
-
-;; Set tab width to 4 spaces and Allman indentation (bsd) in C
-(setq-default tab-width 4)
-(setq-default indent-tabs-mode nil)
-(setq indent-line-function 'insert-tab)
-(setq c-default-style "bsd"
-      c-basic-offset 4)
+ ;; Set tab width to 4 spaces and Allman indentation (bsd) in C
+ (setq-default tab-width 4)
+ (setq-default indent-tabs-mode nil)
+ (setq indent-line-function 'insert-tab)
+ (setq c-default-style "bsd"
+       c-basic-offset 4)
 
 (setq user-full-name "Patxi Madina")
 (cond ((eq system-type 'windows-nt)

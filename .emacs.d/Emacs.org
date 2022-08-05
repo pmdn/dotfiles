@@ -86,18 +86,20 @@ This section configures basic UI settings that remove unneeded elements to make 
 
   ;; Show column numbers in mode line and line numbers on window
   (column-number-mode)
-  (global-display-line-numbers-mode t)
-
-  ;; Disable line numbers for some modes
-  (dolist (mode '(org-mode-hook
-                  term-mode-hook
-                  shell-mode-hook
-                  treemacs-mode-hook
-                  eshell-mode-hook
-                  deft-mode-hook
-                  org-agenda-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
-
+ ;; (global-display-line-numbers-mode t)
+ ;;
+ ;; ;; Disable line numbers for some modes
+ ;; (dolist (mode '(org-mode-hook
+ ;;                 term-mode-hook
+ ;;                 shell-mode-hook
+ ;;                 treemacs-mode-hook
+ ;;                 eshell-mode-hook
+ ;;                 deft-mode-hook
+ ;;                 org-agenda-mode-hook))
+ ;;   (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  ;; Show line numbers only on prog modes
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode)  
+  
   ;; When something changes a file, automatically refresh the buffer containing it.
   (global-auto-revert-mode t)
 
