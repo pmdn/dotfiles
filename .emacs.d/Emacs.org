@@ -774,30 +774,30 @@ Use ~M-x org-roam-ui-mode RET~ to enable the global mode. It will start a web se
 
 #+END_SRC
 
-** Projectile
-
-[[https://projectile.mx/][Projectile]] is a project management library for Emacs which makes it a lot easier to navigate around code projects for various languages.  Many packages integrate with Projectile so it's a good idea to have it installed even if you don't use its commands directly.
-
-#+BEGIN_SRC emacs-lisp
-
-;; Pojectile for working with projects
-(use-package projectile
-  :diminish projectile-mode
-  :config (projectile-mode)
-  :custom ((projectile-completion-system 'ivy))
-  :bind-keymap
-  ("C-c p" . projectile-command-map)
-  :init
-  ;; NOTE: Set this to the folder where you keep your Git repos!
-  (when (file-directory-p "~/Projects/Code")
-    (setq projectile-project-search-path '("~/Projects/Code")))
-  (setq projectile-switch-project-action #'projectile-dired))
-
-(use-package counsel-projectile
-  :after projectile
-  :config (counsel-projectile-mode))
-
-#+END_SRC
+;;** Projectile
+;;
+[[https://projectile.mx/][;;Projectile]] is a project management library for Emacs which makes it a lot easier to navigate around code projects for various languages.  Many packages integrate with Projectile so it's a good idea to have it installed even if you don't use its commands directly.
+;;
+;;#+BEGIN_SRC emacs-lisp
+;;
+;;;; Pojectile for working with projects
+;;(use-package projectile
+;;  :diminish projectile-mode
+;;  :config (projectile-mode)
+;;  :custom ((projectile-completion-system 'ivy))
+;;  :bind-keymap
+;;  ("C-c p" . projectile-command-map)
+;;  :init
+;;  ;; NOTE: Set this to the folder where you keep your Git repos!
+;;  (when (file-directory-p "~/Projects/Code")
+;;    (setq projectile-project-search-path '("~/Projects/Code")))
+;;  (setq projectile-switch-project-action #'projectile-dired))
+;;
+;;(use-package counsel-projectile
+;;  :after projectile
+;;  :config (counsel-projectile-mode))
+;;
+;;#+END_SRC
 
 ** Rainbow delimiter
 
