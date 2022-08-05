@@ -839,16 +839,6 @@ Use ~M-x org-roam-ui-mode RET~ to enable the global mode. It will start a web se
 
 #+END_SRC
 
-** Flycheck
-
-[[https://www.flycheck.org/en/latest/][FLycheck]] is a modern on-the-fly syntax checking extension for GNU Emacs.
-
-#+begin_src emacs-lisp
-
-;;(use-package flycheck
-;; :init (global-flycheck-mode)) 
-  
-#+end_src
 ** Python
 
 Make sure you install virtualenv by: ~sudo apt install virtualenv~

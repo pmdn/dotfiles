@@ -551,9 +551,6 @@
 
 (add-hook 'org-export-before-processing-hook 'my/org-inline-css-hook)
 
-;;(use-package flycheck
-;; :init (global-flycheck-mode))
-
 (setq py-interpreter "python3")
 (setq org-babel-python-command "python3")
 
