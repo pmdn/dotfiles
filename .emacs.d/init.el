@@ -248,6 +248,7 @@
   :config
   (setq org-ellipsis " ▾")
   (setq org-adapt-indentation 'headline-data)
+  (setq org-hide-emphasis-markers t)
   ;; Fix image width and show inline images
   (setq org-image-actual-width 700)
   (setq org-startup-with-inline-images t)
@@ -573,6 +574,13 @@
    :config
    (elfeed-org)
    (setq rmh-elfeed-org-files (list  (concat org-directory "/elfeed.org"))))
+
+(use-package pdf-tools
+    :config
+    (pdf-tools-install)
+    (setq-default pdf-view-display-size 'fit-width))
+
+  (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)))
 
 ;; Local Variables:
 ;; byte-compile-warnings: (not free-vars noruntime)

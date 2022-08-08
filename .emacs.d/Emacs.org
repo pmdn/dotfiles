@@ -417,6 +417,7 @@ Some inspiration from:
     :config
     (setq org-ellipsis " ▾")
     (setq org-adapt-indentation 'headline-data)
+    (setq org-hide-emphasis-markers t)
     ;; Fix image width and show inline images
     (setq org-image-actual-width 700)
     (setq org-startup-with-inline-images t)
@@ -909,6 +910,21 @@ Format code according to PEP8 on save with [[https://github.com/emacsmirror/py-a
      (setq rmh-elfeed-org-files (list  (concat org-directory "/elfeed.org"))))
 
 #+END_SRC
+
+* Pdf files with pdf-tools
+
+[[https://github.com/vedang/pdf-tools][pdf-tools]] is a package to view and anotate pdf files inside emacs. Configuration taken from [[https://gitlab.com/hefistion/emacs.d/-/blob/master/config.org][El blog de Lázaro]].
+
+#+begin_src emacs-lisp
+
+  (use-package pdf-tools
+      :config
+      (pdf-tools-install)
+      (setq-default pdf-view-display-size 'fit-width))
+
+    (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)))
+  
+#+end_src
 
 * Finish line
 
