@@ -247,7 +247,7 @@
   :hook (org-mode . efs/org-mode-setup)
   :config
   (setq org-ellipsis " ▾")
-  (setq org-adapt-indentation 'headline-data)
+  ;(setq org-adapt-indentation 'headline-data)
   (setq org-hide-emphasis-markers t)
   ;; Fix image width and show inline images
   (setq org-image-actual-width 700)
@@ -373,7 +373,8 @@
 (org-babel-do-load-languages
   'org-babel-load-languages
   '((emacs-lisp . t)
-    (python . t)))
+    (python . t)
+    (shell . t)))
 
 (push '("conf-unix" . conf-unix) org-src-lang-modes)
 
@@ -547,7 +548,9 @@
 (use-package pyvenv
   :ensure t
   :init
-  (setenv "WORKON_HOME" "~/.pyenv/versions"))
+  (setenv "WORKON_HOME" "~/.pyenv/versions")
+  :config
+  (pyvenv-mode 1))
 
 ;; Eglot configuration
 (use-package eglot

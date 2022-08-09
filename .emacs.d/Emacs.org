@@ -416,7 +416,7 @@ Some inspiration from:
     :hook (org-mode . efs/org-mode-setup)
     :config
     (setq org-ellipsis " ▾")
-    (setq org-adapt-indentation 'headline-data)
+    ;(setq org-adapt-indentation 'headline-data)
     (setq org-hide-emphasis-markers t)
     ;; Fix image width and show inline images
     (setq org-image-actual-width 700)
@@ -555,12 +555,13 @@ To execute or export code in =org-mode= code blocks, you'll need to set up =org-
 
 #+begin_src emacs-lisp
 
-  (org-babel-do-load-languages
-    'org-babel-load-languages
-    '((emacs-lisp . t)
-      (python . t)))
+    (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((emacs-lisp . t)
+        (python . t)
+        (shell . t)))
 
-  (push '("conf-unix" . conf-unix) org-src-lang-modes)
+    (push '("conf-unix" . conf-unix) org-src-lang-modes)
 
 #+end_src
 
@@ -688,7 +689,7 @@ Also make sure that the directories =RoamNotes= and =daily= inside it exist.
 
 [[https://jblevins.org/projects/deft/][Deft]] provides a nice interface for browsing and filtering org-roam notes.
 
-   #+begin_src emacs-lisp
+#+begin_src emacs-lisp
 
   (cond ((eq system-type 'windows-nt)
        ;; Windows-specific code goes here.
@@ -708,7 +709,7 @@ Also make sure that the directories =RoamNotes= and =daily= inside it exist.
        (deft-directory "~/Sync/Sincronizadas/Notes/OrgFiles/RoamNotes"))
        ))
 
-   #+end_src
+#+end_src
 
 ** Org-roam-ui
 
@@ -820,6 +821,8 @@ Use ~M-x org-roam-ui-mode RET~ to enable the global mode. It will start a web se
 ** Python
 
 Make sure you install virtualenv by: ~sudo apt install virtualenv~
+Or: ~python3 -m pip install virtualenv~
+And; ~apt install python3.10-venv~
 Also install pip: ~sudo apt install python3-pip~
 And also install pep8: ~pip3 install autopep8~
 And jedi: ~pip3 install jedi~ 
@@ -856,26 +859,28 @@ Add =~/.local/bin= to load path. That’s where ~virtualenv~ is installed, and w
 
 [[https://github.com/jorgenschaefer/pyvenv][pyvenv]] for virtual environments. Use ~M-x pyvenv-workon~ to select a virtual env and then ~M-x eglot~.
 
-   #+begin_src emacs-lisp
+#+begin_src emacs-lisp
 
-     (use-package pyvenv
-       :ensure t
-       :init
-       (setenv "WORKON_HOME" "~/.pyenv/versions"))
+  (use-package pyvenv
+    :ensure t
+    :init
+    (setenv "WORKON_HOME" "~/.pyenv/versions")
+    :config
+    (pyvenv-mode 1))
 
-   #+end_src
+#+end_src
 
 Using [[https://github.com/joaotavora/eglot][eglot]], a language server for Python.
 
-   #+begin_src emacs-lisp
+#+begin_src emacs-lisp
 
-     ;; Eglot configuration
-     (use-package eglot
-       :ensure t
-       :defer t
-       :hook (python-mode . eglot-ensure))
+  ;; Eglot configuration
+  (use-package eglot
+    :ensure t
+    :defer t
+    :hook (python-mode . eglot-ensure))
 
-   #+end_src
+#+end_src
    
 Format code according to PEP8 on save with [[https://github.com/emacsmirror/py-autopep8][py-autopep8]]:
 
