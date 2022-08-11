@@ -538,13 +538,19 @@
 
 (add-hook 'org-export-before-processing-hook 'my/org-inline-css-hook)
 
-(setq py-interpreter "python3")
 (setq org-babel-python-command "python3")
 
-(use-package python-mode)
+;; Python mode configuration
+(use-package python
+  :mode ("\\.py\\'" . python-mode)
+        ("\\.wsgi$" . python-mode)
+  :interpreter ("python" . python-mode)
+  :config
+  (setq python-indent-offset 4))
 
 (hrs/append-to-path "~/.local/bin")
 
+;; Pyvenv configuration
 (use-package pyvenv
   :ensure t
   :init

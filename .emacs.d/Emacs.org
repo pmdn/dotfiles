@@ -836,17 +836,26 @@ On 2022/08/04 I changed to [[https://github.com/joaotavora/eglot][eglot]]. Confi
 - https://www.reddit.com/r/emacs/comments/ushfzn/comment/ii0pbg7/?utm_source=share&utm_medium=web2x&context=3
 - https://cestlaz.github.io/post/using-emacs-74-eglot/
 
-Set interpreter to python 3.
+Set org-babel to python 3.
 
 #+BEGIN_SRC  emacs-lisp
 
-  (setq py-interpreter "python3")
-  (setq org-babel-python-command "python3")
+   (setq org-babel-python-command "python3")
 
 #+END_SRC
 
+Use the built in python.el package.
+
 #+begin_src emacs-lisp
-  (use-package python-mode)
+
+  ;; Python mode configuration
+  (use-package python
+    :mode ("\\.py\\'" . python-mode)
+          ("\\.wsgi$" . python-mode)
+    :interpreter ("python" . python-mode)
+    :config
+    (setq python-indent-offset 4))
+
 #+end_src
 
 Add =~/.local/bin= to load path. That’s where ~virtualenv~ is installed, and we’ll need that for ~jedi~. Check with ~which virtualenv~ on the shell.
@@ -861,6 +870,7 @@ Add =~/.local/bin= to load path. That’s where ~virtualenv~ is installed, and w
 
 #+begin_src emacs-lisp
 
+  ;; Pyvenv configuration
   (use-package pyvenv
     :ensure t
     :init
