@@ -539,14 +539,30 @@
 (add-hook 'org-export-before-processing-hook 'my/org-inline-css-hook)
 
 ;; Eglot configuration
-(use-package eglot
-  :ensure t
-  :defer t
-  :hook ((python-mode . eglot-ensure)
-         (c-mode . eglot-ensure)
-         (c++-mode . eglot-ensure))
-  :config
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-14")))
+(cond ((eq system-type 'windows-nt)
+       ;; Windows-specific code goes here.
+       (use-package eglot
+       :ensure t
+       :defer t
+       :hook ((python-mode . eglot-ensure)
+              (c-mode . eglot-ensure)
+              (c++-mode . eglot-ensure))
+       :config
+       (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd")))
+
+       )
+      ((eq system-type 'gnu/linux)
+       ;; Linux-specific code goes here.
+       (use-package eglot
+       :ensure t
+       :defer t
+       :hook ((python-mode . eglot-ensure)
+              (c-mode . eglot-ensure)
+              (c++-mode . eglot-ensure))
+       :config
+       (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-14")))
+
+       ))
 
 (cond ((eq system-type 'windows-nt)
      ;; Windows-specific code goes here.

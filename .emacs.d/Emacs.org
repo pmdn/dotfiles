@@ -822,21 +822,40 @@ Use ~M-x org-roam-ui-mode RET~ to enable the global mode. It will start a web se
 
 Using [[https://github.com/joaotavora/eglot][eglot]], a language server protocol (LSP) for Emacs.
 Make sure servers for the different languajes are installed:
-pyright: ~pip3 install pyright~
-clangd: ~sudo apt -y install clangd-13~
+On Linux
+- pyright: ~pip3 install pyright~
+- clangd: ~sudo apt -y install clangd-14~
+On Windows
+- python language server: ~pip install python-language-server[all]~
+- clangd: install the [[https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.6/LLVM-14.0.6-win64.exe][executable]].
 
 #+begin_src emacs-lisp
 
   ;; Eglot configuration
-  (use-package eglot
-    :ensure t
-    :defer t
-    :hook ((python-mode . eglot-ensure)
-           (c-mode . eglot-ensure)
-           (c++-mode . eglot-ensure))
-    :config
-    (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-14")))
+  (cond ((eq system-type 'windows-nt)
+         ;; Windows-specific code goes here.
+         (use-package eglot
+         :ensure t
+         :defer t
+         :hook ((python-mode . eglot-ensure)
+                (c-mode . eglot-ensure)
+                (c++-mode . eglot-ensure))
+         :config
+         (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd")))
 
+         )
+        ((eq system-type 'gnu/linux)
+         ;; Linux-specific code goes here.
+         (use-package eglot
+         :ensure t
+         :defer t
+         :hook ((python-mode . eglot-ensure)
+                (c-mode . eglot-ensure)
+                (c++-mode . eglot-ensure))
+         :config
+         (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-14")))
+
+         ))
 
 #+end_src
 
