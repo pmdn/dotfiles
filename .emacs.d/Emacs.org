@@ -945,6 +945,46 @@ Format code according to PEP8 on save with [[https://github.com/emacsmirror/py-a
 
 [[https://github.com/vedang/pdf-tools][pdf-tools]] is a package to view and anotate pdf files inside emacs. Configuration taken from [[https://gitlab.com/hefistion/emacs.d/-/blob/master/config.org][El blog de Lázaro]].
 
+To install on Windows: [[https://github.com/nobiot/Zero-to-Emacs-and-Org-roam/blob/v1/100.pdf-tools-org-noter.md][Instructions.]]
+
+The key is:
+
+- Use https://www.msys2.org/ as a build tool to compile necessary software pieces from sources
+
+- Do NOT follow the official Windows instruction to the letter on PDF-tools GitHub page (https://github.com/politza/pdf-tools)
+
+- Instead of using "msys2 shell" (as instructed), build (compile) PDF-Tools from within Emacs
+
+
+1) Install MSYS2 
+
+Go to MSYS2 from its website at https://www.msys2.org/.
+
+Download the installer, execute it to install MSYS2. You can follow the rest of the instruction, but for PDF-Tools, you may not have to do much more than installing MSYS2. I did not even call ~pacman Syu~ to update the package database (I think it would be a good idea to do that so that you can get the latest version of the packages).
+
+2) Install PDF-Tools in Emacs
+
+Launch Emacs. Install =pdf-tools= from MELPA, or any mechanism you use.
+
+MSYS2 has its own Emacs in its package database, but you don't need to use it. The normal Emacs that you download from the GNU Emacs site, as described in the previous chapters of this guide, works fine.
+
+3) Build (Compile) program files required by PDF-Tools
+
+Don't worry, it needs one manual trigger and automatic. Within Emacs, call ~M-x pdf-tools-install RET~ to start automatic build. Then wait.
+
+When Emacs prompts for your input, take the default option and say "yes" to the questions.
+
+This will automatically start to build (compile) software files (=.dll= and =.exe= files). It took me about 30 minutes; the duration will vary depending on how good your PC is. New files will appear in the =pdf-tools= sub-folder in your =~/.emacs.d/elpa= folder.
+
+Now you should be able to open PDF files with PDF-Tools. To do so, simply visit a PDF document like any other file via ~C-x C-f~; Emacs should open the PDF document in "PDFView" mode with PDF-Tools.
+
+4) Add a one-line configuration in your =.emacs= config file
+
+Add ~(pdf-tools-install)~ or ~(pdf-loader-install)~ in your config file, following the official instruction on PDF-Tools.
+
+This is it. You should be able to quit Emacs, launch it again, and open a PDF file with PDF-Tools within Emacs.
+
+
 #+begin_src emacs-lisp
 
   (use-package pdf-tools
