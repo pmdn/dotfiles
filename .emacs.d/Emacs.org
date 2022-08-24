@@ -835,7 +835,7 @@ clangd: ~sudo apt -y install clangd-13~
            (c-mode . eglot-ensure)
            (c++-mode . eglot-ensure))
     :config
-    (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-13")))
+    (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-14")))
 
 
 #+end_src
@@ -861,7 +861,13 @@ Set org-babel to python 3.
 
 #+BEGIN_SRC  emacs-lisp
 
-   (setq org-babel-python-command "python3")
+  (cond ((eq system-type 'windows-nt)
+       ;; Windows-specific code goes here.
+       )
+      ((eq system-type 'gnu/linux)
+       ;; Linux-specific code goes here.
+       (setq org-babel-python-command "python3")
+       ))
 
 #+END_SRC
 

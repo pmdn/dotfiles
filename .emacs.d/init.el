@@ -546,9 +546,15 @@
          (c-mode . eglot-ensure)
          (c++-mode . eglot-ensure))
   :config
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-13")))
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-14")))
 
-(setq org-babel-python-command "python3")
+(cond ((eq system-type 'windows-nt)
+     ;; Windows-specific code goes here.
+     )
+    ((eq system-type 'gnu/linux)
+     ;; Linux-specific code goes here.
+     (setq org-babel-python-command "python3")
+     ))
 
 ;; Python mode configuration
 (use-package python
