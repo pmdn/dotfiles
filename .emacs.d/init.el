@@ -538,6 +538,16 @@
 
 (add-hook 'org-export-before-processing-hook 'my/org-inline-css-hook)
 
+;; Eglot configuration
+(use-package eglot
+  :ensure t
+  :defer t
+  :hook ((python-mode . eglot-ensure)
+         (c-mode . eglot-ensure)
+         (c++-mode . eglot-ensure))
+  :config
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-13")))
+
 (setq org-babel-python-command "python3")
 
 ;; Python mode configuration
@@ -557,12 +567,6 @@
   (setenv "WORKON_HOME" "~/.pyenv/versions")
   :config
   (pyvenv-mode 1))
-
-;; Eglot configuration
-(use-package eglot
-  :ensure t
-  :defer t
-  :hook (python-mode . eglot-ensure))
 
 (use-package py-autopep8
   :hook ((python-mode) . py-autopep8-mode))

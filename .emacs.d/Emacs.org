@@ -818,6 +818,28 @@ Use ~M-x org-roam-ui-mode RET~ to enable the global mode. It will start a web se
 
 #+END_SRC
 
+** Eglot
+
+Using [[https://github.com/joaotavora/eglot][eglot]], a language server protocol (LSP) for Emacs.
+Make sure servers for the different languajes are installed:
+pyright: ~pip3 install pyright~
+clangd: ~sudo apt -y install clangd-13~
+
+#+begin_src emacs-lisp
+
+  ;; Eglot configuration
+  (use-package eglot
+    :ensure t
+    :defer t
+    :hook ((python-mode . eglot-ensure)
+           (c-mode . eglot-ensure)
+           (c++-mode . eglot-ensure))
+    :config
+    (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-13")))
+
+
+#+end_src
+
 ** Python
 
 Make sure you install virtualenv by: ~sudo apt install virtualenv~
@@ -827,7 +849,6 @@ Also install pip: ~sudo apt install python3-pip~
 And also install pep8: ~pip3 install autopep8~
 And jedi: ~pip3 install jedi~ 
 And flake8: ~sudo apt install flake8~
-And pyright: ~pip3 install pyright~
 
 I initially used elpy as described in this tutorial https://realpython.com/emacs-the-best-python-editor/.
 
@@ -880,18 +901,6 @@ Add =~/.local/bin= to load path. That’s where ~virtualenv~ is installed, and w
 
 #+end_src
 
-Using [[https://github.com/joaotavora/eglot][eglot]], a language server for Python.
-
-#+begin_src emacs-lisp
-
-  ;; Eglot configuration
-  (use-package eglot
-    :ensure t
-    :defer t
-    :hook (python-mode . eglot-ensure))
-
-#+end_src
-   
 Format code according to PEP8 on save with [[https://github.com/emacsmirror/py-autopep8][py-autopep8]]:
 
 #+begin_src emacs-lisp
