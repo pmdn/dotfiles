@@ -344,14 +344,15 @@
                    (org-agenda-files org-agenda-files)))))))
 
   ;; Capture templates
+  (setq org-default-notes-file (concat org-directory "/Notas.org"))
   (setq org-capture-templates
-        `(("r" "Quick Note" entry (file+olp (concat org-directory "/Notas.org") "Inbox")
+        `(("r" "Quick Note" entry (file+olp org-default-notes-file "Inbox")
            "* %?\n  %U\n  %i" :empty-lines 1)
-          ("t" "Tasks" entry (file+olp (concat org-directory "/Notas.org") "Inbox")
+          ("t" "Tasks" entry (file+olp org-default-notes-file "Inbox")
            "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-          ("b" "Books" entry (file+olp (concat org-directory "/Notas.org") "Libros" "Lista Lectura")
+          ("b" "Books" entry (file+olp org-default-notes-file "Libros" "Lista Lectura")
            "*** %\\1 %?\n :PROPERTIES:\n :Título: %^{Título}\n :Subtítulo: %^{Subtítulo}\n :Serie: %^{Serie}\n :Autor: %^{Autor [Apellido, Nombre]}\n :Año: %^{Año}\n :Categoría: %^{Categoría}\n :Puntuación: %^{Puntuación [1-5]}\n :Fecha: %^{Fecha Lectura [dd/mm/aaaa]}\n :Estado: %^{Estado|Leído|Leyendo|Pendiente}\n :END: \n" :empty-lines 1 :prepend t)
-          ("n" "Notes" entry (file+datetree (concat org-directory "/Notas.org"))
+          ("d" "Notes" entry (file+datetree org-default-notes-file)
            "* %^{Description} %^g %?\nAdded: %U")))
 
   ;; Set global key for capture
