@@ -742,6 +742,176 @@ Use ~M-x org-roam-ui-mode RET~ to enable the global mode. It will start a web se
 
 #+end_src
 
+* Eshell
+Configuration ideas taken from [[https://github.com/howardabrams/dot-files/blob/master/emacs-eshell.org][Howard Abrams]].
+
+Scrolling through the output and searching for results that can be  copied to the kill ring is a great feature of Eshell. However,  instead of running =end-of-buffer= key-binding, the following  setting means any other key will jump back to the prompt:
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package eshell
+      :init
+      (setq 
+            eshell-scroll-to-bottom-on-input 'all
+            eshell-scroll-show-maximum-output nil
+            eshell-error-if-no-glob t
+            eshell-hist-ignoredups t
+            eshell-save-history-on-exit t
+            eshell-prefer-lisp-functions nil
+            eshell-destroy-buffer-when-process-dies t)
+      ;;Eshell would get somewhat confused if I ran the following commands
+      (add-hook 'eshell-mode-hook
+                (lambda ()
+                  (add-to-list 'eshell-visual-commands "ssh")
+                  (add-to-list 'eshell-visual-commands "tail")
+                  (add-to-list 'eshell-visual-commands "top"))))
+  #+END_SRC
+  
+** Special prompt
+
+  Following [[http://blog.liangzan.net/blog/2012/12/12/customizing-your-emacs-eshell-prompt/][these instructions]], we build a better prompt with the Git branch in it (Of course, it matches my Bash prompt). First, we need a function that returns a string with the Git branch in it, e.g. ":master"
+
+  #+BEGIN_SRC emacs-lisp
+    (defun curr-dir-git-branch-string (pwd)
+      "Returns current git branch as a string, or the empty string if
+    PWD is not in a git repo (or the git command is not found)."
+      (interactive)
+      (when (and (not (file-remote-p pwd))
+                 (eshell-search-path "git")
+                 (locate-dominating-file pwd ".git"))
+        (let* ((git-url (shell-command-to-string "git config --get remote.origin.url"))
+               (git-output (shell-command-to-string (concat "git rev-parse --abbrev-ref HEAD")))
+               (git-branch (s-trim git-output))
+               (git-icon  "\xe0a0"))
+          (concat "[" git-branch "]"))))
+  #+END_SRC
+
+  The function takes the current directory passed in via =pwd= and replaces the =$HOME= part with a tilde. I'm sure this function already exists in the eshell source, but I didn't find it...
+
+  #+BEGIN_SRC emacs-lisp
+    (defun pwd-replace-home (pwd)
+      "Replace home in PWD with tilde (~) character."
+      (interactive)
+      (let* ((home (expand-file-name (getenv "HOME")))
+             (home-len (length home)))
+        (if (and
+             (>= (length pwd) home-len)
+             (equal home (substring pwd 0 home-len)))
+            (concat "~" (substring pwd home-len))
+          pwd)))
+  #+END_SRC
+
+  Make the directory name be shorter...by replacing all directory names with just its first names. However, we leave the last two to be the full names. Why yes, I did steal this.
+
+  #+BEGIN_SRC emacs-lisp
+    (defun pwd-shorten-dirs (pwd)
+      "Shorten all directory names in PWD except the last two."
+      (let ((p-lst (split-string pwd "/")))
+        (if (> (length p-lst) 2)
+            (concat
+             (mapconcat (lambda (elm) (if (zerop (length elm)) ""
+                                   (substring elm 0 1)))
+                        (butlast p-lst 2)
+                        "/")
+             "/"
+             (mapconcat (lambda (elm) elm)
+                        (last p-lst 2)
+                        "/"))
+          pwd)))  ;; Otherwise, we just return the PWD
+  #+END_SRC
+
+  Break up the directory into a "parent" and a "base":
+
+  #+BEGIN_SRC emacs-lisp
+    (defun split-directory-prompt (directory)
+      (if (string-match-p ".*/.*" directory)
+          (list (file-name-directory directory) (file-name-base directory))
+        (list "" directory)))
+  #+END_SRC
+
+  Using virtual environments for certain languages is helpful to know, especially since I change them based on the directory.
+
+  #+BEGIN_SRC emacs-lisp
+    (defun python-prompt ()
+      "Returns a string (may be empty) based on the current Python
+       Virtual Environment. Assuming the M-x command: `pyvenv-activate'
+       has been called."
+      (when (not (eq pyvenv-virtual-env-name 'nil))
+        (concat "(" pyvenv-virtual-env-name ")")))
+  #+END_SRC
+
+  Now tie it all together with a prompt function can color each of the prompts components.
+
+  #+BEGIN_SRC emacs-lisp
+    (defun eshell/eshell-local-prompt-function ()
+      "A prompt for eshell that works locally (in that is assumes
+    that it could run certain commands) in order to make a prettier,
+    more-helpful local prompt."
+      (interactive)
+      (let* ((pwd        (eshell/pwd))
+             (directory (split-directory-prompt
+                         (pwd-shorten-dirs
+                          (pwd-replace-home pwd))))
+             (parent (car directory))
+             (name   (cadr directory))
+             (branch (curr-dir-git-branch-string pwd))
+             (python (when (not (file-remote-p pwd)) (python-prompt)))
+
+             (dark-env (eq 'dark (frame-parameter nil 'background-mode)))
+             (for-name  `(:weight bold :foreground "#81A1C1"))
+             (for-bars                 `(:weight bold))
+             (for-parent  (if dark-env `(:foreground "dark orange") `(:foreground "blue")))
+             (for-dir     (if dark-env `(:foreground "orange" :weight bold)
+                            `(:foreground "blue" :weight bold)))
+             (for-git                  `(:foreground "LightSeaGreen"))
+             (for-python               `(:foreground "DarkGrey")))
+
+        (concat
+         (propertize (user-login-name) 'face for-name)
+         (propertize "@" 'face for-name)
+         (propertize (system-name) 'face for-name)
+         (propertize " : " 'face for-bars)
+         (propertize parent   'face for-parent)
+         (propertize name     'face for-dir)
+         (when branch
+           (concat (propertize " : "    'face for-bars)
+                   (propertize branch   'face for-git)))
+         (when python
+           (concat (propertize " : " 'face for-bars)
+                   (propertize python 'face for-python)))
+         ;;(propertize "\n"     'face for-bars)
+         (propertize (if (= (user-uid) 0) " #" " $") 'face `(:weight ultra-bold))
+         ;; (propertize " └→" 'face (if (= (user-uid) 0) `(:weight ultra-bold :foreground "red") `(:weight ultra-bold)))
+         (propertize " "    'face `(:weight bold)))))
+
+    (setq-default eshell-prompt-function #'eshell/eshell-local-prompt-function)
+  #+END_SRC
+
+  Turn off the default prompt, otherwise, it won't use ours:
+
+  #+BEGIN_SRC emacs-lisp
+    (setq eshell-highlight-prompt nil)
+  #+END_SRC
+
+** Shell windows
+
+Making little Shells whenever I need them:
+
+   #+BEGIN_SRC emacs-lisp
+     (defun eshell-here ()
+       "Opens up a new shell in the directory associated with the
+         current buffer's file. The eshell is renamed to match that
+         directory to make multiple eshell windows easier."
+       (interactive)
+       (let* ((height (/ (window-total-height) 3)))
+         (split-window-vertically (- height))
+         (other-window 1)
+         (eshell "new")
+         (insert (concat "ls"))
+         (eshell-send-input)))
+
+     (bind-key "C-!" 'eshell-here)
+   #+END_SRC
+
 * Development
 
 ** Magit
@@ -915,13 +1085,17 @@ Add =~/.local/bin= to load path. That’s where ~virtualenv~ is installed, and w
 
 [[https://github.com/jorgenschaefer/pyvenv][pyvenv]] for virtual environments. Use ~M-x pyvenv-workon~ to select a virtual env and then ~M-x eglot~.
 
+Eshell must be opened after creating the environment in order to use it.
+
+If created in the default directory by ~M-x pyvenv-create~ instead of doing it from the shell by ~python3 -m venv path/to/venv~, don't use the name =venv=, otherwise is not correctly shown in the =modeline=. Better use somethin like =venv_projX=.
+
+The default path for  ~M-x pyvenv-create~ is =~/.virtualenvs=.
+
 #+begin_src emacs-lisp
 
   ;; Pyvenv configuration
   (use-package pyvenv
     :ensure t
-    :init
-    (setenv "WORKON_HOME" "~/.pyenv/versions")
     :config
     (pyvenv-mode 1))
 
