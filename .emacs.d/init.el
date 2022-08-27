@@ -246,6 +246,9 @@
   :pin elpa
   :hook (org-mode . efs/org-mode-setup)
   :config
+  (setq org-babel-default-header-args
+        (cons '(:results . "output verbatim replace")
+              (assq-delete-all :results org-babel-default-header-args)))
   (setq org-ellipsis " ▾")
   ;(setq org-adapt-indentation 'headline-data)
   (setq org-hide-emphasis-markers t)
@@ -498,8 +501,7 @@
 
 (use-package eshell
   :init
-  (setq 
-        eshell-scroll-to-bottom-on-input 'all
+  (setq eshell-scroll-to-bottom-on-input 'all
         eshell-scroll-show-maximum-output nil
         eshell-error-if-no-glob t
         eshell-hist-ignoredups t
