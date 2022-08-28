@@ -470,42 +470,42 @@
         ))
 
 (cond ((eq system-type 'windows-nt)
-     ;; Windows-specific code goes here.
-     )
-    ((eq system-type 'gnu/linux)
-     ;; Linux-specific code goes here.
-     (use-package deft
-     :after org
-     :bind
-     ("C-c n t" . deft)
-     :custom
-     (deft-recursive t)
-     (deft-use-filename-as-title t)
-     (deft-strip-summary-regexp ":PROPERTIES:\n\\(.+\n\\)+:END:\n")
-     (deft-use-filter-string-for-filename nil)
-     (deft-default-extension "org")
-     (deft-directory "~/Sync/Sincronizadas/Notes/OrgFiles/RoamNotes"))
-     ))
+       ;; Windows-specific code goes here.
+       )
+      ((eq system-type 'gnu/linux)
+       ;; Linux-specific code goes here.
+       (use-package deft
+         :after org
+         :bind
+         ("C-c n t" . deft)
+         :custom
+         (deft-recursive t)
+         (deft-use-filename-as-title t)
+         (deft-strip-summary-regexp ":PROPERTIES:\n\\(.+\n\\)+:END:\n")
+         (deft-use-filter-string-for-filename nil)
+         (deft-default-extension "org")
+         (deft-directory "~/Sync/Sincronizadas/Notes/OrgFiles/RoamNotes"))
+       ))
 
 (cond ((eq system-type 'windows-nt)
-     ;; Windows-specific code goes here.
-     )
-    ((eq system-type 'gnu/linux)
-     ;; Linux-specific code goes here.
-     (use-package org-roam-ui
-     ;;  :straight
-     ;;  (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
-     :after org-roam
-     ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-     ;;         a hookable mode anymore, you're advised to pick something yourself
-     ;;         if you don't care about startup time, use
-     ;;  :hook (after-init . org-roam-ui-mode)
-     :config
-     (setq org-roam-ui-sync-theme t
-           org-roam-ui-follow t
-           org-roam-ui-update-on-save t
-           org-roam-ui-open-on-start nil))
-     ))
+       ;; Windows-specific code goes here.
+       )
+      ((eq system-type 'gnu/linux)
+       ;; Linux-specific code goes here.
+       (use-package org-roam-ui
+         ;;  :straight
+         ;;  (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+         :after org-roam
+         ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+         ;;         a hookable mode anymore, you're advised to pick something yourself
+         ;;         if you don't care about startup time, use
+         ;;  :hook (after-init . org-roam-ui-mode)
+         :config
+         (setq org-roam-ui-sync-theme t
+               org-roam-ui-follow t
+               org-roam-ui-update-on-save t
+               org-roam-ui-open-on-start nil))
+       ))
 
 (use-package eshell
   :init
@@ -689,25 +689,25 @@ more-helpful local prompt."
 (cond ((eq system-type 'windows-nt)
        ;; Windows-specific code goes here.
        (use-package eglot
-       :ensure t
-       :defer t
-       :hook ((python-mode . eglot-ensure)
-              (c-mode . eglot-ensure)
-              (c++-mode . eglot-ensure))
-       :config
-       (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd")))
+         :ensure t
+         :defer t
+         :hook ((python-mode . eglot-ensure)
+                (c-mode . eglot-ensure)
+                (c++-mode . eglot-ensure))
+         :config
+         (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd")))
 
        )
       ((eq system-type 'gnu/linux)
        ;; Linux-specific code goes here.
        (use-package eglot
-       :ensure t
-       :defer t
-       :hook ((python-mode . eglot-ensure)
-              (c-mode . eglot-ensure)
-              (c++-mode . eglot-ensure))
-       :config
-       (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-14")))
+         :ensure t
+         :defer t
+         :hook ((python-mode . eglot-ensure)
+                (c-mode . eglot-ensure)
+                (c++-mode . eglot-ensure))
+         :config
+         (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-14")))
 
        ))
 
