@@ -249,6 +249,7 @@
   (setq org-babel-default-header-args
         (cons '(:results . "output verbatim replace")
               (assq-delete-all :results org-babel-default-header-args)))
+  (setq org-babel-lisp-eval-fn #'sly-eval)
   (setq org-ellipsis " ▾")
   ;(setq org-adapt-indentation 'headline-data)
   (setq org-hide-emphasis-markers t)
@@ -378,6 +379,7 @@
   'org-babel-load-languages
   '((emacs-lisp . t)
     (python . t)
+    (lisp . t)      
     (shell . t)))
 
 (push '("conf-unix" . conf-unix) org-src-lang-modes)
@@ -388,6 +390,7 @@
 
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("li" . "src lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
   ;; For more complicated expansions now ~tempo-define-template must be used. n: newline, p: point after expansion
   (tempo-define-template "org-header"
@@ -648,6 +651,15 @@ more-helpful local prompt."
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
+(use-package smartparens
+  :diminish smartparens-mode ;; Do not show in modeline
+  :init
+  (require 'smartparens-config)
+  :config
+  (smartparens-global-mode t) ;; These options can be t or nil.
+  (show-smartparens-global-mode t)
+  (setq sp-show-pair-from-inside t))
+
 ;; Htmlize. To retain code coloring at html export
 (use-package htmlize
   :ensure t)
@@ -720,6 +732,13 @@ more-helpful local prompt."
 
 (use-package py-autopep8
   :hook ((python-mode) . py-autopep8-mode))
+
+(use-package sly
+  :ensure t
+  :defer t
+  :mode "\\.lisp\\'"
+  :config
+  (setq inferior-lisp-program "sbcl"))
 
 ;; Configure Elfeed
 (use-package elfeed
