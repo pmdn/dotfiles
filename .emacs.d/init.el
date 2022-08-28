@@ -112,10 +112,15 @@
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c l") 'org-store-link)
 
-(use-package doom-themes
-  :init (load-theme 'doom-nord t))
+(use-package doom-themes)
+  ;:init (load-theme 'doom-nord t))
 
 (use-package sublime-themes)
+
+(use-package timu-spacegrey-theme
+  :ensure t
+  :config
+  (load-theme 'timu-spacegrey t))
 
 (cond ((eq system-type 'windows-nt)
      ;; Windows-specific code goes here.
