@@ -1,5 +1,5 @@
 ;;; -*- lisp-data -*-
-(("~/.dotfiles/")
+(("~/Projects/Code/Pruebas/")
+ ("~/.dotfiles/")
  ("~/Sync/Sincronizadas/Notes/OrgFiles/")
- ("~/Projects/Code/Pruebas/")
  ("~/Projects/Code/Robosats/"))

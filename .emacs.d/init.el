@@ -68,6 +68,9 @@
  ;; Visually indicate matching pairs of parentheses.
  (show-paren-mode t)
 
+ ;; Insert closing parenthesis, bracket... pairs automatically
+ (electric-pair-mode 1)
+
  ;; y-or-n answers
  (fset 'yes-or-no-p 'y-or-n-p)	
 
@@ -656,15 +659,6 @@ more-helpful local prompt."
 ;; Easier to see if parenthesis are well closed
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
-
-(use-package smartparens
-  :diminish smartparens-mode ;; Do not show in modeline
-  :init
-  (require 'smartparens-config)
-  :config
-  (smartparens-global-mode t) ;; These options can be t or nil.
-  (show-smartparens-global-mode t)
-  (setq sp-show-pair-from-inside t))
 
 ;; Htmlize. To retain code coloring at html export
 (use-package htmlize
