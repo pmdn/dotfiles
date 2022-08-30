@@ -403,7 +403,7 @@
        '("#+TITLE: " p n
          "#+DESCRITION: " n
          "#+AUTHOR: " n
-         "#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup" n
+         "#+SETUPFILE: ./org-html-themes/org/theme-readtheorg-local.setup" n
          "#+TAGS: " n
          "#+STARTUP: overview")
        "<t"
