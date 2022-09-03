@@ -8,6 +8,9 @@
 
 ;;; Code:
 
+;; Better garbage collection threshold
+(setq gc-cons-threshold (* 50 1000 1000))
+
 ;; Initialize package sources
 (require 'package)
 
@@ -743,6 +746,7 @@ more-helpful local prompt."
 ;; Configure Elfeed
 (use-package elfeed
   :ensure t
+  :defer t
   :config
   (setq elfeed-db-directory (expand-file-name "elfeed" user-emacs-directory)
         elfeed-show-entry-switch 'display-buffer)
@@ -758,7 +762,8 @@ more-helpful local prompt."
    (setq rmh-elfeed-org-files (list  (concat org-directory "/elfeed.org"))))
 
 (use-package pdf-tools
-    :config
+  :defer t
+  :config
     (pdf-tools-install)
     (setq-default pdf-view-display-size 'fit-width))
 
