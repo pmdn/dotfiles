@@ -18,3 +18,4 @@
 /.emacs.d/org-roam.db
 /.emacs.d/.cache/
 /.emacs.d/.lsp-session-v1
+/.emacs.d/history
