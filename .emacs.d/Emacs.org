@@ -426,6 +426,18 @@ Articles:
 - Corfu: https://kristofferbalintona.me/posts/202202270056/
 - Cape: https://kristofferbalintona.me/posts/202203130102/
 
+** Orderless
+
+[[https://github.com/oantolin/orderless][Orderless]] is a completion style that divides the pattern into space-separated components, and matches candidates that match all of the components in any order.
+
+#+begin_src emacs-lisp
+  (use-package orderless
+    :ensure t
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '((file (styles basic partial-completion)))))
+#+end_src
+
 ** 
 
 * Org Mode
@@ -1075,7 +1087,9 @@ On Windows
                   (c-mode . eglot-ensure)
                   (c++-mode . eglot-ensure))
            :config
-           (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd")))
+           (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+            ;;Eglot will change the completion-category-defaults. And I can make it work by customizing completion-category-overrides
+           (setq completion-category-overrides '((eglot (styles orderless)))))
 
          )
         ((eq system-type 'gnu/linux)
@@ -1087,7 +1101,9 @@ On Windows
                   (c-mode . eglot-ensure)
                   (c++-mode . eglot-ensure))
            :config
-           (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-14")))
+           (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-14"))
+                           ;;Eglot will change the completion-category-defaults. And I can make it work by customizing completion-category-overrides
+           (setq completion-category-overrides '((eglot (styles orderless)))))
 
          ))
 

@@ -235,6 +235,12 @@
   (interactive)
   (pulse-momentary-highlight-one-line (point)))
 
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
+
 ;; Org mode configuration
 (defun efs/org-mode-setup ()
   (org-indent-mode 0)
@@ -699,7 +705,9 @@ more-helpful local prompt."
                 (c-mode . eglot-ensure)
                 (c++-mode . eglot-ensure))
          :config
-         (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd")))
+         (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+          ;;Eglot will change the completion-category-defaults. And I can make it work by customizing completion-category-overrides
+         (setq completion-category-overrides '((eglot (styles orderless)))))
 
        )
       ((eq system-type 'gnu/linux)
@@ -711,7 +719,9 @@ more-helpful local prompt."
                 (c-mode . eglot-ensure)
                 (c++-mode . eglot-ensure))
          :config
-         (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-14")))
+         (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-14"))
+                         ;;Eglot will change the completion-category-defaults. And I can make it work by customizing completion-category-overrides
+         (setq completion-category-overrides '((eglot (styles orderless)))))
 
        ))
 
