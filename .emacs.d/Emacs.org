@@ -186,6 +186,8 @@ In this section global key bindings are added.
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c c") 'org-capture)
   (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c h") 'pulse-line)
+  
 #+end_src
 
 * UI configurations
@@ -385,6 +387,46 @@ Default themes may be good options:
     :bind ("C-c s" . treemacs))
   
 #+end_src
+
+** Pulse
+
+=pulse.el= is a built in library that allows a temporal decoration technique where something is to be highlighted briefly. The global key =C-c h= has been added in order o use it.
+
+#+begin_src emacs-lisp
+(defun pulse-line (&rest _)
+  "Pulse (highlight) the current line."
+  (interactive)
+  (pulse-momentary-highlight-one-line (point)))
+
+#+end_src
+
+* Completion framework
+
+Completion in Emacs is key. Previously I used [[https://oremacs.com/swiper/][Ivy/Swiper/Counsel]] for the minibuffer and [[https://company-mode.github.io/][Company]] for in-buffer completion. Although they are nice and work perfectly, I have decided to go on with more /emacsy/ alternatives, that make use of built-in emacs capabilities instead of adding their own. This make them more scalable and easier to mantain. Below are some configuration examples, as well as some tutorials explaining the different functionalities of the packages.
+
+Configurations:
+- [[https://github.com/jeremyf/dotemacs/blob/main/emacs.d/configuration.org#how-does-this-thing-work][Jeremy Friesen]] (also [[https://codeberg.org/takeonrules/dotemacs/src/branch/main/emacs.d/configuration.org#headline-11][here]]).
+- [[https://config.daviwil.com/emacs#completion-system][David Will]]
+- [[https://protesilaos.com/emacs/dotemacs#h:98d3abcc-f34e-4029-aabc-740f0b6421f8][Protesilaos Stavrou]]
+- [[https://sgtpeacock.com/dot-files/Emacs.html#org8b90451][Samuel Thomas]]
+- [[https://github.com/rougier/dotemacs/blob/master/dotemacs.org#completion][Nicolas P. Rougier]]
+
+Corfu + orderless with eglot: https://github.com/minad/corfu/issues/136
+
+Tutorials: 
+- https://www.youtube.com/watch?v=43Dg5zYPHTU
+- https://www.youtube.com/watch?v=5ffb2at2d7w
+- https://www.youtube.com/watch?v=UtqE-lR2HCA&pp=ugMICgJlcxABGAE%3D
+- https://www.youtube.com/watch?v=nyz4O7EwxIk
+- https://www.youtube.com/watch?v=J0OaRy85MOo
+- https://www.youtube.com/watch?v=fnE0lXoe7Y0 and https://github.com/abcdw/notes/blob/master/notes/20220715092523-emacs_completion_explained.org
+
+Articles:
+- Vertico, Marginalia, Orderless: https://kristofferbalintona.me/posts/202202211546/
+- Corfu: https://kristofferbalintona.me/posts/202202270056/
+- Cape: https://kristofferbalintona.me/posts/202203130102/
+
+** 
 
 * Org Mode
 

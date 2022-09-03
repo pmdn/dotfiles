@@ -117,6 +117,7 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c h") 'pulse-line)
 
 (use-package doom-themes)
   ;:init (load-theme 'doom-nord t))
@@ -228,6 +229,11 @@
   :ensure t
   :defer t
   :bind ("C-c s" . treemacs))
+
+(defun pulse-line (&rest _)
+  "Pulse (highlight) the current line."
+  (interactive)
+  (pulse-momentary-highlight-one-line (point)))
 
 ;; Org mode configuration
 (defun efs/org-mode-setup ()
