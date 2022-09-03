@@ -156,35 +156,6 @@
 (use-package diminish
   :ensure t)
 
-;; Ivy / Counsel / Swiper configuration. Counsel contains the rest.
-(use-package counsel
-  :diminish ivy-mode
-  :demand
-  :bind (("C-s" . swiper)
-	 ("M-x" . counsel-M-x)
-	 ("C-x C-f" . counsel-find-file)
-	 ("C-c C-r" . iny-resume)
-         :map ivy-minibuffer-map
-         ("TAB" . ivy-alt-done)
-         ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
-         :map ivy-switch-buffer-map
-         ("C-k" . ivy-previous-line)
-         ("C-l" . ivy-done)
-         ("C-d" . ivy-switch-buffer-kill)
-         :map ivy-reverse-i-search-map
-         ("C-k" . ivy-previous-line)
-         ("C-d" . ivy-reverse-i-search-kill))
-  :config
-  (ivy-mode 1))
-
-;; Enrich Ivy
-(use-package ivy-rich
-  :after ivy
-  :init
-  (ivy-rich-mode 1))
-
 ;; To show next commands
 (use-package which-key
   :defer 0
@@ -215,14 +186,6 @@
   (setq dashboard-set-heading-icons t)
   ; disable the snarky footer
   (setq dashboard-set-footer nil))
-
-;; Company completion framework configuration
-(use-package company
-  :custom
-  (company-idle-delay 0)
-  (company-tooltip-align-annotations t)
-  :config
-  (add-hook 'prog-mode-hook 'company-mode))
 
 ;; Treemacs configuration
 (use-package treemacs
