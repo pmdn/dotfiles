@@ -120,14 +120,9 @@
 (global-set-key (kbd "C-c h") 'pulse-line)
 
 (use-package doom-themes
- :init (load-theme 'doom-nord t))
+ :init (load-theme 'doom-spacegrey t))
 
 (use-package sublime-themes)
-
-(use-package timu-spacegrey-theme)
-;;  :ensure t
-;;  :config
-;;  (load-theme 'timu-spacegrey t))
 
 (cond ((eq system-type 'windows-nt)
      ;; Windows-specific code goes here.

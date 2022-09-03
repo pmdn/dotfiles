@@ -203,7 +203,7 @@ Default themes may be good options:
 #+begin_src emacs-lisp
 
   (use-package doom-themes
-   :init (load-theme 'doom-nord t))
+   :init (load-theme 'doom-spacegrey t))
 
 #+end_src
 
@@ -211,18 +211,9 @@ Default themes may be good options:
 
 #+BEGIN_SRC  emacs-lisp
 
-(use-package sublime-themes)
+  (use-package sublime-themes)
 
 #+END_SRC
-
-[[https://github.com/emacsmirror/timu-spacegrey-theme][timu-spacegrey-theme]] is nice.
-
-#+begin_src emacs-lisp
-(use-package timu-spacegrey-theme)
-;;  :ensure t
-;;  :config
-;;  (load-theme 'timu-spacegrey t))
-#+end_src
 
 ** Fonts
 
