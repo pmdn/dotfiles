@@ -961,7 +961,6 @@ more-helpful local prompt."
    (setq rmh-elfeed-org-files (list  (concat org-directory "/elfeed.org"))))
 
 (use-package pdf-tools
-  :defer t
   :config
     (pdf-tools-install)
     (setq-default pdf-view-display-size 'fit-width))

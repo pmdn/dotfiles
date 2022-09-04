@@ -1478,7 +1478,6 @@ This is it. You should be able to quit Emacs, launch it again, and open a PDF fi
 #+begin_src emacs-lisp
 
   (use-package pdf-tools
-    :defer t
     :config
       (pdf-tools-install)
       (setq-default pdf-view-display-size 'fit-width))
