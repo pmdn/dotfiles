@@ -43,6 +43,13 @@
  (tooltip-mode -1)           ; Disable tooltips
  (set-fringe-mode 10)        ; Give some breathing room
 
+;; GIve some air in text mode by increasing margins
+(defun my-set-margins ()
+  "Set margins in current buffer."
+  (setq left-margin-width 3)
+  (setq right-margin-width 3))
+(add-hook 'text-mode-hook 'my-set-margins)
+
  ;; Set up the visible bell
  (setq visible-bell t)
 
