@@ -167,7 +167,7 @@
   ; set the title
   (setq dashboard-banner-logo-title "Bienvenido a Emacs!")
   ; set the banner
-  (setq dashboard-startup-banner 'logo)
+  (setq dashboard-startup-banner "~/.emacs.d/lambda_logo.png")
   (setq dashboard-projects-backend 'project-el)
   ; set the sections I'd like displayed and how many of each
   (setq dashboard-items '((recents . 7) (projects . 5) (bookmarks . 5) (agenda . 5)))
