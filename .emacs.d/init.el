@@ -120,7 +120,7 @@
 (global-set-key (kbd "C-c h") 'pulse-line)
 
 (use-package doom-themes
- :init (load-theme 'doom-spacegrey t))
+ :init (load-theme 'doom-henna t))
 
 (use-package sublime-themes)
 
