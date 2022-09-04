@@ -73,6 +73,7 @@
 
  ;; Insert closing parenthesis, bracket... pairs automatically
  (electric-pair-mode 1)
+ (setq electric-pair-preserve-balance nil)
 
  ;; y-or-n answers
  (fset 'yes-or-no-p 'y-or-n-p)	

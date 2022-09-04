@@ -24,7 +24,7 @@ The configuration is inspired by [[https://github.com/daviwil/emacs-from-scratch
 
 #+end_src
 
-* Package System Setup
+* Package system setup
 
 Emacs has a built in package manager but it doesn't make it easy to automatically install packages on a new system the first time you pull down your configuration.  [[https://github.com/jwiegley/use-package][use-package]] is a really helpful package used in this configuration to make it a lot easier to automate the installation and configuration of everything else we use.
 
@@ -62,7 +62,7 @@ Emacs has a built in package manager but it doesn't make it easy to automaticall
 
 #+end_src
 
-* Basic UI Configuration
+* Basic UI configuration
 
 This section configures basic UI settings that remove unneeded elements to make Emacs look a lot more minimal and modern.  If you're just getting started in Emacs, the menu bar might be helpful so you can remove the =(menu-bar-mode -1)= line if you'd like to still see that.
 
@@ -111,6 +111,7 @@ This section configures basic UI settings that remove unneeded elements to make 
 
    ;; Insert closing parenthesis, bracket... pairs automatically
    (electric-pair-mode 1)
+   (setq electric-pair-preserve-balance nil)
 
    ;; y-or-n answers
    (fset 'yes-or-no-p 'y-or-n-p)	
