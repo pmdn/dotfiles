@@ -575,7 +575,7 @@ Articles:
     ;; (corfu-scroll-margin 5)        ;; Use scroll margin
 
     ;; Recommended: Enable Corfu globally.
-    ;; This is recommended since Dabbrev can be used globally (M-/).
+    ;; This is recommended since Dabbrev can be used globally via  M-/.
     ;; See also `corfu-excluded-modes'.
     :init
     (global-corfu-mode))
@@ -1446,19 +1446,19 @@ The key is:
 - Instead of using "msys2 shell" (as instructed), build (compile) PDF-Tools from within Emacs
 
 
-1) Install MSYS2 
+1. Install MSYS2 
 
 Go to MSYS2 from its website at https://www.msys2.org/.
 
 Download the installer, execute it to install MSYS2. You can follow the rest of the instruction, but for PDF-Tools, you may not have to do much more than installing MSYS2. I did not even call ~pacman Syu~ to update the package database (I think it would be a good idea to do that so that you can get the latest version of the packages).
 
-2) Install PDF-Tools in Emacs
+2. Install PDF-Tools in Emacs
 
 Launch Emacs. Install =pdf-tools= from MELPA, or any mechanism you use.
 
 MSYS2 has its own Emacs in its package database, but you don't need to use it. The normal Emacs that you download from the GNU Emacs site, as described in the previous chapters of this guide, works fine.
 
-3) Build (Compile) program files required by PDF-Tools
+3. Build (Compile) program files required by PDF-Tools
 
 Don't worry, it needs one manual trigger and automatic. Within Emacs, call ~M-x pdf-tools-install RET~ to start automatic build. Then wait.
 
@@ -1468,7 +1468,7 @@ This will automatically start to build (compile) software files (=.dll= and =.ex
 
 Now you should be able to open PDF files with PDF-Tools. To do so, simply visit a PDF document like any other file via ~C-x C-f~; Emacs should open the PDF document in "PDFView" mode with PDF-Tools.
 
-4) Add a one-line configuration in your =.emacs= config file
+4. Add a one-line configuration in your =.emacs= config file
 
 Add ~(pdf-tools-install)~ or ~(pdf-loader-install)~ in your config file, following the official instruction on PDF-Tools.
 

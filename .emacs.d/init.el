@@ -368,7 +368,7 @@
   ;; (corfu-scroll-margin 5)        ;; Use scroll margin
 
   ;; Recommended: Enable Corfu globally.
-  ;; This is recommended since Dabbrev can be used globally (M-/).
+  ;; This is recommended since Dabbrev can be used globally via  M-/.
   ;; See also `corfu-excluded-modes'.
   :init
   (global-corfu-mode))
