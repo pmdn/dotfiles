@@ -142,9 +142,18 @@
      ))
 
 ;; Utilizar fuentes mono para una mejor alineación
-(set-face-attribute 'default nil :font "DejaVu Sans Mono 10")
-(set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono 10")
-(set-face-attribute 'variable-pitch nil :font "DejaVu Sans 10")
+(set-face-attribute 'default nil
+                    :font "DejaVu Sans Mono"
+                    :height 100)
+
+(set-face-attribute 'fixed-pitch nil
+                    :font "DejaVu Sans Mono"
+                    :height 100)
+
+(set-face-attribute 'variable-pitch nil
+                    :font "DejaVu Sans"
+                    :height 100)
+
 (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono 10"))
 
 (use-package all-the-icons)
@@ -374,6 +383,7 @@
   ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
   ;; (corfu-echo-documentation nil) ;; Disable documentation in the echo area
   ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+  (corfu-min-width 40)           ;; Set a minimun width for the corfu area
 
   ;; Recommended: Enable Corfu globally.
   ;; This is recommended since Dabbrev can be used globally via  M-/.
