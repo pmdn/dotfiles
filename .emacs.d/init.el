@@ -141,20 +141,23 @@
      ;; Linux-specific code goes here.
      ))
 
-;; Utilizar fuentes mono para una mejor alineación
+;; Use mono fonts for better alignment
 (set-face-attribute 'default nil
-                    :font "DejaVu Sans Mono"
+                    :font "Fira Mono"
+                    :weight 'regular
                     :height 100)
 
 (set-face-attribute 'fixed-pitch nil
-                    :font "DejaVu Sans Mono"
+                    :font "Fira Mono"
+                    :weight 'regular
                     :height 100)
 
 (set-face-attribute 'variable-pitch nil
-                    :font "DejaVu Sans"
-                    :height 100)
+                    :font "Fira Sans"
+                    :weight 'light
+                    :height 105)
 
-(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono 10"))
+(add-to-list 'default-frame-alist '(font . "Fira Mono-10"))
 
 (use-package all-the-icons)
 
@@ -456,7 +459,7 @@
 ;; Change font size for headings
 (with-eval-after-load 'org-faces
   ;; Increase the size of various headings
-  (set-face-attribute 'org-document-title nil :font "DejaVu Sans" :weight 'bold :height 1.3)
+  (set-face-attribute 'org-document-title nil :font "Fira Sans" :weight 'bold :height 1.3)
   (dolist (face '((org-level-1 . 1.2)
                   (org-level-2 . 1.1)
                   (org-level-3 . 1.05)
@@ -465,7 +468,7 @@
                   (org-level-6 . 1.1)
                   (org-level-7 . 1.1)
                   (org-level-8 . 1.1)))
-    (set-face-attribute (car face) nil :font "DejaVu Sans" :weight 'regular :height (cdr face))))
+    (set-face-attribute (car face) nil :font "Fira Sans" :weight 'regular :height (cdr face))))
 
 (use-package org
   :pin elpa
