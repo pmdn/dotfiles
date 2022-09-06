@@ -150,12 +150,12 @@
 (set-face-attribute 'fixed-pitch nil
                     :font "Fira Mono"
                     :weight 'regular
-                    :height 100)
+                    :height 1.0)
 
 (set-face-attribute 'variable-pitch nil
                     :font "Fira Sans"
                     :weight 'light
-                    :height 105)
+                    :height 1.0)
 
 (add-to-list 'default-frame-alist '(font . "Fira Mono-10"))
 
