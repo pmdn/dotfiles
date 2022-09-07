@@ -136,6 +136,8 @@
      ;; Windows-specific code goes here.
      ;; Spacing
      (setq-default line-spacing 0.25)
+     ;; Set DejaVu font for the "◉" glyph
+     (set-fontset-font t ?◉ "DejaVu Sans")
      )
     ((eq system-type 'gnu/linux)
      ;; Linux-specific code goes here.
@@ -157,6 +159,7 @@
                     :weight 'light
                     :height 105)
 
+;; This sets de default font, as 'set-face-attribute' does not seem to work 
 (add-to-list 'default-frame-alist '(font . "Fira Mono-10"))
 
 (use-package all-the-icons)
