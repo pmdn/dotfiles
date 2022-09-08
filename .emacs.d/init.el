@@ -136,8 +136,9 @@
      ;; Windows-specific code goes here.
      ;; Spacing
      (setq-default line-spacing 0.25)
-     ;; Set DejaVu font for the "◉" glyph
+     ;; Set DejaVu font for the some glyphs
      (set-fontset-font t ?◉ "DejaVu Sans")
+     (set-fontset-font t ?▾ "DejaVu Sans")
      )
     ((eq system-type 'gnu/linux)
      ;; Linux-specific code goes here.
@@ -491,6 +492,7 @@
   (setq org-agenda-start-with-log-mode t)
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
+  (setq org-id-link-to-org-use-id 'use-existing)
 
   (cond ((eq system-type 'windows-nt)
          ;; Windows-specific code goes here.
