@@ -212,7 +212,7 @@ Default themes may be good options:
 #+begin_src emacs-lisp
 
   (use-package doom-themes
-   :init (load-theme 'doom-henna t))
+   :init (load-theme 'doom-nord t))
 
 #+end_src
 
