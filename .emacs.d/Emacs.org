@@ -1435,6 +1435,8 @@ Then the [[https://www.quicklisp.org/beta/][Quicklisp]] packgage manager followi
 
 ** Scheme
 
+First install [[https://www.gnu.org/software/guile/][Guile]] with ~sudo apt install guile-3.0~.
+
 [[https://github.com/emacsmirror/geiser][Geiser]] is a generic Emacs/Scheme interaction mode, featuring an enhanced REPL and a set of minor modes improving Emacs’ basic scheme major mode. It supports different schemes via independente packages.
 
 For Guile, [[https://gitlab.com/emacs-geiser/guile][geise-guile]] will be installed, which installs Geiser, as it depends on it. To launch the REPL, run ~M-x geiser-guile~.
