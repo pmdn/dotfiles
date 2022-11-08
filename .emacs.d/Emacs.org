@@ -859,7 +859,8 @@ To execute or export code in =org-mode= code blocks, you'll need to set up =org-
     'org-babel-load-languages
     '((emacs-lisp . t)
       (python . t)
-      (lisp . t)      
+      (lisp . t)
+      (scheme .t)
       (shell . t)))
 
   (push '("conf-unix" . conf-unix) org-src-lang-modes)
@@ -1430,6 +1431,19 @@ Then the [[https://www.quicklisp.org/beta/][Quicklisp]] packgage manager followi
     :config
     (setq inferior-lisp-program "sbcl"))
 
+#+end_src
+
+** Scheme
+
+[[https://github.com/emacsmirror/geiser][Geiser]] is a generic Emacs/Scheme interaction mode, featuring an enhanced REPL and a set of minor modes improving Emacs’ basic scheme major mode. It supports different schemes via independente packages.
+
+For Guile, [[https://gitlab.com/emacs-geiser/guile][geise-guile]] will be installed, which installs Geiser, as it depends on it. To launch the REPL, run ~M-x geiser-guile~.
+
+#+begin_src emacs-lisp
+  (use-package geiser-guile
+    :ensure t
+    :config
+    (setq geiser-default-implementation 'guile))
 #+end_src
 
 * RSS with Elfeed

@@ -612,7 +612,8 @@
   'org-babel-load-languages
   '((emacs-lisp . t)
     (python . t)
-    (lisp . t)      
+    (lisp . t)
+    (scheme .t)
     (shell . t)))
 
 (push '("conf-unix" . conf-unix) org-src-lang-modes)
@@ -967,6 +968,11 @@ more-helpful local prompt."
   :mode "\\.lisp\\'"
   :config
   (setq inferior-lisp-program "sbcl"))
+
+(use-package geiser-guile
+  :ensure t
+  :config
+  (setq geiser-default-implementation 'guile))
 
 ;; Configure Elfeed
 (use-package elfeed
