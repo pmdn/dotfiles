@@ -10,6 +10,8 @@
 
 ;; Better garbage collection threshold
 (setq gc-cons-threshold (* 50 1000 1000))
+;; GnuPG keyring path correction
+(setq package-gnupghome-dir "~/.emacs.d/elpa/gnupg")
 
 ;; Initialize package sources
 (require 'package)
@@ -186,24 +188,39 @@
 ;; Dashboard configuration
 (use-package dashboard
   :ensure t
+  :custom
+  (dashboard-set-navigator t)
+  (dashboard-center-content t)
   :config
   (dashboard-setup-startup-hook)
-  ; set the title
+                                        ; set the title
   (setq dashboard-banner-logo-title "Bienvenido a Emacs!")
-  ; set the banner
+                                        ; set the banner
   (setq dashboard-startup-banner "~/.emacs.d/lambda_logo_2.png")
   (setq dashboard-projects-backend 'project-el)
-  ; set the sections I'd like displayed and how many of each
+  (setq dashboard-navigator-buttons
+        `(;; line1
+          ;; Keybindings
+          ((,(all-the-icons-octicon "search" :height 0.9 :v-adjust -0.1)
+            " Find file" nil
+            (lambda (&rest _) (find-file)) nil "" "            C-x C-f"))
+          ((,(all-the-icons-octicon "file-directory" :height 1.0 :v-adjust -0.1)
+            " Open project" nil
+            (lambda (&rest _) (project-switch-project)) nil "" "         C-x p p"))
+          ((,(all-the-icons-octicon "three-bars" :height 1.1 :v-adjust -0.1)
+            " File explorer" nil
+            (lambda (&rest _) (project-dired)) nil "" "        C-x p D"))))
+                                        ; set the sections I'd like displayed and how many of each
   (setq dashboard-items '((recents . 7) (projects . 5) (bookmarks . 5) (agenda . 5)))
-  ; center it all
+                                        ; center it all
   (setq dashboard-center-content t)
-  ; don't show shortcut keys
+                                        ; don't show shortcut keys
   (setq dashboard-show-shortcuts t)
-  ; use nice icons for the files
+                                        ; use nice icons for the files
   (setq dashboard-set-file-icons t)
-  ; use nice section icons
+                                        ; use nice section icons
   (setq dashboard-set-heading-icons t)
-  ; disable the snarky footer
+                                        ; disable the snarky footer
   (setq dashboard-set-footer nil))
 
 ;; Treemacs configuration
@@ -613,7 +630,7 @@
   '((emacs-lisp . t)
     (python . t)
     (lisp . t)
-    (scheme .t)
+    (scheme . t)
     (shell . t)))
 
 (push '("conf-unix" . conf-unix) org-src-lang-modes)
@@ -853,7 +870,7 @@ more-helpful local prompt."
     current buffer's file. The eshell is renamed to match that
     directory to make multiple eshell windows easier."
   (interactive)
-  (let* ((height (/ (window-total-height) 3)))
+  (let* ((height (/ (window-total-height) 4)))
     (split-window-vertically (- height))
     (other-window 1)
     (eshell "new")
@@ -972,7 +989,8 @@ more-helpful local prompt."
 (use-package geiser-guile
   :ensure t
   :config
-  (setq geiser-default-implementation 'guile))
+  (setq geiser-default-implementation 'guile)
+  (setq geiser-active-implementations '(guile)))
 
 ;; Configure Elfeed
 (use-package elfeed

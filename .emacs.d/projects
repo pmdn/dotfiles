@@ -1,7 +1,7 @@
 ;;; -*- lisp-data -*-
 (("~/Projects/Code/pid_controller/")
- ("~/Projects/Code/calculator/")
- ("~/Sync/Sincronizadas/Notes/OrgFiles/")
- ("~/Projects/Code/Pruebas/")
  ("~/.dotfiles/")
+ ("~/Sync/Sincronizadas/Notes/OrgFiles/")
+ ("~/Projects/Code/calculator/")
+ ("~/Projects/Code/Pruebas/")
  ("~/Projects/Code/Robosats/"))
