@@ -130,7 +130,7 @@
 (global-set-key (kbd "C-c e") 'pulse-line)
 
 (use-package doom-themes
- :init (load-theme 'doom-nord t))
+ :init (load-theme 'doom-nord-aurora t))
 
 (use-package sublime-themes)
 

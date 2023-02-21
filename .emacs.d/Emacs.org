@@ -214,7 +214,7 @@ Default themes may be good options:
 #+begin_src emacs-lisp
 
   (use-package doom-themes
-   :init (load-theme 'doom-nord t))
+   :init (load-theme 'doom-nord-aurora t))
 
 #+end_src
 
