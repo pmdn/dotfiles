@@ -694,6 +694,10 @@ Some inspiration from:
 - https://stackoverflow.com/questions/2581935/import-csv-into-org-mode-properties
 - https://victorianoi.notion.site/
 
+Bookmark capture from:
+- https://karl-voit.at/2014/08/10/bookmarks-with-orgmode/
+- https://blog.lazkani.io/posts/bookmark-with-org-capture/  
+
 
 #+begin_src emacs-lisp
 
@@ -831,14 +835,16 @@ Some inspiration from:
     ;; Capture templates
     (setq org-default-notes-file (concat org-directory "/Notas.org"))
     (setq org-capture-templates
-          `(("r" "Quick Note" entry (file+olp org-default-notes-file "Inbox")
+          `(("f" "Fast Note" entry (file+olp org-default-notes-file "Inbox")
              "* %?\n  %U\n  %i" :empty-lines 1)
             ("t" "Tasks" entry (file+olp org-default-notes-file "Inbox")
              "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-            ("b" "Books" entry (file+olp org-default-notes-file "Libros" "Lista Lectura")
+            ("r" "Reads" entry (file+olp org-default-notes-file "Libros" "Lista Lectura")
              "*** %\\1 %?\n :PROPERTIES:\n :Título: %^{Título}\n :Subtítulo: %^{Subtítulo}\n :Serie: %^{Serie}\n :Autor: %^{Autor [Apellido, Nombre]}\n :Año: %^{Año}\n :Categoría: %^{Categoría}\n :Puntuación: %^{Puntuación [1-5]}\n :Fecha: %^{Fecha Lectura [dd/mm/aaaa]}\n :Estado: %^{Estado|Leído|Leyendo|Pendiente}\n :END: \n" :empty-lines 1 :prepend t)
-            ("d" "Notes" entry (file+datetree org-default-notes-file)
-             "* %^{Description} %^g %?\nAdded: %U")))
+            ("d" "Dailies" entry (file+datetree org-default-notes-file)
+             "* %^{Description} %^g %?\nAdded: %U")
+            ("b" "Bookmark (Clipboard)" entry (file+olp org-default-notes-file "Bookmarks")
+             "* %(org-cliplink-capture) %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n- %?\n" :empty-lines 1 :prepend t)))
 
     ;; Set global key for capture
     (define-key global-map (kbd "C-c r")
@@ -929,6 +935,17 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
         (org-babel-tangle))))
 
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+
+#+end_src
+
+** Org cliplink
+
+[[https://github.com/rexim/org-cliplink][org-cliplink]] takes a URL from the clipboard and inserts an org-mode link with a title of a page found by the URL into the current buffer
+
+#+begin_src emacs-lisp
+
+  (use-package org-cliplink
+    :ensure t)
 
 #+end_src
 

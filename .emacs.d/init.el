@@ -600,14 +600,16 @@
   ;; Capture templates
   (setq org-default-notes-file (concat org-directory "/Notas.org"))
   (setq org-capture-templates
-        `(("r" "Quick Note" entry (file+olp org-default-notes-file "Inbox")
+        `(("f" "Fast Note" entry (file+olp org-default-notes-file "Inbox")
            "* %?\n  %U\n  %i" :empty-lines 1)
           ("t" "Tasks" entry (file+olp org-default-notes-file "Inbox")
            "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-          ("b" "Books" entry (file+olp org-default-notes-file "Libros" "Lista Lectura")
+          ("r" "Reads" entry (file+olp org-default-notes-file "Libros" "Lista Lectura")
            "*** %\\1 %?\n :PROPERTIES:\n :Título: %^{Título}\n :Subtítulo: %^{Subtítulo}\n :Serie: %^{Serie}\n :Autor: %^{Autor [Apellido, Nombre]}\n :Año: %^{Año}\n :Categoría: %^{Categoría}\n :Puntuación: %^{Puntuación [1-5]}\n :Fecha: %^{Fecha Lectura [dd/mm/aaaa]}\n :Estado: %^{Estado|Leído|Leyendo|Pendiente}\n :END: \n" :empty-lines 1 :prepend t)
-          ("d" "Notes" entry (file+datetree org-default-notes-file)
-           "* %^{Description} %^g %?\nAdded: %U")))
+          ("d" "Dailies" entry (file+datetree org-default-notes-file)
+           "* %^{Description} %^g %?\nAdded: %U")
+          ("b" "Bookmark (Clipboard)" entry (file+olp org-default-notes-file "Bookmarks")
+           "* %(org-cliplink-capture) %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n- %?\n" :empty-lines 1 :prepend t)))
 
   ;; Set global key for capture
   (define-key global-map (kbd "C-c r")
@@ -664,6 +666,9 @@
       (org-babel-tangle))))
 
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+
+(use-package org-cliplink
+  :ensure t)
 
 (use-package org-download
   :ensure t
