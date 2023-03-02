@@ -686,77 +686,56 @@
     (org-download-enable)))
 
 (cond ((eq system-type 'windows-nt)
-    ;; Windows-specific code goes here.
-     )
-    ((eq system-type 'gnu/linux)
-     ;; Linux-specific code goes here.
-     (use-package org-roam
-     :ensure t
-     :init
-     (setq org-roam-v2-ack t)
-     (setq org-roam-node-display-template
-       (concat "${title:*} " (propertize "${tags:50}" 'face 'org-tag)))
-     :custom
-     (org-roam-directory "~/Sync/Sincronizadas/Notes/OrgFiles/RoamNotes")
-     (org-roam-completion-everywhere t)
-     (org-roam-capture-templates
-       '(("d" "default" plain "%?"
-         :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
-         :unnarrowed t)))
-         :bind (("C-c n l" . org-roam-buffer-toggle)
-                ("C-c n f" . org-roam-node-find)
-                ("C-c n i" . org-roam-node-insert)
-                ("C-c n r" . org-roam-node-random)
-                :map org-mode-map
-                ("C-M-i"    . completion-at-point)
-                ("C-c n o" . org-id-get-create)
-                :map org-roam-dailies-map
-                ("Y" . org-roam-dailies-capture-yesterday)
-                ("T" . org-roam-dailies-capture-tomorrow))
-         :bind-keymap
-         ("C-c n d" . org-roam-dailies-map)
-         :config
-         (require 'org-roam-dailies) ;; Ensure the keymap is available
-         (org-roam-db-autosync-mode))
-        ))
-
-(cond ((eq system-type 'windows-nt)
        ;; Windows-specific code goes here.
        )
       ((eq system-type 'gnu/linux)
        ;; Linux-specific code goes here.
-       (use-package deft
-         :after org
+       (use-package denote
          :bind
-         ("C-c n t" . deft)
-         :custom
-         (deft-recursive t)
-         (deft-use-filename-as-title t)
-         (deft-strip-summary-regexp ":PROPERTIES:\n\\(.+\n\\)+:END:\n")
-         (deft-use-filter-string-for-filename nil)
-         (deft-default-extension "org")
-         (deft-directory "~/Sync/Sincronizadas/Notes/OrgFiles/RoamNotes"))
-       ))
-
-(cond ((eq system-type 'windows-nt)
-       ;; Windows-specific code goes here.
-       )
-      ((eq system-type 'gnu/linux)
-       ;; Linux-specific code goes here.
-       (use-package org-roam-ui
-         ;;  :straight
-         ;;  (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
-         :after org-roam
-         ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-         ;;         a hookable mode anymore, you're advised to pick something yourself
-         ;;         if you don't care about startup time, use
-         ;;  :hook (after-init . org-roam-ui-mode)
+         ("C-c n n" . 'denote)
+         ("C-c n c" . 'denote-open-or-create)
+         ("C-c n k" . 'denote-keywords-add)    ;; update file name automatically
+         ("C-c n K" . 'denote-keywords-remove) ;; update file name automatically
+         ("C-c n u" . 'denote-rename-file-using-front-matter)
+         ("C-c n i" . 'denote-link) ; "insert" mnemonic
+         ("C-c n I" . 'denote-link-add-links)
+         ("C-c n b" . 'denote-link-backlinks)
+         ("C-c n F" . 'denote-link-find-file)
+         ("C-c n B" . 'denote-link-find-backlink)
+         ("C-c n r" . 'denote-rename-file)
+         ("C-c n R" . 'denote-rename-file-using-front-matter)
+         ("C-c n a" . 'my/denote-random-note)
+         :init
+         (setq denote-directory (expand-file-name "~/Sync/Sincronizadas/Notes/OrgFiles/DeNotes/"))
          :config
-         (setq org-roam-ui-sync-theme t
-               org-roam-ui-follow t
-               org-roam-ui-update-on-save t
-               org-roam-ui-open-on-start nil))
-       ))
+         (setq denote-known-keywords '("btc" "control" "datos" "economía" "emacs" "filosofía" "finanzas" "política" "productividad" "programación"))
+         (setq denote-infer-keywords t)
+         (setq denote-sort-keywords t)
+         (setq denote-file-type nil) ; Org is the default, set others here
+         (setq denote-prompts '(title keywords))
+         (setq denote-excluded-directories-regexp nil)
+         (setq denote-excluded-keywords-regexp nil)
+
+         ;; Pick dates, where relevant, with Org's advanced interface:
+         (setq denote-date-prompt-use-org-read-date t)
+
+         (setq denote-date-format nil) ; read doc string
+
+         ;; By default, we do not show the context of links.  We just display
+         ;; file names.  This provides a more informative view.
+         (setq denote-backlinks-show-context t)
+         (setq denote-dired-directories
+               (list denote-directory))
+
+         (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories))
+
+
+       (defun my/denote-random-note (&optional directory)
+         "Open a random denote."
+         (interactive)
+         (let* ((denote-directory (or directory denote-directory))
+                (files (denote-directory-files)))
+           (find-file (nth (random (length files)) files))))))
 
 (use-package eshell
   :init
