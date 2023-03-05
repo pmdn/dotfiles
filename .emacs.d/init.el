@@ -500,7 +500,7 @@
               (assq-delete-all :results org-babel-default-header-args)))
   (setq org-babel-lisp-eval-fn #'sly-eval)
   (setq org-ellipsis " ▾")
-  ;(setq org-adapt-indentation 'headline-data)
+                                        ;(setq org-adapt-indentation 'headline-data)
   (setq org-hide-emphasis-markers t)
   ;; Fix image width and show inline images
   (setq org-image-actual-width 700)
@@ -522,7 +522,8 @@
 
   (setq org-agenda-files
         (list
-         (concat org-directory "/Notas.org")))
+         (concat org-directory "/Notas.org")
+         (concat org-directory "/InboxMovil.org")))
   (setq org-archive-location (concat org-directory "/Archivo.org::datetree/"))
 
   (require 'org-habit)
@@ -595,7 +596,13 @@
                    (org-agenda-files org-agenda-files)))
             (todo "CANCELLED"
                   ((org-agenda-overriding-header "Cancelled Tasks")
-                   (org-agenda-files org-agenda-files)))))))
+                   (org-agenda-files org-agenda-files)))))
+
+          ("r" "Needs Refile"
+           ((tags
+             "refile"
+             ((org-agenda-overriding-header "To refile")
+              (org-tags-match-list-sublevels nil)))))))
 
   ;; Capture templates
   (setq org-default-notes-file (concat org-directory "/Notas.org"))
