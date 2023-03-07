@@ -658,11 +658,22 @@
          "#+DESCRITION: " n
          "#+AUTHOR: " n
          "#+SETUPFILE: ./org-html-themes/org/theme-readtheorg-local.setup" n
+         "#+SETUPFILE: ./org-latex-themes/jake-latex-standard.setup" n
          "#+TAGS: " n
          "#+STARTUP: overview")
        "<t"
        "Insert an header in the org file"
-       'org-tempo-tags))
+       'org-tempo-tags)
+  (tempo-define-template "org-meeting"
+      '("*Asistentes:* " n
+        "- " p n n
+        "*Notas:* " n
+        "- " n n
+        "*Tareas:* " n
+        n)
+      "<m"
+      "Insert a meeting template in the org file"
+      'org-tempo-tags))
 
 ;; Automatically tangle our Emacs.org config file when we save it
 (defun efs/org-babel-tangle-config ()
@@ -692,57 +703,104 @@
   (with-eval-after-load 'org
     (org-download-enable)))
 
-(cond ((eq system-type 'windows-nt)
-       ;; Windows-specific code goes here.
-       )
-      ((eq system-type 'gnu/linux)
-       ;; Linux-specific code goes here.
-       (use-package denote
-         :bind
-         ("C-c n n" . 'denote)
-         ("C-c n c" . 'denote-open-or-create)
-         ("C-c n k" . 'denote-keywords-add)    ;; update file name automatically
-         ("C-c n K" . 'denote-keywords-remove) ;; update file name automatically
-         ("C-c n u" . 'denote-rename-file-using-front-matter)
-         ("C-c n i" . 'denote-link) ; "insert" mnemonic
-         ("C-c n I" . 'denote-link-add-links)
-         ("C-c n b" . 'denote-link-backlinks)
-         ("C-c n F" . 'denote-link-find-file)
-         ("C-c n B" . 'denote-link-find-backlink)
-         ("C-c n r" . 'denote-rename-file)
-         ("C-c n R" . 'denote-rename-file-using-front-matter)
-         ("C-c n a" . 'my/denote-random-note)
-         :init
-         (setq denote-directory (expand-file-name "~/Sync/Sincronizadas/Notes/OrgFiles/DeNotes/"))
-         :config
-         (setq denote-known-keywords '("btc" "control" "datos" "economía" "emacs" "filosofía" "finanzas" "política" "productividad" "programación"))
-         (setq denote-infer-keywords t)
-         (setq denote-sort-keywords t)
-         (setq denote-file-type nil) ; Org is the default, set others here
-         (setq denote-prompts '(title keywords))
-         (setq denote-excluded-directories-regexp nil)
-         (setq denote-excluded-keywords-regexp nil)
+(use-package denote
+  :bind
+  ("C-c n n" . 'denote)
+  ("C-c n c" . 'denote-open-or-create)
+  ("C-c n k" . 'denote-keywords-add)    ;; update file name automatically
+  ("C-c n K" . 'denote-keywords-remove) ;; update file name automatically
+  ("C-c n u" . 'denote-rename-file-using-front-matter)
+  ("C-c n i" . 'denote-link) ; "insert" mnemonic
+  ("C-c n I" . 'denote-link-add-links)
+  ("C-c n b" . 'denote-link-backlinks)
+  ("C-c n F" . 'denote-link-find-file)
+  ("C-c n B" . 'denote-link-find-backlink)
+  ("C-c n r" . 'denote-rename-file)
+  ("C-c n R" . 'denote-rename-file-using-front-matter)
+  ("C-c n a" . 'my/denote-random-note)
+  :init
+  (setq denote-directory (concat org-directory "/DeNotes/"))
+  :config
+  (setq denote-known-keywords '("btc" "control" "datos" "economía" "emacs" "filosofía" "finanzas" "política" "productividad" "programación"))
+  (setq denote-infer-keywords t)
+  (setq denote-sort-keywords t)
+  (setq denote-file-type nil) ; Org is the default, set others here
+  (setq denote-prompts '(title keywords))
+  (setq denote-excluded-directories-regexp nil)
+  (setq denote-excluded-keywords-regexp nil)
 
-         ;; Pick dates, where relevant, with Org's advanced interface:
-         (setq denote-date-prompt-use-org-read-date t)
+  ;; Pick dates, where relevant, with Org's advanced interface:
+  (setq denote-date-prompt-use-org-read-date t)
 
-         (setq denote-date-format nil) ; read doc string
+  (setq denote-date-format nil) ; read doc string
 
-         ;; By default, we do not show the context of links.  We just display
-         ;; file names.  This provides a more informative view.
-         (setq denote-backlinks-show-context t)
-         (setq denote-dired-directories
-               (list denote-directory))
+  ;; By default, we do not show the context of links.  We just display
+  ;; file names.  This provides a more informative view.
+  (setq denote-backlinks-show-context t)
+  (setq denote-dired-directories
+        (list denote-directory))
 
-         (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories))
+  (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories))
 
 
-       (defun my/denote-random-note (&optional directory)
-         "Open a random denote."
-         (interactive)
-         (let* ((denote-directory (or directory denote-directory))
-                (files (denote-directory-files)))
-           (find-file (nth (random (length files)) files))))))
+(defun my/denote-random-note (&optional directory)
+  "Open a random denote."
+  (interactive)
+  (let* ((denote-directory (or directory denote-directory))
+         (files (denote-directory-files)))
+    (find-file (nth (random (length files)) files))))
+
+(use-package citar
+  :no-require
+  :custom
+  (org-cite-global-bibliography (list (concat org-directory "/biblioteca_zotero.bib")))
+  (org-cite-insert-processor 'citar)
+  (org-cite-follow-processor 'citar)
+  (org-cite-activate-processor 'citar)
+  (citar-bibliography org-cite-global-bibliography)
+  :bind
+  (:map org-mode-map :package org ("C-c i" . #'org-cite-insert)))
+
+(setq citar-symbols
+      `((file ,(all-the-icons-faicon "file-o" :face 'all-the-icons-green :v-adjust -0.1) . " ")
+        (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
+        (link ,(all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01) . " ")))
+(setq citar-symbol-separator "  ")
+
+  (use-package citar-denote
+    :after citar denote
+    :config
+    (citar-denote-mode)
+    (setq citar-open-always-create-notes t))
+
+(require 'ox-latex)
+(add-to-list 'org-latex-packages-alist '("" "minted"))
+
+(setq org-latex-listings 'minted
+      org-latex-minted-options '(("breaklines" "true")
+                                 ("breakanywhere" "true")
+                                 ("frame" "lines")
+                                 ("framesep" "2mm")
+                                 ("linenos" "false")
+                                 ("bgcolor" "shadecolor")))
+
+(setq org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+(with-eval-after-load 'ox-latex
+(add-to-list 'org-latex-classes
+             '("org-plain-latex"
+               "\\documentclass{article}
+           [NO-DEFAULT-PACKAGES]
+           [PACKAGES]
+           [EXTRA]"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
 (use-package eshell
   :init
