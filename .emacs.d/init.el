@@ -719,7 +719,7 @@
   ("C-c n R" . 'denote-rename-file-using-front-matter)
   ("C-c n a" . 'my/denote-random-note)
   :init
-  (setq denote-directory (concat org-directory "/DeNotes/"))
+  (setq denote-directory (concat org-directory "/denotes/"))
   :config
   (setq denote-known-keywords '("btc" "control" "datos" "economía" "emacs" "filosofía" "finanzas" "política" "productividad" "programación"))
   (setq denote-infer-keywords t)
@@ -753,7 +753,7 @@
 (use-package citar
   :no-require
   :custom
-  (org-cite-global-bibliography (list (concat org-directory "/biblioteca_zotero.bib")))
+  (org-cite-global-bibliography (list (concat org-directory "/references/biblioteca_zotero.bib")))
   (org-cite-insert-processor 'citar)
   (org-cite-follow-processor 'citar)
   (org-cite-activate-processor 'citar)
