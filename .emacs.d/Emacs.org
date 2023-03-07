@@ -311,43 +311,47 @@ Default themes may be good options:
 [[https://github.com/emacs-dashboard/emacs-dashboard][Dashboard]] is an extensible emacs startup screen showing you what’s most important.
 
 #+BEGIN_SRC emacs-lisp
-  ;; Dashboard configuration
-  (use-package dashboard
-    :ensure t
-    :custom
-    (dashboard-set-navigator t)
-    (dashboard-center-content t)
-    :config
-    (dashboard-setup-startup-hook)
-                                          ; set the title
-    (setq dashboard-banner-logo-title "Bienvenido a Emacs!")
-                                          ; set the banner
-    (setq dashboard-startup-banner "~/.emacs.d/lambda_logo_2.png")
-    (setq dashboard-projects-backend 'project-el)
-    (setq dashboard-navigator-buttons
-          `(;; line1
-            ;; Keybindings
-            ((,(all-the-icons-octicon "search" :height 0.9 :v-adjust -0.1)
-              " Find file" nil
-              (lambda (&rest _) (find-file)) nil "" "            C-x C-f"))
-            ((,(all-the-icons-octicon "file-directory" :height 1.0 :v-adjust -0.1)
-              " Open project" nil
-              (lambda (&rest _) (project-switch-project)) nil "" "         C-x p p"))
-            ((,(all-the-icons-octicon "three-bars" :height 1.1 :v-adjust -0.1)
-              " File explorer" nil
-              (lambda (&rest _) (project-dired)) nil "" "        C-x p D"))))
-                                          ; set the sections I'd like displayed and how many of each
-    (setq dashboard-items '((recents . 7) (projects . 5) (bookmarks . 5) (agenda . 5)))
-                                          ; center it all
-    (setq dashboard-center-content t)
-                                          ; don't show shortcut keys
-    (setq dashboard-show-shortcuts t)
-                                          ; use nice icons for the files
-    (setq dashboard-set-file-icons t)
-                                          ; use nice section icons
-    (setq dashboard-set-heading-icons t)
-                                          ; disable the snarky footer
-    (setq dashboard-set-footer nil))
+    ;; Dashboard configuration
+    (use-package dashboard
+      :ensure t
+      :custom
+      (dashboard-set-navigator t)
+      (dashboard-center-content t)
+      :config
+      (dashboard-setup-startup-hook)
+                                            ; set the title
+      (setq dashboard-banner-logo-title "Bienvenido a Emacs!")
+                                            ; set the banner
+      (setq dashboard-startup-banner "~/.emacs.d/lambda_logo_2.png")
+      (setq dashboard-projects-backend 'project-el)
+      (setq dashboard-navigator-buttons
+            `(;; line1
+              ;; Shortcuts
+              ((,(all-the-icons-octicon "mark-github" :height 0.9 :v-adjust -0.1)
+                " Github"
+                "Github repository"
+                (lambda (&rest _) (browse-url "https://github.com/pmdn/dotfiles/tree/master/.emacs.d"))))
+              ((,(all-the-icons-octicon "tools" :height 0.9 :v-adjust -0.1)
+                " Config"
+                "Configuration file"
+                (lambda (&rest _) (find-file (expand-file-name  "~/.emacs.d/Emacs.org")))))
+              ((,(all-the-icons-octicon "rss" :height 1.2 :v-adjust -0.1)
+                " Elfeed"
+                "Go to rss feed"
+                (lambda (&rest _) (elfeed))))))
+                                            ; set the sections I'd like displayed and how many of each
+      (setq dashboard-items '((recents . 7) (projects . 5) (bookmarks . 5) (agenda . 5))
+  )
+                                            ; center it all
+      (setq dashboard-center-content t)
+                                            ; don't show shortcut keys
+      (setq dashboard-show-shortcuts t)
+                                            ; use nice icons for the files
+      (setq dashboard-set-file-icons t)
+                                            ; use nice section icons
+      (setq dashboard-set-heading-icons t)
+                                            ; disable the snarky footer
+      (setq dashboard-set-footer nil))
 
 #+END_SRC
 
