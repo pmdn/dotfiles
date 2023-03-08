@@ -311,47 +311,45 @@ Default themes may be good options:
 [[https://github.com/emacs-dashboard/emacs-dashboard][Dashboard]] is an extensible emacs startup screen showing you what’s most important.
 
 #+BEGIN_SRC emacs-lisp
-    ;; Dashboard configuration
-    (use-package dashboard
-      :ensure t
-      :custom
-      (dashboard-set-navigator t)
-      (dashboard-center-content t)
-      :config
-      (dashboard-setup-startup-hook)
-                                            ; set the title
-      (setq dashboard-banner-logo-title "Bienvenido a Emacs!")
-                                            ; set the banner
-      (setq dashboard-startup-banner "~/.emacs.d/lambda_logo_2.png")
-      (setq dashboard-projects-backend 'project-el)
-      (setq dashboard-navigator-buttons
-            `(;; line1
-              ;; Shortcuts
-              ((,(all-the-icons-octicon "mark-github" :height 0.9 :v-adjust -0.1)
-                " Github"
-                "Github repository"
-                (lambda (&rest _) (browse-url "https://github.com/pmdn/dotfiles/tree/master/.emacs.d"))))
-              ((,(all-the-icons-octicon "tools" :height 0.9 :v-adjust -0.1)
-                " Config"
-                "Configuration file"
-                (lambda (&rest _) (find-file (expand-file-name  "~/.emacs.d/Emacs.org")))))
-              ((,(all-the-icons-octicon "rss" :height 1.2 :v-adjust -0.1)
-                " Elfeed"
-                "Go to rss feed"
-                (lambda (&rest _) (elfeed))))))
-                                            ; set the sections I'd like displayed and how many of each
-      (setq dashboard-items '((recents . 7) (projects . 5) (bookmarks . 5) (agenda . 5))
-  )
-                                            ; center it all
-      (setq dashboard-center-content t)
-                                            ; don't show shortcut keys
-      (setq dashboard-show-shortcuts t)
-                                            ; use nice icons for the files
-      (setq dashboard-set-file-icons t)
-                                            ; use nice section icons
-      (setq dashboard-set-heading-icons t)
-                                            ; disable the snarky footer
-      (setq dashboard-set-footer nil))
+  ;; Dashboard configuration
+  (use-package dashboard
+    :ensure t
+    :custom
+    (dashboard-set-navigator t)
+    :config
+    (dashboard-setup-startup-hook)
+                                          ; set the title
+    (setq dashboard-banner-logo-title "Bienvenido a Emacs!")
+                                          ; set the banner
+    (setq dashboard-startup-banner "~/.emacs.d/lambda_logo_2.png")
+    (setq dashboard-projects-backend 'project-el)
+    (setq dashboard-navigator-buttons
+          `(;; line1
+            ;; Shortcuts
+            ((,(all-the-icons-octicon "mark-github" :height 0.9 :v-adjust -0.1)
+              "Github"
+              "Github repository"
+              (lambda (&rest _) (browse-url "https://github.com/pmdn/dotfiles/tree/master/.emacs.d")))
+            (,(all-the-icons-octicon "tools" :height 0.9 :v-adjust -0.1)
+              "Config"
+              "Configuration file"
+              (lambda (&rest _) (find-file (expand-file-name  "~/.emacs.d/Emacs.org"))))
+            (,(all-the-icons-octicon "rss" :height 1.2 :v-adjust -0.1)
+              "Elfeed"
+              "Go to rss feed"
+              (lambda (&rest _) (elfeed))))))
+    ; set the sections I'd like displayed and how many of each
+    (setq dashboard-items '((recents . 7) (projects . 5) (bookmarks . 5) (agenda . 5)))
+    ; center it all
+    (setq dashboard-center-content t)
+    ; show shortcut keys
+    (setq dashboard-show-shortcuts t)
+    ; use nice icons for the files
+    (setq dashboard-set-file-icons t)
+    ; use nice section icons
+    (setq dashboard-set-heading-icons t)
+    ; disable the snarky footer
+    (setq dashboard-set-footer nil))
 
 #+END_SRC
 
@@ -739,7 +737,7 @@ Bookmark capture from:
                 (assq-delete-all :results org-babel-default-header-args)))
     (setq org-babel-lisp-eval-fn #'sly-eval)
     (setq org-ellipsis " ▾")
-                                          ;(setq org-adapt-indentation 'headline-data)
+    ;;(setq org-adapt-indentation 'headline-data)
     (setq org-hide-emphasis-markers t)
     ;; Fix image width and show inline images
     (setq org-image-actual-width 700)
@@ -778,7 +776,7 @@ Bookmark capture from:
             ("ACTIVE".(:foreground "LightSeaGreen" :weight bold))
             ("WAITING".(:foreground "peru" :weight bold))
             ("DELEGATED".(:foreground "CornflowerBlue" :weight bold))
-            ("DONE".(:foreground "azure" :weight bold))
+            ("DONE".(:foreground "LightGrey" :weight bold))
             ("CANCELLED".(:foreground "IndianRed" :weight bold))
             ("LEYENDO".(:foreground "peru" :weight bold))
             ("LEÍDO".(:foreground "DarkSeaGreen" :weight bold))))
@@ -853,7 +851,7 @@ Bookmark capture from:
             ("r" "Reads" entry (file+olp org-default-notes-file "Libros" "Lista Lectura")
              "*** %\\1 %?\n :PROPERTIES:\n :Título: %^{Título}\n :Subtítulo: %^{Subtítulo}\n :Serie: %^{Serie}\n :Autor: %^{Autor [Apellido, Nombre]}\n :Año: %^{Año}\n :Categoría: %^{Categoría}\n :Puntuación: %^{Puntuación [1-5]}\n :Fecha: %^{Fecha Lectura [dd/mm/aaaa]}\n :Estado: %^{Estado|Leído|Leyendo|Pendiente}\n :END: \n" :empty-lines 1 :prepend t)
             ("d" "Dailies" entry (file+datetree org-default-notes-file)
-             "* %^{Description} %^g %?\nAdded: %U")
+             "* %^{Description} %^g\n Added: %U\n\n %?")
             ("b" "Bookmark (Clipboard)" entry (file+olp org-default-notes-file "Bookmarks")
              "* %(org-cliplink-capture) %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n- %?\n" :empty-lines 1 :prepend t)))
 
