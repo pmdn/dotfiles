@@ -675,6 +675,13 @@
         n)
       "<m"
       "Insert a meeting template in the org file"
+      'org-tempo-tags)
+  (tempo-define-template "references"
+      '("* References" n
+        "#+CITE_EXPORT: csl ~/Zotero/styles/ieee.csl" n
+        "#+PRINT_BIBLIOGRAPHY:" n)
+      "<r"
+      "Insert references header for latex export"
       'org-tempo-tags))
 
 ;; Automatically tangle our Emacs.org config file when we save it
