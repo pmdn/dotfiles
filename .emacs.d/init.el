@@ -127,7 +127,7 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c l") 'org-store-link)
-(global-set-key (kbd "C-c e") 'pulse-line)
+(global-set-key (kbd "C-c e") 'pulsar-pulse-line)
 
 (use-package doom-themes
  :init (load-theme 'doom-nord-aurora t))
@@ -231,10 +231,51 @@
   :defer t
   :bind ("C-c s" . treemacs))
 
-(defun pulse-line (&rest _)
-  "Pulse (highlight) the current line."
-  (interactive)
-  (pulse-momentary-highlight-one-line (point)))
+(use-package pulsar
+  :custom
+  ;; NOTE: The commented out functions are from before
+  ;; the introduction of `pulsar-pulse-on-window-change'.  Try
+  ;; that instead.
+  (pulsar-pulse-functions ; Read the doc string for why not `setq'
+   '(recenter-top-bottom
+     move-to-window-line-top-bottom
+     reposition-window
+     bookmark-jump
+     other-window
+     delete-window
+     delete-other-windows
+     forward-page
+     backward-page
+     scroll-up-command
+     scroll-down-command
+     windmove-right
+     windmove-left
+     windmove-up
+     windmove-down
+     windmove-swap-states-right
+     windmove-swap-states-left
+     windmove-swap-states-up
+     windmove-swap-states-down
+     tab-new
+     tab-close
+     tab-next
+     org-next-visible-heading
+     org-previous-visible-heading
+     org-forward-heading-same-level
+     org-backward-heading-same-level
+     outline-backward-same-level
+     outline-forward-same-level
+     outline-next-visible-heading
+     outline-previous-visible-heading
+     ace-window
+     outline-up-heading))
+  :config
+  (pulsar-global-mode 1)
+  (setq pulsar-pulse t)
+  (setq pulsar-delay 0.055)
+  (setq pulsar-iterations 10)
+  (setq pulsar-face 'pulsar-yellow)
+  (setq pulsar-highlight-face 'pulsar-yellow))
 
 ;; Configure orderless
 (use-package orderless

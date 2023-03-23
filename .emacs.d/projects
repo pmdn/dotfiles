@@ -1,5 +1,6 @@
 ;;; -*- lisp-data -*-
-(("~/Projects/Code/raindrop_to_orgmode/")
+(("~/Projects/Code/scripts/")
+ ("~/Projects/Code/raindrop_to_orgmode/")
  ("~/.dotfiles/")
  ("~/Sync/Sincronizadas/Notes/OrgFiles/")
  ("~/Projects/Code/pid_controller/")
