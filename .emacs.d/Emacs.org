@@ -1158,6 +1158,22 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 
 #+end_src
 
+** Org rainbow tags
+
+[[https://github.com/KaratasFurkan/org-rainbow-tags][Org Rainbow Tags]] adds random colors to your org tags. In order to make colors random but consistent between same tags, colors are generated from the hash of the tag names.
+
+#+begin_src emacs-lisp
+(use-package org-rainbow-tags
+  :ensure t
+  :custom
+  (org-rainbow-tags-hash-start-index 10)
+  (org-rainbow-tags-extra-face-attributes
+   ;; Default is '(:weight 'bold)
+   '(:weight 'light))
+  :hook
+  (org-mode . org-rainbow-tags-mode))
+#+end_src
+
 * Eshell
 Configuration ideas taken from [[https://github.com/howardabrams/dot-files/blob/master/emacs-eshell.org][Howard Abrams]].
 

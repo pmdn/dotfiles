@@ -852,6 +852,16 @@
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
+(use-package org-rainbow-tags
+  :ensure t
+  :custom
+  (org-rainbow-tags-hash-start-index 10)
+  (org-rainbow-tags-extra-face-attributes
+   ;; Default is '(:weight 'bold)
+   '(:weight 'light))
+  :hook
+  (org-mode . org-rainbow-tags-mode))
+
 (use-package eshell
   :init
   (setq eshell-scroll-to-bottom-on-input 'all
