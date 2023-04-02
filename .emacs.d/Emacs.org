@@ -1081,8 +1081,8 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
     (setq denote-dired-directories
           (list denote-directory))
 
-    (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories))
-
+    (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories)
+    (set-face-attribute 'denote-faces-link nil :foreground "#EBCB8B" :inherit 'link))
 
   (defun my/denote-random-note (&optional directory)
     "Open a random denote."

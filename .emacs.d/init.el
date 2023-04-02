@@ -790,8 +790,8 @@
   (setq denote-dired-directories
         (list denote-directory))
 
-  (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories))
-
+  (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories)
+  (set-face-attribute 'denote-faces-link nil :foreground "#EBCB8B" :inherit 'link))
 
 (defun my/denote-random-note (&optional directory)
   "Open a random denote."
