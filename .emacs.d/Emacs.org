@@ -372,6 +372,7 @@ Default themes may be good options:
 [[https://github.com/protesilaos/pulsar][pulsar]] is a small package that temporarily highlights the current line after a given function is invoked. It uses the built in =pulse.el= package.
 
 #+begin_src emacs-lisp
+  ;; pulsar configuration 
   (use-package pulsar
     :custom
     ;; NOTE: The commented out functions are from before
@@ -417,6 +418,17 @@ Default themes may be good options:
     (setq pulsar-iterations 10)
     (setq pulsar-face 'pulsar-yellow)
     (setq pulsar-highlight-face 'pulsar-yellow))
+#+end_src
+
+** Olivetti
+
+[[https://github.com/rnkn/olivetti][Olivetti]] simple Emacs minor mode for a nice writing environment.
+
+#+begin_src emacs-lisp
+  ;; Olivetti configuration
+  (use-package olivetti
+    :config
+    (add-hook 'olivetti-mode-hook (lambda () (interactive) (setq olivetti-body-width 80))))
 #+end_src
 
 * Completion framework
@@ -1577,6 +1589,18 @@ For Guile, [[https://gitlab.com/emacs-geiser/guile][geise-guile]] will be instal
     :config
     (setq geiser-default-implementation 'guile)
     (setq geiser-active-implementations '(guile)))
+#+end_src
+
+** Markdown
+
+[[https://github.com/jrblevin/markdown-mode][markdown-mode]] is a major mode for editing Markdown-formatted text.
+
+#+begin_src emacs-lisp
+  ;; markdown-mode configuration
+  (use-package markdown-mode
+    :ensure t
+    :mode ("\\.md\\'" . markdown-mode)
+    :hook (markdown-mode . auto-fill-mode))
 #+end_src
 
 * RSS with Elfeed

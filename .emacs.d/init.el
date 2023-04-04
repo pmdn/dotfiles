@@ -231,6 +231,7 @@
   :defer t
   :bind ("C-c s" . treemacs))
 
+;; pulsar configuration 
 (use-package pulsar
   :custom
   ;; NOTE: The commented out functions are from before
@@ -276,6 +277,11 @@
   (setq pulsar-iterations 10)
   (setq pulsar-face 'pulsar-yellow)
   (setq pulsar-highlight-face 'pulsar-yellow))
+
+;; Olivetti configuration
+(use-package olivetti
+  :config
+  (add-hook 'olivetti-mode-hook (lambda () (interactive) (setq olivetti-body-width 80))))
 
 ;; Configure orderless
 (use-package orderless
@@ -1100,6 +1106,12 @@ more-helpful local prompt."
   :config
   (setq geiser-default-implementation 'guile)
   (setq geiser-active-implementations '(guile)))
+
+;; markdown-mode configuration
+(use-package markdown-mode
+  :ensure t
+  :mode ("\\.md\\'" . markdown-mode)
+  :hook (markdown-mode . auto-fill-mode))
 
 ;; Configure Elfeed
 (use-package elfeed
