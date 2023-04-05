@@ -87,10 +87,6 @@
  ;; y-or-n answers
  (fset 'yes-or-no-p 'y-or-n-p)	
 
- ;; global-hl-line-mode softly highlights the background color of the line containing point. It makes it a bit easier to find point, and it’s useful when pairing or presenting code.
- (global-hl-line-mode 1)
- (set-face-attribute hl-line-face nil :underline nil)
-
  ;; Set tab width to 4 spaces and Allman indentation (bsd) in C
  (setq-default tab-width 4)
  (setq-default indent-tabs-mode nil)
@@ -734,7 +730,7 @@
 ;; Automatically tangle our Emacs.org config file when we save it
 (defun efs/org-babel-tangle-config ()
   (when (string-equal (buffer-file-name)
-                      (expand-file-name "~/.dotfiles/.emacs.d/Emacs.org"))
+                      (expand-file-name "~/.emacs.d/Emacs.org"))
     ;; Dynamic scoping to the rescue
     (let ((org-confirm-babel-evaluate nil))
       (org-babel-tangle))))
