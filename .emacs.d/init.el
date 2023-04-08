@@ -203,7 +203,7 @@
           (,(all-the-icons-octicon "tools" :height 0.9 :v-adjust -0.1)
             "Config"
             "Configuration file"
-            (lambda (&rest _) (find-file (expand-file-name  "~/.emacs.d/Emacs.org"))))
+            (lambda (&rest _) (find-file (expand-file-name  "~/.dotfiles/.emacs.d/Emacs.org"))))
           (,(all-the-icons-octicon "rss" :height 1.2 :v-adjust -0.1)
             "Elfeed"
             "Go to rss feed"
@@ -555,6 +555,7 @@
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
   (setq org-id-link-to-org-use-id 'use-existing)
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.2))
 
   (cond ((eq system-type 'windows-nt)
          ;; Windows-specific code goes here.
@@ -730,7 +731,7 @@
 ;; Automatically tangle our Emacs.org config file when we save it
 (defun efs/org-babel-tangle-config ()
   (when (string-equal (buffer-file-name)
-                      (expand-file-name "~/.emacs.d/Emacs.org"))
+                      (expand-file-name "~/.dotfiles/.emacs.d/Emacs.org"))
     ;; Dynamic scoping to the rescue
     (let ((org-confirm-babel-evaluate nil))
       (org-babel-tangle))))
