@@ -191,7 +191,7 @@
                                         ; set the title
   (setq dashboard-banner-logo-title "Bienvenido a Emacs!")
                                         ; set the banner
-  (setq dashboard-startup-banner "~/.emacs.d/lambda_logo_2.png")
+  (setq dashboard-startup-banner "~/.emacs.d/emacs-splash.png")
   (setq dashboard-projects-backend 'project-el)
   (setq dashboard-navigator-buttons
         `(;; line1
