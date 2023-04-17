@@ -126,7 +126,7 @@
 (global-set-key (kbd "C-c e") 'pulsar-pulse-line)
 
 (use-package doom-themes
- :init (load-theme 'doom-nord-aurora t))
+ :init (load-theme 'doom-xcode t))
 
 (use-package sublime-themes)
 

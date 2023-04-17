@@ -210,7 +210,7 @@ Default themes may be good options:
 #+begin_src emacs-lisp
 
   (use-package doom-themes
-   :init (load-theme 'doom-nord-aurora t))
+   :init (load-theme 'doom-xcode t))
 
 #+end_src
 
