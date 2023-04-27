@@ -221,11 +221,13 @@
   ; disable the snarky footer
   (setq dashboard-set-footer nil))
 
-;; Treemacs configuration
-(use-package treemacs
+;;Dired-Sidebar configuration
+(use-package dired-sidebar
+  :bind (("C-c s" . dired-sidebar-toggle-sidebar))
   :ensure t
-  :defer t
-  :bind ("C-c s" . treemacs))
+  :commands (dired-sidebar-toggle-sidebar)
+  :config
+  (setq dired-sidebar-subtree-line-prefix "__"))
 
 ;; pulsar configuration 
 (use-package pulsar
@@ -277,7 +279,10 @@
 ;; Olivetti configuration
 (use-package olivetti
   :config
-  (add-hook 'olivetti-mode-hook (lambda () (interactive) (setq olivetti-body-width 80))))
+  (add-hook 'olivetti-mode-hook (lambda () (interactive) (setq olivetti-body-width 80)))
+  :hook
+  (org-mode . olivetti-mode)
+  (markdown-mode . olivetti-mode))
 
 ;; Configure orderless
 (use-package orderless
