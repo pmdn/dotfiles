@@ -418,20 +418,6 @@ Default themes may be good options:
     (setq pulsar-highlight-face 'pulsar-yellow))
 #+end_src
 
-** Olivetti
-
-[[https://github.com/rnkn/olivetti][Olivetti]] simple Emacs minor mode for a nice writing environment.
-
-#+begin_src emacs-lisp
-  ;; Olivetti configuration
-  (use-package olivetti
-    :config
-    (add-hook 'olivetti-mode-hook (lambda () (interactive) (setq olivetti-body-width 80)))
-    :hook
-    (org-mode . olivetti-mode)
-    (markdown-mode . olivetti-mode))
-#+end_src
-
 * Completion framework
 
 Completion in Emacs is key. Previously I used [[https://oremacs.com/swiper/][Ivy/Swiper/Counsel]] for the minibuffer and [[https://company-mode.github.io/][Company]] for in-buffer completion. Although they are nice and work perfectly, I have decided to go on with more /emacsy/ alternatives, that make use of built-in emacs capabilities instead of adding their own. This make them more scalable and easier to mantain. Below are some configuration examples, as well as some tutorials explaining the different functionalities of the packages.
@@ -1129,7 +1115,7 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
   (setq citar-symbol-separator "  ")
 
     (use-package citar-denote
-      :after citar denote
+      :after (citar denote)
       :config
       (citar-denote-mode)
       (setq citar-open-always-create-notes t))
@@ -1178,6 +1164,7 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 
 #+begin_src emacs-lisp
 (use-package org-rainbow-tags
+  :after org
   :ensure t
   :custom
   (org-rainbow-tags-hash-start-index 10)
@@ -1186,6 +1173,21 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
    '(:weight 'light))
   :hook
   (org-mode . org-rainbow-tags-mode))
+#+end_src
+
+** Olivetti
+
+[[https://github.com/rnkn/olivetti][Olivetti]] simple Emacs minor mode for a nice writing environment.
+
+#+begin_src emacs-lisp
+  ;; Olivetti configuration
+  (use-package olivetti
+    :after org
+    :config
+    (add-hook 'olivetti-mode-hook (lambda () (interactive) (setq olivetti-body-width 80)))
+    :hook
+    (org-mode . olivetti-mode)
+    (markdown-mode . olivetti-mode))
 #+end_src
 
 * Eshell

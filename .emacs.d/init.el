@@ -276,14 +276,6 @@
   (setq pulsar-face 'pulsar-yellow)
   (setq pulsar-highlight-face 'pulsar-yellow))
 
-;; Olivetti configuration
-(use-package olivetti
-  :config
-  (add-hook 'olivetti-mode-hook (lambda () (interactive) (setq olivetti-body-width 80)))
-  :hook
-  (org-mode . olivetti-mode)
-  (markdown-mode . olivetti-mode))
-
 ;; Configure orderless
 (use-package orderless
   :ensure t
@@ -826,7 +818,7 @@
 (setq citar-symbol-separator "  ")
 
   (use-package citar-denote
-    :after citar denote
+    :after (citar denote)
     :config
     (citar-denote-mode)
     (setq citar-open-always-create-notes t))
@@ -861,6 +853,7 @@
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
 (use-package org-rainbow-tags
+  :after org
   :ensure t
   :custom
   (org-rainbow-tags-hash-start-index 10)
@@ -869,6 +862,15 @@
    '(:weight 'light))
   :hook
   (org-mode . org-rainbow-tags-mode))
+
+;; Olivetti configuration
+(use-package olivetti
+  :after org
+  :config
+  (add-hook 'olivetti-mode-hook (lambda () (interactive) (setq olivetti-body-width 80)))
+  :hook
+  (org-mode . olivetti-mode)
+  (markdown-mode . olivetti-mode))
 
 (use-package eshell
   :init
