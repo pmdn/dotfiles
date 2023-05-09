@@ -165,7 +165,7 @@
 
 (use-package doom-modeline
   :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 13)
+  :custom ((doom-modeline-height 20)
     (doom-modeline-buffer-file-name-style 'truncate-except-project)
     (doom-modeline-bar-width 6)))
 
