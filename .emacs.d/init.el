@@ -853,7 +853,6 @@
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
 (use-package org-rainbow-tags
-  :after org
   :ensure t
   :custom
   (org-rainbow-tags-hash-start-index 10)
@@ -865,7 +864,6 @@
 
 ;; Olivetti configuration
 (use-package olivetti
-  :after org
   :config
   (add-hook 'olivetti-mode-hook (lambda () (interactive) (setq olivetti-body-width 80)))
   :hook

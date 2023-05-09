@@ -1164,7 +1164,6 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 
 #+begin_src emacs-lisp
 (use-package org-rainbow-tags
-  :after org
   :ensure t
   :custom
   (org-rainbow-tags-hash-start-index 10)
@@ -1182,7 +1181,6 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 #+begin_src emacs-lisp
   ;; Olivetti configuration
   (use-package olivetti
-    :after org
     :config
     (add-hook 'olivetti-mode-hook (lambda () (interactive) (setq olivetti-body-width 80)))
     :hook
