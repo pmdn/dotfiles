@@ -855,7 +855,7 @@
 ;; Olivetti configuration
 (use-package olivetti
   :config
-  (add-hook 'olivetti-mode-hook (lambda () (interactive) (setq olivetti-body-width 80)))
+  (add-hook 'olivetti-mode-hook (lambda () (interactive) (setq olivetti-body-width 85)))
   :hook
   (org-mode . olivetti-mode)
   (markdown-mode . olivetti-mode))
