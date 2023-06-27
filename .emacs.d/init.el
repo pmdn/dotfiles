@@ -1123,6 +1123,34 @@ more-helpful local prompt."
    (elfeed-org)
    (setq rmh-elfeed-org-files (list  (concat org-directory "/elfeed.org"))))
 
+;; Configure ERC
+
+(use-package erc
+  :custom
+  (erc-autojoin-channels-alist '(("libera.chat" "#bitcoin" "#emacs" "#org-mode")))
+  (erc-nick "aptix")
+  (erc-autojoin-timing 'ident)
+  (erc-fill-column 80)
+  (erc-fill-function 'erc-fill-static)
+  (erc-fill-static-center 20)
+  (erc-hide-list '("JOIN" "PART" "QUIT"))
+  (erc-lurker-hide-list '("JOIN" "PART" "QUIT"))
+  (erc-lurker-threshold-time 43200)
+  (erc-server-reconnect-attempts 5)
+  (erc-server-reconnect-timeout 3)
+  (erc-track-exclude-types '("JOIN" "MODE" "NICK" "PART" "QUIT"
+                             "324" "329" "332" "333" "353" "477"))
+  :config
+  (add-to-list 'erc-modules 'notifications)
+  (erc-services-mode 1)
+  (erc-update-modules))
+
+(use-package erc-hl-nicks
+:after erc)
+
+(use-package erc-image
+:after erc)
+
 (use-package pdf-tools
   :config
     (pdf-tools-install)

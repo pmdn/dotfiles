@@ -1615,6 +1615,41 @@ For Guile, [[https://gitlab.com/emacs-geiser/guile][geise-guile]] will be instal
 
 #+END_SRC
 
+* IRC with ERC
+
+ERC is one of Emacs IRC clients. Start by =M-x erc-tls=.
+
+#+begin_src emacs-lisp
+
+  ;; Configure ERC
+
+  (use-package erc
+    :custom
+    (erc-autojoin-channels-alist '(("libera.chat" "#bitcoin" "#emacs" "#org-mode")))
+    (erc-nick "aptix")
+    (erc-autojoin-timing 'ident)
+    (erc-fill-column 80)
+    (erc-fill-function 'erc-fill-static)
+    (erc-fill-static-center 20)
+    (erc-hide-list '("JOIN" "PART" "QUIT"))
+    (erc-lurker-hide-list '("JOIN" "PART" "QUIT"))
+    (erc-lurker-threshold-time 43200)
+    (erc-server-reconnect-attempts 5)
+    (erc-server-reconnect-timeout 3)
+    (erc-track-exclude-types '("JOIN" "MODE" "NICK" "PART" "QUIT"
+                               "324" "329" "332" "333" "353" "477"))
+    :config
+    (add-to-list 'erc-modules 'notifications)
+    (erc-services-mode 1)
+    (erc-update-modules))
+
+  (use-package erc-hl-nicks
+  :after erc)
+
+  (use-package erc-image
+  :after erc)
+#+end_src
+
 * Pdf files with pdf-tools
 
 [[https://github.com/vedang/pdf-tools][pdf-tools]] is a package to view and anotate pdf files inside emacs. Configuration taken from [[https://gitlab.com/hefistion/emacs.d/-/blob/master/config.org][El blog de Lázaro]].
