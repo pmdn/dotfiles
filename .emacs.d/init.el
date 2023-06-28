@@ -677,6 +677,11 @@
   :custom
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
+;; org-appear configuration
+(use-package org-appear
+    :after org
+    :hook (org-mode . org-appear-mode))
+
 (org-babel-do-load-languages
   'org-babel-load-languages
   '((emacs-lisp . t)
@@ -1127,8 +1132,8 @@ more-helpful local prompt."
 
 (use-package erc
   :custom
-  (erc-autojoin-channels-alist '(("libera.chat" "#bitcoin" "#emacs" "#org-mode")))
-  (erc-nick "aptix")
+  (erc-autojoin-channels-alist '(("libera.chat" "#bitcoin" "#emacs" "#org-mode" "#lisp")))
+  (erc-nick "pmdn")
   (erc-autojoin-timing 'ident)
   (erc-fill-column 80)
   (erc-fill-function 'erc-fill-static)

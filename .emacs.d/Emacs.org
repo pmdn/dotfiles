@@ -921,6 +921,19 @@ Bookmark capture from:
 
 #+end_src
 
+** Show emphasis markers when needed
+
+[[https://github.com/awth13/org-appear][org-appear]] provides a way to toggle visibility of hidden elements such as emphasis markers, links, etc. by customising specific variables, e.g., =org-hide-emphasis-markers=.
+
+#+begin_src emacs-lisp
+
+  ;; org-appear configuration
+  (use-package org-appear
+      :after org
+      :hook (org-mode . org-appear-mode))
+  
+#+end_src
+
 ** Configure Babel Languages
 
 To execute or export code in =org-mode= code blocks, you'll need to set up =org-babel-load-languages= for each language you'd like to use.  [[https://orgmode.org/worg/org-contrib/babel/languages.html][This page]] documents all of the languages that you can use with =org-babel=.
@@ -1625,8 +1638,8 @@ ERC is one of Emacs IRC clients. Start by =M-x erc-tls=.
 
   (use-package erc
     :custom
-    (erc-autojoin-channels-alist '(("libera.chat" "#bitcoin" "#emacs" "#org-mode")))
-    (erc-nick "aptix")
+    (erc-autojoin-channels-alist '(("libera.chat" "#bitcoin" "#emacs" "#org-mode" "#lisp")))
+    (erc-nick "pmdn")
     (erc-autojoin-timing 'ident)
     (erc-fill-column 80)
     (erc-fill-function 'erc-fill-static)
