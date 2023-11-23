@@ -361,8 +361,9 @@ Default themes may be good options:
     :ensure t
     :commands (dired-sidebar-toggle-sidebar)
     :config
-    (setq dired-sidebar-subtree-line-prefix "__"))
-  
+    ;;(setq dired-sidebar-subtree-line-prefix "__")
+    (setq dired-sidebar-theme 'ascii))
+
 #+end_src
 
 ** Pulsar
@@ -1638,7 +1639,7 @@ ERC is one of Emacs IRC clients. Start by =M-x erc-tls=.
 
   (use-package erc
     :custom
-    (erc-autojoin-channels-alist '(("libera.chat" "#bitcoin" "#emacs" "#org-mode" "#lisp")))
+    (erc-autojoin-channels-alist '(("libera.chat" "#bitcoin" "#emacs" "#emacs-es" "#org-mode" "#lisp")))
     (erc-nick "pmdn")
     (erc-autojoin-timing 'ident)
     (erc-fill-column 80)

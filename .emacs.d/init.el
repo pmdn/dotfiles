@@ -227,7 +227,8 @@
   :ensure t
   :commands (dired-sidebar-toggle-sidebar)
   :config
-  (setq dired-sidebar-subtree-line-prefix "__"))
+  ;;(setq dired-sidebar-subtree-line-prefix "__")
+  (setq dired-sidebar-theme 'ascii))
 
 ;; pulsar configuration 
 (use-package pulsar
@@ -1132,7 +1133,7 @@ more-helpful local prompt."
 
 (use-package erc
   :custom
-  (erc-autojoin-channels-alist '(("libera.chat" "#bitcoin" "#emacs" "#org-mode" "#lisp")))
+  (erc-autojoin-channels-alist '(("libera.chat" "#bitcoin" "#emacs" "#emacs-es" "#org-mode" "#lisp")))
   (erc-nick "pmdn")
   (erc-autojoin-timing 'ident)
   (erc-fill-column 80)
