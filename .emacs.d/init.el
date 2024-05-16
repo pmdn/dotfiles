@@ -184,8 +184,6 @@
 ;; Dashboard configuration
 (use-package dashboard
   :ensure t
-  :custom
-  (dashboard-set-navigator t)
   :config
   (dashboard-setup-startup-hook)
                                         ; set the title
@@ -203,13 +201,28 @@
           (,(all-the-icons-octicon "tools" :height 0.9 :v-adjust -0.1)
             "Config"
             "Configuration file"
-            (lambda (&rest _) (find-file (expand-file-name  "~/.dotfiles/.emacs.d/Emacs.org"))))
+            (lambda (&rest _) (find-file (expand-file-name  "~/.emacs.d/Emacs.org"))))
           (,(all-the-icons-octicon "rss" :height 1.2 :v-adjust -0.1)
             "Elfeed"
             "Go to rss feed"
             (lambda (&rest _) (elfeed))))))
   ; set the sections I'd like displayed and how many of each
   (setq dashboard-items '((recents . 7) (projects . 5) (bookmarks . 5) (agenda . 5)))
+  (setq dashboard-heading-icons '((recents   . "history")
+                              (bookmarks . "bookmark")
+                              (agenda    . "calendar")
+                              (projects  . "rocket")
+                              (registers . "database")))
+  (setq dashboard-startupify-list '(dashboard-insert-banner
+                                dashboard-insert-newline
+                                dashboard-insert-banner-title
+                                dashboard-insert-newline
+                                dashboard-insert-navigator
+                                dashboard-insert-newline
+                                dashboard-insert-init-info
+                                dashboard-insert-items
+                                dashboard-insert-newline
+                                dashboard-insert-footer))
   ; center it all
   (setq dashboard-center-content t)
   ; show shortcut keys
@@ -219,7 +232,9 @@
   ; use nice section icons
   (setq dashboard-set-heading-icons t)
   ; disable the snarky footer
-  (setq dashboard-set-footer nil))
+  (setq dashboard-set-footer nil)
+  ; use `all-the-icons' package
+  (setq dashboard-icon-type 'all-the-icons))
 
 ;;Dired-Sidebar configuration
 (use-package dired-sidebar
@@ -734,7 +749,7 @@
 ;; Automatically tangle our Emacs.org config file when we save it
 (defun efs/org-babel-tangle-config ()
   (when (string-equal (buffer-file-name)
-                      (expand-file-name "~/.dotfiles/.emacs.d/Emacs.org"))
+                      (expand-file-name "~/.emacs.d/Emacs.org"))
     ;; Dynamic scoping to the rescue
     (let ((org-confirm-babel-evaluate nil))
       (org-babel-tangle))))
