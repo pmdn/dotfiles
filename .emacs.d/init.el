@@ -164,7 +164,7 @@
 (use-package all-the-icons)
 
 (use-package doom-modeline
-  :init (doom-modeline-mode 1)
+  :hook (after-init . doom-modeline-mode)
   :custom ((doom-modeline-height 20)
     (doom-modeline-buffer-file-name-style 'truncate-except-project)
     (doom-modeline-bar-width 6)))
@@ -748,8 +748,10 @@
 
 ;; Automatically tangle our Emacs.org config file when we save it
 (defun efs/org-babel-tangle-config ()
-  (when (string-equal (buffer-file-name)
+  (when (or (string-equal (buffer-file-name)
                       (expand-file-name "~/.emacs.d/Emacs.org"))
+            (string-equal (buffer-file-name)
+                      (expand-file-name "~/.dotfiles/.emacs.d/Emacs.org")))
     ;; Dynamic scoping to the rescue
     (let ((org-confirm-babel-evaluate nil))
       (org-babel-tangle))))
@@ -1144,40 +1146,11 @@ more-helpful local prompt."
    (elfeed-org)
    (setq rmh-elfeed-org-files (list  (concat org-directory "/elfeed.org"))))
 
-;; Configure ERC
-
-(use-package erc
+(use-package doc-view
   :custom
-  (erc-autojoin-channels-alist '(("libera.chat" "#bitcoin" "#emacs" "#emacs-es" "#org-mode" "#lisp")))
-  (erc-nick "pmdn")
-  (erc-autojoin-timing 'ident)
-  (erc-fill-column 80)
-  (erc-fill-function 'erc-fill-static)
-  (erc-fill-static-center 20)
-  (erc-hide-list '("JOIN" "PART" "QUIT"))
-  (erc-lurker-hide-list '("JOIN" "PART" "QUIT"))
-  (erc-lurker-threshold-time 43200)
-  (erc-server-reconnect-attempts 5)
-  (erc-server-reconnect-timeout 3)
-  (erc-track-exclude-types '("JOIN" "MODE" "NICK" "PART" "QUIT"
-                             "324" "329" "332" "333" "353" "477"))
-  :config
-  (add-to-list 'erc-modules 'notifications)
-  (erc-services-mode 1)
-  (erc-update-modules))
-
-(use-package erc-hl-nicks
-:after erc)
-
-(use-package erc-image
-:after erc)
-
-(use-package pdf-tools
-  :config
-    (pdf-tools-install)
-    (setq-default pdf-view-display-size 'fit-width))
-
-  (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)))
+  (doc-view-resolution 300)
+  (doc-view-mupdf-use-svg t)
+  (large-file-warning-threshold (* 50 (expt 2 20))))
 
 ;; Local Variables:
 ;; byte-compile-warnings: (not free-vars noruntime)
