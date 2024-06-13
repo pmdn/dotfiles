@@ -1650,7 +1650,7 @@ For Guile, [[https://gitlab.com/emacs-geiser/guile][geise-guile]] will be instal
 
 Pdf files can be read with the built-in ~DocView~, but an external software is needed for rendering. [[https://mupdf.com/][MuPDF]] is an open source pdf reader that renders pdf files intro images and passes them to ~DocView~.
 
-With Emacs 29.1 and above, =MuPDF= will convet pdf files into SVG instead of PNG, getting a sharper image and improving zooming capabilities.
+With Emacs 29.1 and above, =MuPDF= (installed via ~apt~) will convet pdf files into SVG instead of PNG, getting a sharper image and improving zooming capabilities.
 
 #+begin_src emacs-lisp
   (use-package doc-view
