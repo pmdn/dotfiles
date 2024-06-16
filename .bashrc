@@ -117,3 +117,9 @@ if ! shopt -oq posix; then
 fi
 
 export PATH="$HOME/Projects/Code/scripts:$PATH"
+
+# aliases
+alias emc='emacsclient -n'
+
+# user config
+bind -s 'set completion-ignore-case on'

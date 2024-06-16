@@ -12,6 +12,10 @@
 (setq gc-cons-threshold (* 50 1000 1000))
 ;; GnuPG keyring path correction
 (setq package-gnupghome-dir "~/.emacs.d/elpa/gnupg")
+;; Start server only if not in terminal
+(when (or (eq system-type 'windows-nt)
+        (eq system-type 'gnu/linux))
+(server-start))
 
 ;; Initialize package sources
 (require 'package)
@@ -45,12 +49,12 @@
  (tooltip-mode -1)           ; Disable tooltips
  (set-fringe-mode 10)        ; Give some breathing room
 
-;; GIve some air in text mode by increasing margins
-(defun my-set-margins ()
-  "Set margins in current buffer."
-  (setq left-margin-width 3)
-  (setq right-margin-width 3))
-(add-hook 'text-mode-hook 'my-set-margins)
+ ;; GIve some air in text mode by increasing margins
+ (defun my-set-margins ()
+   "Set margins in current buffer."
+   (setq left-margin-width 3)
+   (setq right-margin-width 3))
+ (add-hook 'text-mode-hook 'my-set-margins)
 
  ;; Set up the visible bell
  (setq visible-bell t)
@@ -93,6 +97,9 @@
  (setq indent-line-function 'insert-tab)
  (setq c-default-style "bsd"
        c-basic-offset 4)
+
+ ;; Kill the current buffer when selecting a new directory
+ (setq dired-kill-when-opening-new-dired-buffer t)
 
 (setq user-full-name "Patxi Madina")
 (cond ((eq system-type 'windows-nt)
@@ -244,6 +251,13 @@
   :config
   ;;(setq dired-sidebar-subtree-line-prefix "__")
   (setq dired-sidebar-theme 'ascii))
+
+;; all-the-icons in dired
+(use-package all-the-icons-dired
+  :hook
+  (dired-mode . all-the-icons-dired-mode)
+  :config
+  (setq all-the-icons-dired-monochrome nil))
 
 ;; pulsar configuration 
 (use-package pulsar
@@ -572,13 +586,13 @@
 
   (cond ((eq system-type 'windows-nt)
          ;; Windows-specific code goes here.
-         (setq org-directory "C:/Dropbox (MGEP)/OrgFiles")
+         (setq org-directory "~/MGEP Dropbox/patxi madina hernandez/OrgFiles")
          )
         ((eq system-type 'gnu/linux)
          ;; Linux-specific code goes here.
          (setq org-directory "~/Sync/Sincronizadas/Notes/OrgFiles")
          ))
-
+  
   (setq org-agenda-files
         (list
          (concat org-directory "/Notas.org")
@@ -1140,11 +1154,13 @@ more-helpful local prompt."
   ("C-x w" . elfeed ))
 
 ;; Configure Elfeed with org mode
- (use-package elfeed-org
-   :ensure t
-   :config
-   (elfeed-org)
-   (setq rmh-elfeed-org-files (list  (concat org-directory "/elfeed.org"))))
+(use-package elfeed-org
+  :defer nil
+  :after elfeed
+  :init
+  (elfeed-org)
+  :config
+  (setq rmh-elfeed-org-files (list  (concat org-directory "/elfeed.org"))))
 
 (use-package doc-view
   :custom

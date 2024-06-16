@@ -5,7 +5,16 @@
 * Welcome
 
 This is my configuration, now written as an Org Mode document.  This file generates [[file:init.el][init.el]] which can be loaded by Emacs at startup.
-The configuration is inspired by [[https://github.com/daviwil/emacs-from-scratch][System Crafters]], [[https://config.daviwil.com/emacs][David Wilson]], [[https://github.com/hrs][Harry R. Schwartz]], [[https://github.com/geolessel][Geoffrey Lessel]] and more.
+The configuration is inspired by [[https://github.com/daviwil/emacs-from-scratch][System Crafters]], [[https://config.daviwil.com/emacs][David Wilson]], [[https://github.com/hrs][Harry R. Schwartz]], [[https://github.com/geolessel][Geoffrey Lessel]], [[https://config.phundrak.com/emacs/][Phundrak]] and more.
+
+To start emacs in client mode, run from command line:
+
+Windows: ~emacsclientw -n fichero_a_abrir~
+Linux: ~emacsclient -n fichero_a_abrir~
+
+Or from the "open with" constext menu in windows using emacsclientw.exe.
+
+To close te file opened in the client once edited, use =C-x #=.
 
 #+begin_src emacs-lisp
 
@@ -23,7 +32,10 @@ The configuration is inspired by [[https://github.com/daviwil/emacs-from-scratch
   (setq gc-cons-threshold (* 50 1000 1000))
   ;; GnuPG keyring path correction
   (setq package-gnupghome-dir "~/.emacs.d/elpa/gnupg")
-
+  ;; Start server only if not in terminal
+  (when (or (eq system-type 'windows-nt)
+          (eq system-type 'gnu/linux))
+  (server-start))
 #+end_src
 
 * Package system setup
@@ -84,12 +96,12 @@ This section configures basic UI settings that remove unneeded elements to make 
    (tooltip-mode -1)           ; Disable tooltips
    (set-fringe-mode 10)        ; Give some breathing room
 
-  ;; GIve some air in text mode by increasing margins
-  (defun my-set-margins ()
-    "Set margins in current buffer."
-    (setq left-margin-width 3)
-    (setq right-margin-width 3))
-  (add-hook 'text-mode-hook 'my-set-margins)
+   ;; GIve some air in text mode by increasing margins
+   (defun my-set-margins ()
+     "Set margins in current buffer."
+     (setq left-margin-width 3)
+     (setq right-margin-width 3))
+   (add-hook 'text-mode-hook 'my-set-margins)
 
    ;; Set up the visible bell
    (setq visible-bell t)
@@ -132,6 +144,9 @@ This section configures basic UI settings that remove unneeded elements to make 
    (setq indent-line-function 'insert-tab)
    (setq c-default-style "bsd"
          c-basic-offset 4)
+
+   ;; Kill the current buffer when selecting a new directory
+   (setq dired-kill-when-opening-new-dired-buffer t)
 
 #+end_src
 
@@ -379,6 +394,19 @@ Default themes may be good options:
     ;;(setq dired-sidebar-subtree-line-prefix "__")
     (setq dired-sidebar-theme 'ascii))
 
+#+end_src
+
+** All-the-icons-dired
+
+[[https://github.com/jtbm37/all-the-icons-dired][all-the-icons-dired]] brings icons to =dired=.
+
+#+begin_src emacs-lisp
+  ;; all-the-icons in dired
+  (use-package all-the-icons-dired
+    :hook
+    (dired-mode . all-the-icons-dired-mode)
+    :config
+    (setq all-the-icons-dired-monochrome nil))
 #+end_src
 
 ** Pulsar
@@ -806,13 +834,13 @@ Bookmark capture from:
 
     (cond ((eq system-type 'windows-nt)
            ;; Windows-specific code goes here.
-           (setq org-directory "C:/Dropbox (MGEP)/OrgFiles")
+           (setq org-directory "~/MGEP Dropbox/patxi madina hernandez/OrgFiles")
            )
           ((eq system-type 'gnu/linux)
            ;; Linux-specific code goes here.
            (setq org-directory "~/Sync/Sincronizadas/Notes/OrgFiles")
            ))
-
+    
     (setq org-agenda-files
           (list
            (concat org-directory "/Notas.org")
@@ -1638,12 +1666,13 @@ For Guile, [[https://gitlab.com/emacs-geiser/guile][geise-guile]] will be instal
     ("C-x w" . elfeed ))
 
   ;; Configure Elfeed with org mode
-   (use-package elfeed-org
-     :ensure t
-     :config
-     (elfeed-org)
-     (setq rmh-elfeed-org-files (list  (concat org-directory "/elfeed.org"))))
-
+  (use-package elfeed-org
+    :defer nil
+    :after elfeed
+    :init
+    (elfeed-org)
+    :config
+    (setq rmh-elfeed-org-files (list  (concat org-directory "/elfeed.org"))))
 #+END_SRC
 
 * Pdf files with docview
