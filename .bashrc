@@ -120,6 +120,12 @@ export PATH="$HOME/Projects/Code/scripts:$PATH"
 
 # aliases
 alias emc='emacsclient -n'
+alias upev='sudo apt update && sudo apt full-upgrade -y'
 
 # user config
 bind -s 'set completion-ignore-case on'
+
+# user fucntiones
+cdl() {
+    cd "$1" && ls -A;
+}
