@@ -1,0 +1,19 @@
+* Dotfiles
+
+Aquí guardo los archivo de configuración para poder respaldar entre equipos.
+
+Al principio hacía los =symlinks= manualmente. Ahora, utilizo [[https://www.gnu.org/software/stow/][GNU Stow]], que se encarga de generar los =symlinks= de forma automática con un comando:
+
+#+begin_src shell
+stow .
+#+end_src
+
+Se instala mediante =apt=:
+
+#+begin_src shell
+sudo apt install stow
+#+end_src
+
+Aquí un par de tutoriales:
+- https://matthewrobinsondev.github.io/posts/using-stow/
+- https://dev.to/luxcih/dotfiles-managing-with-gnu-stow-and-git-5100
