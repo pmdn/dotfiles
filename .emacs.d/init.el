@@ -1120,9 +1120,6 @@ more-helpful local prompt."
   :config
   (pyvenv-mode 1))
 
-(use-package py-autopep8
-  :hook ((python-mode) . py-autopep8-mode))
-
 (use-package sly
   :ensure t
   :defer t

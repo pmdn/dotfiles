@@ -1482,7 +1482,7 @@ Making little Shells whenever I need them:
 Using [[https://github.com/joaotavora/eglot][eglot]], a language server protocol (LSP) for Emacs.
 Make sure servers for the different languajes are installed:
 On Linux
-- pyright: ~pip3 install pyright~
+- python language: ~pip3 install "python-language-server[all]"~
 - clangd: ~sudo apt -y install clangd-14~
 On Windows
 - python language server: ~pip install python-language-server[all]~
@@ -1528,9 +1528,6 @@ Make sure you install virtualenv by: ~sudo apt install virtualenv~
 Or: ~python3 -m pip install virtualenv~
 And; ~apt install python3.10-venv~
 Also install pip: ~sudo apt install python3-pip~
-And also install pep8: ~pip3 install autopep8~
-And jedi: ~pip3 install jedi~ 
-And flake8: ~sudo apt install flake8~
 
 I initially used elpy as described in this tutorial https://realpython.com/emacs-the-best-python-editor/.
 
@@ -1538,6 +1535,23 @@ On 2022/08/04 I changed to [[https://github.com/joaotavora/eglot][eglot]]. Confi
 - https://gist.github.com/Nathan-Furnal/b327f14e861f009c014af36c1790ec49
 - https://www.reddit.com/r/emacs/comments/ushfzn/comment/ii0pbg7/?utm_source=share&utm_medium=web2x&context=3
 - https://cestlaz.github.io/post/using-emacs-74-eglot/
+
+
+Update 2024/06/17:
+You can have a global LSP (not recommended, or at least, not recommended having only that) or install an LSP for each virtual environment. For small projects (personal use) the most appropriate thing is to generate a virtual environment called =venv_emacs= and install in it the most used packages in addition to the LSP. =Pyright= has been used in the past, but it is closed source and maintained by Microsoft. =Python LSP Server= (=pylsp=) is now used, which is open source and uses =Jedi= as a backend.
+
+Only the first time:
+~M-x pyvenv-create venv_emacs~
+~M-x pyvenv-workon venve_emacs~
+~pip install pandas numpy matplotlib~
+
+To use all the default providers: ~pip install "python-lsp-server[all]"~ 
+For linting and formatting with =ruff= (a lot faster), also install: ~pip install ruff python-lsp-ruff~
+This disables the linting and formatting providers by default.
+
+Then, when developing, as explainde later:
+~M-x pyvenv-workon venv_emacs~
+~M-x eglot~
 
 Set org-babel to python 3.
 
@@ -1590,15 +1604,6 @@ The default path for  ~M-x pyvenv-create~ is =~/.virtualenvs=.
     :ensure t
     :config
     (pyvenv-mode 1))
-
-#+end_src
-
-Format code according to PEP8 on save with [[https://github.com/emacsmirror/py-autopep8][py-autopep8]]:
-
-#+begin_src emacs-lisp
-
-  (use-package py-autopep8
-    :hook ((python-mode) . py-autopep8-mode))
 
 #+end_src
 
