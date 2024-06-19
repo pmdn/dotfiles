@@ -586,7 +586,7 @@
 
   (cond ((eq system-type 'windows-nt)
          ;; Windows-specific code goes here.
-         (setq org-directory "~/MGEP Dropbox/patxi madina hernandez/OrgFiles")
+         (setq org-directory "C:/MGEP Dropbox/patxi madina hernandez/OrgFiles")
          )
         ((eq system-type 'gnu/linux)
          ;; Linux-specific code goes here.
