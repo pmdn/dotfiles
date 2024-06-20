@@ -68,12 +68,80 @@ Emacs has a built in package manager but it doesn't make it easy to automaticall
   (unless package-archive-contents
     (package-refresh-contents))
 
-    ;; Initialize use-package on non-Linux platforms
+  ;; Initialize use-package on non-Linux platforms
   (unless (package-installed-p 'use-package)
     (package-install 'use-package))
 
   (require 'use-package)
   (setq use-package-always-ensure t)
+
+#+end_src
+
+* Custom functions
+
+Funtions to be used in the config file.
+
+#+BEGIN_SRC  emacs-lisp
+  ;;Custom function definitions:
+  (defun pmdn/append-to-path (path)
+    "Add a path both to the $PATH variable and to Emacs' ~exec-path~."
+    (setenv "PATH" (concat (getenv "PATH") ":" path))
+    (add-to-list 'exec-path path))
+#+END_SRC
+
+#+begin_src emacs-lisp
+  (defun pmdn/set-margins ()
+    "Set margins in current buffer."
+    (setq left-margin-width 3)
+    (setq right-margin-width 3))
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun pmdn/org-mode-setup ()
+    "Set basic org mode configuration."
+    (org-indent-mode 0)
+    (variable-pitch-mode 1)
+    (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+    (visual-line-mode 1))
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun pmdn/org-babel-tangle-config ()
+    "Activate tangle only if buffer is Emacs.org config file."
+    (when (or (string-equal (buffer-file-name)
+                        (expand-file-name "~/.emacs.d/Emacs.org"))
+              (string-equal (buffer-file-name)
+                        (expand-file-name "~/.dotfiles/.emacs.d/Emacs.org")))
+      ;; Dynamic scoping to the rescue
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-tangle))))
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun pmdn/denote-random-note (&optional directory)
+    "Open a random denote."
+    (interactive)
+    (let* ((denote-directory (or directory denote-directory))
+           (files (denote-directory-files)))
+      (find-file (nth (random (length files)) files))))
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun pmdn/org-inline-css-hook (exporter)
+    "Insert custom inline css to automatically set the background of code to whatever theme I'm using's background."
+    (when (eq exporter 'html)
+      (let* ((my-pre-bg (face-background 'default))
+             (my-pre-fg (face-foreground 'default)))
+        (setq
+         org-html-head-extra
+         (concat
+          org-html-head-extra
+          (format "<style type=\"text/css\">\n pre.src {background-color: %s; color: %s;}</style>\n"
+                  my-pre-bg my-pre-fg))))))
 
 #+end_src
 
@@ -97,11 +165,7 @@ This section configures basic UI settings that remove unneeded elements to make 
    (set-fringe-mode 10)        ; Give some breathing room
 
    ;; GIve some air in text mode by increasing margins
-   (defun my-set-margins ()
-     "Set margins in current buffer."
-     (setq left-margin-width 3)
-     (setq right-margin-width 3))
-   (add-hook 'text-mode-hook 'my-set-margins)
+   (add-hook 'text-mode-hook 'pmdn/set-margins)
 
    ;; Set up the visible bell
    (setq visible-bell t)
@@ -164,19 +228,6 @@ Personal information.
          ;; Linux-specific code goes here.
          (setq user-mail-address "pmdn@mailbox.org")
          ))
-
-#+END_SRC
-
-* Custom functions
-
-Funtions to be used.
-
-#+BEGIN_SRC  emacs-lisp
-
-(defun hrs/append-to-path (path)
-  "Add a path both to the $PATH variable and to Emacs' ~exec-path~."
-  (setenv "PATH" (concat (getenv "PATH") ":" path))
-  (add-to-list 'exec-path path))
 
 #+END_SRC
 
@@ -279,14 +330,15 @@ Default themes may be good options:
 *NOTE:* The first time you load your configuration on a new machine, you'll need to run `M-x all-the-icons-install-fonts` so that mode line icons display correctly.
 
 #+begin_src emacs-lisp
+  ;; All the icons
+  (use-package all-the-icons)
 
-(use-package all-the-icons)
-
-(use-package doom-modeline
-  :hook (after-init . doom-modeline-mode)
-  :custom ((doom-modeline-height 20)
-    (doom-modeline-buffer-file-name-style 'truncate-except-project)
-    (doom-modeline-bar-width 6)))
+  ;; Configure Doom Modeline
+  (use-package doom-modeline
+    :hook (after-init . doom-modeline-mode)
+    :custom ((doom-modeline-height 20)
+      (doom-modeline-buffer-file-name-style 'truncate-except-project)
+      (doom-modeline-bar-width 6)))
 
 #+end_src
 ** Diminish  
@@ -307,7 +359,7 @@ Default themes may be good options:
 
 #+begin_src emacs-lisp
 
-;; To show next commands
+;; To show next commands with which-key
 (use-package which-key
   :defer 0
   :diminish which-key-mode
@@ -648,36 +700,37 @@ Articles:
 [[https://github.com/oantolin/embark][Embark]] makes it easy to choose a command to run based on what is near point, both during a minibuffer completion session (in a way familiar to Helm or Counsel users) and in normal buffers.
 
 #+begin_src emacs-lisp
-(use-package embark
-  :ensure t
+  ;; Embark configuration
+  (use-package embark
+    :ensure t
 
-  :bind
-  (("C-." . embark-act)         ;; pick some comfortable binding
-   ("C-;" . embark-dwim)        ;; good alternative: M-.
-   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+    :bind
+    (("C-." . embark-act)         ;; pick some comfortable binding
+     ("C-;" . embark-dwim)        ;; good alternative: M-.
+     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
-  :init
+    :init
 
-  ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
+    ;; Optionally replace the key help with a completing-read interface
+    (setq prefix-help-command #'embark-prefix-help-command)
 
-  :config
+    :config
 
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
+    ;; Hide the mode line of the Embark live/completions buffers
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none)))))
 
-;; Consult users will also want the embark-consult package.
-(use-package embark-consult
-  :ensure t
-  :after (embark consult)
-  :demand t ; only necessary if you have the hook below
-  ;; if you want to have consult previews as you move around an
-  ;; auto-updating embark collect buffer
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
+  ;; Consult users will also want the embark-consult package.
+  (use-package embark-consult
+    :ensure t
+    :after (embark consult)
+    :demand t ; only necessary if you have the hook below
+    ;; if you want to have consult previews as you move around an
+    ;; auto-updating embark collect buffer
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
 
 #+end_src
 
@@ -787,15 +840,6 @@ Bookmark capture from:
 #+begin_src emacs-lisp
 
   ;; Org mode configuration
-  (defun efs/org-mode-setup ()
-    (org-indent-mode 0)
-    (variable-pitch-mode 1)
-    (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-    (visual-line-mode 1))
 
   ;; Change font size for headings
   (with-eval-after-load 'org-faces
@@ -813,7 +857,7 @@ Bookmark capture from:
 
   (use-package org
     :pin elpa
-    :hook (org-mode . efs/org-mode-setup)
+    :hook (org-mode . pmdn/org-mode-setup)
     :config
     (setq org-babel-default-header-args
           (cons '(:results . "output verbatim replace")
@@ -956,7 +1000,7 @@ Bookmark capture from:
 [[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in =org-mode= buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]].
 
 #+begin_src emacs-lisp
-
+  ;; Set org bullets
   (use-package org-bullets
     :after org
     :hook (org-mode . org-bullets-mode)
@@ -983,7 +1027,7 @@ Bookmark capture from:
 To execute or export code in =org-mode= code blocks, you'll need to set up =org-babel-load-languages= for each language you'd like to use.  [[https://orgmode.org/worg/org-contrib/babel/languages.html][This page]] documents all of the languages that you can use with =org-babel=.
 
 #+begin_src emacs-lisp
-
+  ;; Add org babel languages
   (org-babel-do-load-languages
     'org-babel-load-languages
     '((emacs-lisp . t)
@@ -1003,7 +1047,7 @@ Org Mode's [[https://orgmode.org/manual/Structure-Templates.html][structure temp
 You can add more =src= block templates below by copying one of the lines and changing the two strings at the end, the first to be the template name and the second to contain the name of the language [[https://orgmode.org/worg/org-contrib/babel/languages.html][as it is known by Org Babel]].
 
 #+begin_src emacs-lisp
-
+  ;; Org tempo templates
   (with-eval-after-load 'org
    ;; This is needed as of Org 9.2
    (require 'org-tempo)
@@ -1046,21 +1090,12 @@ You can add more =src= block templates below by copying one of the lines and cha
 
 ** Auto-tangle Configuration Files
 
-This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-config= gets executed each time such a buffer gets saved.  This function checks to see if the file being saved is the Emacs.org file you're looking at right now, and if so, automatically exports the configuration here to the associated output files.
+This snippet adds a hook to =org-mode= buffers so that =pmdn/org-babel-tangle-config= gets executed each time such a buffer gets saved.  This function checks to see if the file being saved is the Emacs.org file you're looking at right now, and if so, automatically exports the configuration here to the associated output files.
 
 #+begin_src emacs-lisp
 
   ;; Automatically tangle our Emacs.org config file when we save it
-  (defun efs/org-babel-tangle-config ()
-    (when (or (string-equal (buffer-file-name)
-                        (expand-file-name "~/.emacs.d/Emacs.org"))
-              (string-equal (buffer-file-name)
-                        (expand-file-name "~/.dotfiles/.emacs.d/Emacs.org")))
-      ;; Dynamic scoping to the rescue
-      (let ((org-confirm-babel-evaluate nil))
-        (org-babel-tangle))))
-
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'pmdn/org-babel-tangle-config)))
 
 #+end_src
 
@@ -1069,7 +1104,7 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 [[https://github.com/rexim/org-cliplink][org-cliplink]] takes a URL from the clipboard and inserts an org-mode link with a title of a page found by the URL into the current buffer
 
 #+begin_src emacs-lisp
-
+  ;; Configure org-cliplink
   (use-package org-cliplink
     :ensure t)
 
@@ -1080,7 +1115,7 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 [[https://github.com/abo-abo/org-download][org-download]]  facilitates inserting images into org files.
 
 #+BEGIN_SRC  emacs-lisp
-
+  ;; org-download configuration
   (use-package org-download
     :ensure t
     :custom
@@ -1103,6 +1138,7 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 [[https://github.com/protesilaos/denote][Denote]] is a simple note-taking tool for Emacs. It is based on the idea that notes should follow a predictable and descriptive file-naming scheme. The file name must offer a clear indication of what the note is about, without reference to any other metadata. Denote basically streamlines the creation of such files while providing facilities to link between them.
 
 #+begin_src emacs-lisp
+  ;; Denote configuration
   (use-package denote
     :bind
     ("C-c n n" . 'denote)
@@ -1117,7 +1153,7 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
     ("C-c n B" . 'denote-link-find-backlink)
     ("C-c n r" . 'denote-rename-file)
     ("C-c n R" . 'denote-rename-file-using-front-matter)
-    ("C-c n a" . 'my/denote-random-note)
+    ("C-c n a" . 'pmdn/denote-random-note)
     :init
     (setq denote-directory (concat org-directory "/denotes/"))
     :config
@@ -1142,13 +1178,6 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 
     (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories)
     (set-face-attribute 'denote-faces-link nil :foreground "#EBCB8B" :inherit 'link))
-
-  (defun my/denote-random-note (&optional directory)
-    "Open a random denote."
-    (interactive)
-    (let* ((denote-directory (or directory denote-directory))
-           (files (denote-directory-files)))
-      (find-file (nth (random (length files)) files))))
 #+end_src
 
 ** Citar
@@ -1156,6 +1185,7 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 [[https://github.com/emacs-citar/citar][citar]] provides a completing-read front-end to browse and act on BibTeX, BibLaTeX, and CSL JSON bibliographic data, and LaTeX, markdown, and org-cite editing support.
 
 #+begin_src emacs-lisp
+  ;; Citar configuration
   (use-package citar
     :no-require
     :custom
@@ -1185,34 +1215,35 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
 =ox-latex= is the Latex export framework included in =org-mode=. With =minted=, syntax is highlighted in code blocks, using a third-party application, [[https://pygments.org/][pygments]], to process the source code. 
 
 #+begin_src emacs-lisp
-(require 'ox-latex)
-(add-to-list 'org-latex-packages-alist '("" "minted"))
+  ;; Latex configuration
+  (require 'ox-latex)
+  (add-to-list 'org-latex-packages-alist '("" "minted"))
 
-(setq org-latex-listings 'minted
-      org-latex-minted-options '(("breaklines" "true")
-                                 ("breakanywhere" "true")
-                                 ("frame" "lines")
-                                 ("framesep" "2mm")
-                                 ("linenos" "false")
-                                 ("bgcolor" "shadecolor")))
+  (setq org-latex-listings 'minted
+        org-latex-minted-options '(("breaklines" "true")
+                                   ("breakanywhere" "true")
+                                   ("frame" "lines")
+                                   ("framesep" "2mm")
+                                   ("linenos" "false")
+                                   ("bgcolor" "shadecolor")))
 
-(setq org-latex-pdf-process
-      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+  (setq org-latex-pdf-process
+        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 
-(with-eval-after-load 'ox-latex
-(add-to-list 'org-latex-classes
-             '("org-plain-latex"
-               "\\documentclass{article}
-           [NO-DEFAULT-PACKAGES]
-           [PACKAGES]
-           [EXTRA]"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+  (with-eval-after-load 'ox-latex
+  (add-to-list 'org-latex-classes
+               '("org-plain-latex"
+                 "\\documentclass{article}
+             [NO-DEFAULT-PACKAGES]
+             [PACKAGES]
+             [EXTRA]"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
 
 #+end_src
@@ -1237,6 +1268,7 @@ Configuration ideas taken from [[https://github.com/howardabrams/dot-files/blob/
 Scrolling through the output and searching for results that can be  copied to the kill ring is a great feature of Eshell. However,  instead of running =end-of-buffer= key-binding, the following  setting means any other key will jump back to the prompt:
 
   #+BEGIN_SRC emacs-lisp
+    ;; Eshell configuration
     (use-package eshell
       :init
       (setq eshell-scroll-to-bottom-on-input 'all
@@ -1259,7 +1291,7 @@ Scrolling through the output and searching for results that can be  copied to th
   Following [[http://blog.liangzan.net/blog/2012/12/12/customizing-your-emacs-eshell-prompt/][these instructions]], we build a better prompt with the Git branch in it (Of course, it matches my Bash prompt). First, we need a function that returns a string with the Git branch in it, e.g. ":master"
 
   #+BEGIN_SRC emacs-lisp
-    (defun curr-dir-git-branch-string (pwd)
+    (defun pmdn/curr-dir-git-branch-string (pwd)
       "Returns current git branch as a string, or the empty string if
     PWD is not in a git repo (or the git command is not found)."
       (interactive)
@@ -1276,7 +1308,7 @@ Scrolling through the output and searching for results that can be  copied to th
   The function takes the current directory passed in via =pwd= and replaces the =$HOME= part with a tilde. I'm sure this function already exists in the eshell source, but I didn't find it...
 
   #+BEGIN_SRC emacs-lisp
-    (defun pwd-replace-home (pwd)
+    (defun pmdn/pwd-replace-home (pwd)
       "Replace home in PWD with tilde (~) character."
       (interactive)
       (let* ((home (expand-file-name (getenv "HOME")))
@@ -1291,7 +1323,7 @@ Scrolling through the output and searching for results that can be  copied to th
   Make the directory name be shorter...by replacing all directory names with just its first names. However, we leave the last two to be the full names. Why yes, I did steal this.
 
   #+BEGIN_SRC emacs-lisp
-    (defun pwd-shorten-dirs (pwd)
+    (defun pmdn/pwd-shorten-dirs (pwd)
       "Shorten all directory names in PWD except the last two."
       (let ((p-lst (split-string pwd "/")))
         (if (> (length p-lst) 2)
@@ -1310,7 +1342,7 @@ Scrolling through the output and searching for results that can be  copied to th
   Break up the directory into a "parent" and a "base":
 
   #+BEGIN_SRC emacs-lisp
-    (defun split-directory-prompt (directory)
+    (defun pmdn/split-directory-prompt (directory)
       (if (string-match-p ".*/.*" directory)
           (list (file-name-directory directory) (file-name-base directory))
         (list "" directory)))
@@ -1319,7 +1351,7 @@ Scrolling through the output and searching for results that can be  copied to th
   Using virtual environments for certain languages is helpful to know, especially since I change them based on the directory.
 
   #+BEGIN_SRC emacs-lisp
-    (defun python-prompt ()
+    (defun pmdn/python-prompt ()
       "Returns a string (may be empty) based on the current Python
        Virtual Environment. Assuming the M-x command: `pyvenv-activate'
        has been called."
@@ -1336,13 +1368,13 @@ Scrolling through the output and searching for results that can be  copied to th
     more-helpful local prompt."
       (interactive)
       (let* ((pwd        (eshell/pwd))
-             (directory (split-directory-prompt
-                         (pwd-shorten-dirs
-                          (pwd-replace-home pwd))))
+             (directory (pmdn/split-directory-prompt
+                         (pmdn/pwd-shorten-dirs
+                          (pmdn/pwd-replace-home pwd))))
              (parent (car directory))
              (name   (cadr directory))
-             (branch (curr-dir-git-branch-string pwd))
-             (python (when (not (file-remote-p pwd)) (python-prompt)))
+             (branch (pmdn/curr-dir-git-branch-string pwd))
+             (python (when (not (file-remote-p pwd)) (pmdn/python-prompt)))
 
              (dark-env (eq 'dark (frame-parameter nil 'background-mode)))
              (for-name  `(:weight bold :foreground "#81A1C1"))
@@ -1385,7 +1417,7 @@ Scrolling through the output and searching for results that can be  copied to th
 Making little Shells whenever I need them:
 
    #+BEGIN_SRC emacs-lisp
-     (defun eshell-here ()
+     (defun pmdn/eshell-here ()
        "Opens up a new shell in the directory associated with the
          current buffer's file. The eshell is renamed to match that
          directory to make multiple eshell windows easier."
@@ -1397,7 +1429,7 @@ Making little Shells whenever I need them:
          (insert (concat "ls"))
          (eshell-send-input)))
 
-     (bind-key "C-!" 'eshell-here)
+     (bind-key "C-!" 'pmdn/eshell-here)
    #+END_SRC
 
 * Development
@@ -1460,20 +1492,7 @@ Making little Shells whenever I need them:
     :ensure t)
   
   ;; To retain the background color of the used theme
-
-  (defun my/org-inline-css-hook (exporter)
-    "Insert custom inline css to automatically set the background of code to whatever theme I'm using's background."
-    (when (eq exporter 'html)
-      (let* ((my-pre-bg (face-background 'default))
-             (my-pre-fg (face-foreground 'default)))
-        (setq
-         org-html-head-extra
-         (concat
-          org-html-head-extra
-          (format "<style type=\"text/css\">\n pre.src {background-color: %s; color: %s;}</style>\n"
-                  my-pre-bg my-pre-fg))))))
-
-  (add-hook 'org-export-before-processing-hook 'my/org-inline-css-hook)
+  (add-hook 'org-export-before-processing-hook 'pmdn/org-inline-css-hook)
 
 #+END_SRC
 
@@ -1591,7 +1610,7 @@ Add =~/.local/bin= to load path. That’s where ~virtualenv~ is installed, and w
 
 #+BEGIN_SRC  emacs-lisp
 
-  (hrs/append-to-path "~/.local/bin")
+  (pmdn/append-to-path "~/.local/bin")
 
 #+END_SRC
 
@@ -1622,6 +1641,7 @@ Then the [[https://www.quicklisp.org/beta/][Quicklisp]] packgage manager followi
 [[https://github.com/joaotavora/sly][Sly]] is a Common Lisp IDE for Emacs with a full-featured REPL. The REPL is lauched by ~M-x sly~. This must be done before evaluating =lisp= code block in =org-babel=.
 
 #+begin_src emacs-lisp
+  ;; Sly configuration
   (use-package sly
     :ensure t
     :defer t
@@ -1640,6 +1660,7 @@ First install [[https://www.gnu.org/software/guile/][Guile]] with ~sudo apt inst
 For Guile, [[https://gitlab.com/emacs-geiser/guile][geise-guile]] will be installed, which installs Geiser, as it depends on it. To launch the REPL, run ~M-x geiser-guile~.
 
 #+begin_src emacs-lisp
+  ;; Geiser-Guile configuration
   (use-package geiser-guile
     :ensure t
     :config
@@ -1693,6 +1714,7 @@ Pdf files can be read with the built-in ~DocView~, but an external software is n
 With Emacs 29.1 and above, =MuPDF= (installed via ~apt~) will convet pdf files into SVG instead of PNG, getting a sharper image and improving zooming capabilities.
 
 #+begin_src emacs-lisp
+  ;; Doc-View configuration for pdf files
   (use-package doc-view
     :custom
     (doc-view-resolution 300)

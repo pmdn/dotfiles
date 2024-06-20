@@ -29,12 +29,63 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
-  ;; Initialize use-package on non-Linux platforms
+;; Initialize use-package on non-Linux platforms
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
 (require 'use-package)
 (setq use-package-always-ensure t)
+
+;;Custom function definitions:
+(defun pmdn/append-to-path (path)
+  "Add a path both to the $PATH variable and to Emacs' ~exec-path~."
+  (setenv "PATH" (concat (getenv "PATH") ":" path))
+  (add-to-list 'exec-path path))
+
+(defun pmdn/set-margins ()
+  "Set margins in current buffer."
+  (setq left-margin-width 3)
+  (setq right-margin-width 3))
+
+(defun pmdn/org-mode-setup ()
+  "Set basic org mode configuration."
+  (org-indent-mode 0)
+  (variable-pitch-mode 1)
+  (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+  (visual-line-mode 1))
+
+(defun pmdn/org-babel-tangle-config ()
+  "Activate tangle only if buffer is Emacs.org config file."
+  (when (or (string-equal (buffer-file-name)
+                      (expand-file-name "~/.emacs.d/Emacs.org"))
+            (string-equal (buffer-file-name)
+                      (expand-file-name "~/.dotfiles/.emacs.d/Emacs.org")))
+    ;; Dynamic scoping to the rescue
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
+
+(defun pmdn/denote-random-note (&optional directory)
+  "Open a random denote."
+  (interactive)
+  (let* ((denote-directory (or directory denote-directory))
+         (files (denote-directory-files)))
+    (find-file (nth (random (length files)) files))))
+
+(defun pmdn/org-inline-css-hook (exporter)
+  "Insert custom inline css to automatically set the background of code to whatever theme I'm using's background."
+  (when (eq exporter 'html)
+    (let* ((my-pre-bg (face-background 'default))
+           (my-pre-fg (face-foreground 'default)))
+      (setq
+       org-html-head-extra
+       (concat
+        org-html-head-extra
+        (format "<style type=\"text/css\">\n pre.src {background-color: %s; color: %s;}</style>\n"
+                my-pre-bg my-pre-fg))))))
 
 ;; UTF-8 everywhere
  (prefer-coding-system 'utf-8)
@@ -50,11 +101,7 @@
  (set-fringe-mode 10)        ; Give some breathing room
 
  ;; GIve some air in text mode by increasing margins
- (defun my-set-margins ()
-   "Set margins in current buffer."
-   (setq left-margin-width 3)
-   (setq right-margin-width 3))
- (add-hook 'text-mode-hook 'my-set-margins)
+ (add-hook 'text-mode-hook 'pmdn/set-margins)
 
  ;; Set up the visible bell
  (setq visible-bell t)
@@ -110,11 +157,6 @@
        (setq user-mail-address "pmdn@mailbox.org")
        ))
 
-(defun hrs/append-to-path (path)
-  "Add a path both to the $PATH variable and to Emacs' ~exec-path~."
-  (setenv "PATH" (concat (getenv "PATH") ":" path))
-  (add-to-list 'exec-path path))
-
 ;; Custom command stored on its own file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
@@ -168,8 +210,10 @@
 ;; This sets de default font, as 'set-face-attribute' does not seem to work 
 (add-to-list 'default-frame-alist '(font . "Fira Mono-10"))
 
+;; All the icons
 (use-package all-the-icons)
 
+;; Configure Doom Modeline
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode)
   :custom ((doom-modeline-height 20)
@@ -180,7 +224,7 @@
 (use-package diminish
   :ensure t)
 
-;; To show next commands
+;; To show next commands with which-key
 (use-package which-key
   :defer 0
   :diminish which-key-mode
@@ -434,6 +478,7 @@
   ;; enabled right away. Note that this forces loading the package.
   (marginalia-mode))
 
+;; Embark configuration
 (use-package embark
   :ensure t
 
@@ -539,15 +584,6 @@
 )
 
 ;; Org mode configuration
-(defun efs/org-mode-setup ()
-  (org-indent-mode 0)
-  (variable-pitch-mode 1)
-  (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-  (visual-line-mode 1))
 
 ;; Change font size for headings
 (with-eval-after-load 'org-faces
@@ -565,7 +601,7 @@
 
 (use-package org
   :pin elpa
-  :hook (org-mode . efs/org-mode-setup)
+  :hook (org-mode . pmdn/org-mode-setup)
   :config
   (setq org-babel-default-header-args
         (cons '(:results . "output verbatim replace")
@@ -701,6 +737,7 @@
   (define-key global-map (kbd "C-c d")
     (lambda () (interactive) (org-capture nil "d"))))
 
+;; Set org bullets
 (use-package org-bullets
   :after org
   :hook (org-mode . org-bullets-mode)
@@ -712,6 +749,7 @@
     :after org
     :hook (org-mode . org-appear-mode))
 
+;; Add org babel languages
 (org-babel-do-load-languages
   'org-babel-load-languages
   '((emacs-lisp . t)
@@ -722,6 +760,7 @@
 
 (push '("conf-unix" . conf-unix) org-src-lang-modes)
 
+;; Org tempo templates
 (with-eval-after-load 'org
  ;; This is needed as of Org 9.2
  (require 'org-tempo)
@@ -761,20 +800,13 @@
       'org-tempo-tags))
 
 ;; Automatically tangle our Emacs.org config file when we save it
-(defun efs/org-babel-tangle-config ()
-  (when (or (string-equal (buffer-file-name)
-                      (expand-file-name "~/.emacs.d/Emacs.org"))
-            (string-equal (buffer-file-name)
-                      (expand-file-name "~/.dotfiles/.emacs.d/Emacs.org")))
-    ;; Dynamic scoping to the rescue
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'pmdn/org-babel-tangle-config)))
 
-(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
-
+;; Configure org-cliplink
 (use-package org-cliplink
   :ensure t)
 
+;; org-download configuration
 (use-package org-download
   :ensure t
   :custom
@@ -790,6 +822,7 @@
   (with-eval-after-load 'org
     (org-download-enable)))
 
+;; Denote configuration
 (use-package denote
   :bind
   ("C-c n n" . 'denote)
@@ -804,7 +837,7 @@
   ("C-c n B" . 'denote-link-find-backlink)
   ("C-c n r" . 'denote-rename-file)
   ("C-c n R" . 'denote-rename-file-using-front-matter)
-  ("C-c n a" . 'my/denote-random-note)
+  ("C-c n a" . 'pmdn/denote-random-note)
   :init
   (setq denote-directory (concat org-directory "/denotes/"))
   :config
@@ -830,13 +863,7 @@
   (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories)
   (set-face-attribute 'denote-faces-link nil :foreground "#EBCB8B" :inherit 'link))
 
-(defun my/denote-random-note (&optional directory)
-  "Open a random denote."
-  (interactive)
-  (let* ((denote-directory (or directory denote-directory))
-         (files (denote-directory-files)))
-    (find-file (nth (random (length files)) files))))
-
+;; Citar configuration
 (use-package citar
   :no-require
   :custom
@@ -860,6 +887,7 @@
     (citar-denote-mode)
     (setq citar-open-always-create-notes t))
 
+;; Latex configuration
 (require 'ox-latex)
 (add-to-list 'org-latex-packages-alist '("" "minted"))
 
@@ -897,6 +925,7 @@
   (org-mode . olivetti-mode)
   (markdown-mode . olivetti-mode))
 
+;; Eshell configuration
 (use-package eshell
   :init
   (setq eshell-scroll-to-bottom-on-input 'all
@@ -913,7 +942,7 @@
               (add-to-list 'eshell-visual-commands "tail")
               (add-to-list 'eshell-visual-commands "top"))))
 
-(defun curr-dir-git-branch-string (pwd)
+(defun pmdn/curr-dir-git-branch-string (pwd)
   "Returns current git branch as a string, or the empty string if
 PWD is not in a git repo (or the git command is not found)."
   (interactive)
@@ -926,7 +955,7 @@ PWD is not in a git repo (or the git command is not found)."
            (git-icon  "\xe0a0"))
       (concat "[" git-branch "]"))))
 
-(defun pwd-replace-home (pwd)
+(defun pmdn/pwd-replace-home (pwd)
   "Replace home in PWD with tilde (~) character."
   (interactive)
   (let* ((home (expand-file-name (getenv "HOME")))
@@ -937,7 +966,7 @@ PWD is not in a git repo (or the git command is not found)."
         (concat "~" (substring pwd home-len))
       pwd)))
 
-(defun pwd-shorten-dirs (pwd)
+(defun pmdn/pwd-shorten-dirs (pwd)
   "Shorten all directory names in PWD except the last two."
   (let ((p-lst (split-string pwd "/")))
     (if (> (length p-lst) 2)
@@ -952,12 +981,12 @@ PWD is not in a git repo (or the git command is not found)."
                     "/"))
       pwd)))  ;; Otherwise, we just return the PWD
 
-(defun split-directory-prompt (directory)
+(defun pmdn/split-directory-prompt (directory)
   (if (string-match-p ".*/.*" directory)
       (list (file-name-directory directory) (file-name-base directory))
     (list "" directory)))
 
-(defun python-prompt ()
+(defun pmdn/python-prompt ()
   "Returns a string (may be empty) based on the current Python
    Virtual Environment. Assuming the M-x command: `pyvenv-activate'
    has been called."
@@ -970,13 +999,13 @@ that it could run certain commands) in order to make a prettier,
 more-helpful local prompt."
   (interactive)
   (let* ((pwd        (eshell/pwd))
-         (directory (split-directory-prompt
-                     (pwd-shorten-dirs
-                      (pwd-replace-home pwd))))
+         (directory (pmdn/split-directory-prompt
+                     (pmdn/pwd-shorten-dirs
+                      (pmdn/pwd-replace-home pwd))))
          (parent (car directory))
          (name   (cadr directory))
-         (branch (curr-dir-git-branch-string pwd))
-         (python (when (not (file-remote-p pwd)) (python-prompt)))
+         (branch (pmdn/curr-dir-git-branch-string pwd))
+         (python (when (not (file-remote-p pwd)) (pmdn/python-prompt)))
 
          (dark-env (eq 'dark (frame-parameter nil 'background-mode)))
          (for-name  `(:weight bold :foreground "#81A1C1"))
@@ -1009,7 +1038,7 @@ more-helpful local prompt."
 
 (setq eshell-highlight-prompt nil)
 
-(defun eshell-here ()
+(defun pmdn/eshell-here ()
   "Opens up a new shell in the directory associated with the
     current buffer's file. The eshell is renamed to match that
     directory to make multiple eshell windows easier."
@@ -1021,7 +1050,7 @@ more-helpful local prompt."
     (insert (concat "ls"))
     (eshell-send-input)))
 
-(bind-key "C-!" 'eshell-here)
+(bind-key "C-!" 'pmdn/eshell-here)
 
 ;; Magit for git
 (use-package magit
@@ -1051,20 +1080,7 @@ more-helpful local prompt."
   :ensure t)
 
 ;; To retain the background color of the used theme
-
-(defun my/org-inline-css-hook (exporter)
-  "Insert custom inline css to automatically set the background of code to whatever theme I'm using's background."
-  (when (eq exporter 'html)
-    (let* ((my-pre-bg (face-background 'default))
-           (my-pre-fg (face-foreground 'default)))
-      (setq
-       org-html-head-extra
-       (concat
-        org-html-head-extra
-        (format "<style type=\"text/css\">\n pre.src {background-color: %s; color: %s;}</style>\n"
-                my-pre-bg my-pre-fg))))))
-
-(add-hook 'org-export-before-processing-hook 'my/org-inline-css-hook)
+(add-hook 'org-export-before-processing-hook 'pmdn/org-inline-css-hook)
 
 ;; Eglot configuration
 (cond ((eq system-type 'windows-nt)
@@ -1112,7 +1128,7 @@ more-helpful local prompt."
   :config
   (setq python-indent-offset 4))
 
-(hrs/append-to-path "~/.local/bin")
+(pmdn/append-to-path "~/.local/bin")
 
 ;; Pyvenv configuration
 (use-package pyvenv
@@ -1120,6 +1136,7 @@ more-helpful local prompt."
   :config
   (pyvenv-mode 1))
 
+;; Sly configuration
 (use-package sly
   :ensure t
   :defer t
@@ -1127,6 +1144,7 @@ more-helpful local prompt."
   :config
   (setq inferior-lisp-program "sbcl"))
 
+;; Geiser-Guile configuration
 (use-package geiser-guile
   :ensure t
   :config
@@ -1159,6 +1177,7 @@ more-helpful local prompt."
   :config
   (setq rmh-elfeed-org-files (list  (concat org-directory "/elfeed.org"))))
 
+;; Doc-View configuration for pdf files
 (use-package doc-view
   :custom
   (doc-view-resolution 300)
