@@ -1157,6 +1157,23 @@ more-helpful local prompt."
   :mode ("\\.md\\'" . markdown-mode)
   :hook (markdown-mode . auto-fill-mode))
 
+;; csv-mode configuration
+(use-package csv-mode
+  :defer t
+  :mode ("\\.csv\\'" . csv-mode)
+  :hook ((csv-mode . csv-align-mode)
+         (csv-mode . csv-header-line)))
+
+;; json-mode configuration
+(use-package json-mode
+   :defer t
+   :mode ("\\.json\\'" . json-mode))
+
+;; yaml-mode configuration
+(use-package yaml-mode
+   :defer t
+   :mode (("\\.ya?ml\\'" . yaml-mode)))
+
 ;; Configure Elfeed
 (use-package elfeed
   :ensure t

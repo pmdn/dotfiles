@@ -1680,6 +1680,41 @@ For Guile, [[https://gitlab.com/emacs-geiser/guile][geise-guile]] will be instal
     :hook (markdown-mode . auto-fill-mode))
 #+end_src
 
+** CSV
+
+[[https://elpa.gnu.org/packages/csv-mode.html][csv-mode]] is a major mode for editing comma/char separated values.
+
+#+begin_src emacs-lisp
+  ;; csv-mode configuration
+  (use-package csv-mode
+    :defer t
+    :mode ("\\.csv\\'" . csv-mode)
+    :hook ((csv-mode . csv-align-mode)
+           (csv-mode . csv-header-line)))
+#+end_src
+
+** JSON
+
+[[https://github.com/json-emacs/json-mode][json-mode]] is a major mode for editing JSON files. Extends the builtin js-mode to add better syntax highlighting for JSON and some nice editing keybindings.
+
+#+begin_src emacs-lisp
+  ;; json-mode configuration
+  (use-package json-mode
+     :defer t
+     :mode ("\\.json\\'" . json-mode))
+#+end_src
+
+** YAML
+
+[[https://github.com/yoshiki/yaml-mode][yaml-mode]] is a simple major mode to edit YAML files for emacs.
+
+#+begin_src emacs-lisp
+  ;; yaml-mode configuration
+  (use-package yaml-mode
+     :defer t
+     :mode (("\\.ya?ml\\'" . yaml-mode)))
+#+end_src
+
 * RSS with Elfeed
 
  [[https://github.com/skeeto/elfeed][Elfeed]] is a RSS reader integrated in Emacs. Together with [[https://github.com/remyhonig/elfeed-org][Elfeed-org]] makes adding feeds and reading them a joy.
