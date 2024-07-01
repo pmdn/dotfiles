@@ -5,7 +5,7 @@
 * Welcome
 
 This is my configuration, now written as an Org Mode document.  This file generates [[file:init.el][init.el]] which can be loaded by Emacs at startup.
-The configuration is inspired by [[https://github.com/daviwil/emacs-from-scratch][System Crafters]], [[https://config.daviwil.com/emacs][David Wilson]], [[https://github.com/hrs][Harry R. Schwartz]], [[https://github.com/geolessel][Geoffrey Lessel]], [[https://config.phundrak.com/emacs/][Phundrak]] and more.
+The configuration is inspired by [[https://github.com/daviwil/emacs-from-scratch][System Crafters]], [[https://github.com/daviwil/dotfiles/tree/master/.emacs.d][David Wilson]], [[https://github.com/hrs][Harry R. Schwartz]], [[https://github.com/geolessel][Geoffrey Lessel]], [[https://config.phundrak.com/emacs/][Phundrak]] and more.
 
 To start emacs in client mode, run from command line:
 
@@ -1518,6 +1518,8 @@ On Windows
            :hook ((python-mode . eglot-ensure)
                   (c-mode . eglot-ensure)
                   (c++-mode . eglot-ensure))
+           :custom
+           (eglot-autoshutdown t)
            :config
            (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
             ;;Eglot will change the completion-category-defaults. And I can make it work by customizing completion-category-overrides
@@ -1532,6 +1534,8 @@ On Windows
            :hook ((python-mode . eglot-ensure)
                   (c-mode . eglot-ensure)
                   (c++-mode . eglot-ensure))
+           :custom
+           (eglot-autoshutdown t)
            :config
            (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-14"))
                            ;;Eglot will change the completion-category-defaults. And I can make it work by customizing completion-category-overrides

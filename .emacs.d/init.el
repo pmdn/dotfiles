@@ -1091,6 +1091,8 @@ more-helpful local prompt."
          :hook ((python-mode . eglot-ensure)
                 (c-mode . eglot-ensure)
                 (c++-mode . eglot-ensure))
+         :custom
+         (eglot-autoshutdown t)
          :config
          (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
           ;;Eglot will change the completion-category-defaults. And I can make it work by customizing completion-category-overrides
@@ -1105,6 +1107,8 @@ more-helpful local prompt."
          :hook ((python-mode . eglot-ensure)
                 (c-mode . eglot-ensure)
                 (c++-mode . eglot-ensure))
+         :custom
+         (eglot-autoshutdown t)
          :config
          (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-14"))
                          ;;Eglot will change the completion-category-defaults. And I can make it work by customizing completion-category-overrides
