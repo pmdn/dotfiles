@@ -1719,6 +1719,29 @@ For Guile, [[https://gitlab.com/emacs-geiser/guile][geise-guile]] will be instal
      :mode (("\\.ya?ml\\'" . yaml-mode)))
 #+end_src
 
+** Yasnippet
+
+[[https://github.com/joaotavora/YASnippet][yasnippet]] is a template system for Emacs. It allows you to type an abbreviation and automatically expand it into function templates. Bundled language templates include: C, C++, C#, Perl, Python, Ruby, SQL, LaTeX, HTML, CSS and more.
+
+#+begin_src emacs-lisp
+;; yasnippet configuration
+(use-package yasnippet
+  :ensure t
+  :defer t
+  :config
+  (yas-global-mode 1))
+#+end_src
+
+[[https://github.com/AndreaCrotti/yasnippet-snippets][yasnippet-snippets]] contains the official collection of snippets for yasnippet.
+
+#+begin_src emacs-lisp
+  ;; yasnippet-snippets configuration
+(use-package yasnippet-snippets
+  :ensure t
+  :after yasnippet
+  :config (yasnippet-snippets-initialize))
+#+end_src
+
 * RSS with Elfeed
 
  [[https://github.com/skeeto/elfeed][Elfeed]] is a RSS reader integrated in Emacs. Together with [[https://github.com/remyhonig/elfeed-org][Elfeed-org]] makes adding feeds and reading them a joy.

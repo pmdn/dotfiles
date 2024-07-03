@@ -1178,6 +1178,19 @@ more-helpful local prompt."
    :defer t
    :mode (("\\.ya?ml\\'" . yaml-mode)))
 
+;; yasnippet configuration
+(use-package yasnippet
+  :ensure t
+  :defer t
+  :config
+  (yas-global-mode 1))
+
+;; yasnippet-snippets configuration
+(use-package yasnippet-snippets
+  :ensure t
+  :after yasnippet
+  :config (yasnippet-snippets-initialize))
+
 ;; Configure Elfeed
 (use-package elfeed
   :ensure t

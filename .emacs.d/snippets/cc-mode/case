@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: case : {...} (allman)
+# key: casea
+# --
+case ${2:constexpr}:
+${3: \{}
+    $0
+    break;
+${3:$(if (string-match "\{" yas-text) "\}" "")}

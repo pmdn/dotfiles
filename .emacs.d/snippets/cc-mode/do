@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: do { ... } while (...) (allman)
+# key: doa
+# --
+do
+{
+    $0
+} while (${1:condition});

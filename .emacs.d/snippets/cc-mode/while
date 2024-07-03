@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: while (allman)
+# key: whilea
+# --
+while (${1:condition})
+{
+      $0
+}
