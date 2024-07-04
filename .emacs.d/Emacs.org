@@ -1728,8 +1728,7 @@ For Guile, [[https://gitlab.com/emacs-geiser/guile][geise-guile]] will be instal
 (use-package yasnippet
   :ensure t
   :defer t
-  :config
-  (yas-global-mode 1))
+  :init (yas-global-mode 1))
 #+end_src
 
 [[https://github.com/AndreaCrotti/yasnippet-snippets][yasnippet-snippets]] contains the official collection of snippets for yasnippet.

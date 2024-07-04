@@ -1182,8 +1182,7 @@ more-helpful local prompt."
 (use-package yasnippet
   :ensure t
   :defer t
-  :config
-  (yas-global-mode 1))
+  :init (yas-global-mode 1))
 
 ;; yasnippet-snippets configuration
 (use-package yasnippet-snippets
