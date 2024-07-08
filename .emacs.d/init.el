@@ -350,6 +350,12 @@
   (setq pulsar-face 'pulsar-yellow)
   (setq pulsar-highlight-face 'pulsar-yellow))
 
+;; Configure avy
+(use-package avy
+  :ensure t
+  :bind (("C-:" . avy-goto-char)
+         ("C-M-:" . avy-goto-char-2)))
+
 ;; Configure orderless
 (use-package orderless
   :ensure t

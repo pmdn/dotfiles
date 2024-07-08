@@ -514,6 +514,18 @@ Default themes may be good options:
     (setq pulsar-highlight-face 'pulsar-yellow))
 #+end_src
 
+** Avy
+
+[[https://github.com/abo-abo/avy][avy]] is a GNU Emacs package for jumping to visible text using a char-based decision tree.
+
+#+begin_src emacs-lisp
+  ;; Configure avy
+  (use-package avy
+    :ensure t
+    :bind (("C-:" . avy-goto-char)
+           ("C-M-:" . avy-goto-char-2)))
+#+end_src
+
 * Completion framework
 
 Completion in Emacs is key. Previously I used [[https://oremacs.com/swiper/][Ivy/Swiper/Counsel]] for the minibuffer and [[https://company-mode.github.io/][Company]] for in-buffer completion. Although they are nice and work perfectly, I have decided to go on with more /emacsy/ alternatives, that make use of built-in emacs capabilities instead of adding their own. This make them more scalable and easier to mantain. Below are some configuration examples, as well as some tutorials explaining the different functionalities of the packages.
