@@ -151,30 +151,52 @@ This section configures basic UI settings that remove unneeded elements to make 
 
 #+begin_src emacs-lisp
 
-   ;; UTF-8 everywhere
-   (prefer-coding-system 'utf-8)
-   (set-default-coding-systems 'utf-8)
-   (set-terminal-coding-system 'utf-8)
-   (set-keyboard-coding-system 'utf-8)
+  ;; UTF-8 everywhere
+  (prefer-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
 
-   ;; User interface
-   (menu-bar-mode -1)          ; Disable the menu bar
-   (scroll-bar-mode -1)        ; Disable visible scrollbar
-   (tool-bar-mode -1)          ; Disable the toolbar
-   (tooltip-mode -1)           ; Disable tooltips
-   (set-fringe-mode 10)        ; Give some breathing room
+  ;; User interface
+  (menu-bar-mode -1)          ; Disable the menu bar
+  (scroll-bar-mode -1)        ; Disable visible scrollbar
+  (tool-bar-mode -1)          ; Disable the toolbar
+  (tooltip-mode -1)           ; Disable tooltips
+  (set-fringe-mode 10)        ; Give some breathing room
 
-   ;; GIve some air in text mode by increasing margins
-   (add-hook 'text-mode-hook 'pmdn/set-margins)
+  ;; GIve some air in text mode by increasing margins
+  (add-hook 'text-mode-hook 'pmdn/set-margins)
 
-   ;; Set up the visible bell
-   (setq visible-bell t)
+  ;; Set up the visible bell
+  (setq visible-bell t)
 
-   ;; Calendar stars on monday
-   (setq calendar-week-start-day 1)
+  ;; Calendar setting
+  (setq calendar-date-style 'iso)
+  (setq calendar-month-name-array
+        ["Enero" "Febrero" "Marzo" "Abril" "Mayo" "Junio"
+         "Julio"    "Agosto"   "Septiembre" "Octubre" "Noviembre" "Diciembre"])
+      
+  (setq calendar-day-name-array
+        ["Domingo" "Lunes" "Martes" "Miércoles" "Jueves" "Viernes" "Sábado"])
+  (setq calendar-week-start-day 1)
+  (setq calendar-holidays '((holiday-fixed 1 1 "Año Nuevo")
+                            (holiday-fixed 1 6 "Reyes Magos")
+                            (holiday-fixed 4 17 "Jueves Santo")
+                            (holiday-fixed 4 18 "Viernes Santo")
+                            (holiday-fixed 4 21 "Lunes de Pascua")
+                            (holiday-fixed 5 1 "Dia del Trabajo")
+                            (holiday-fixed 6 24 "San Juan Bautista")
+                            (holiday-fixed 7 25 "Santiago Apóstol")
+                            (holiday-fixed 7 31 "San Ignacio de Loyola")
+                            (holiday-fixed 8 15 "Asunción")
+                            (holiday-fixed 10 12 "Día de la Hispanidad")
+                            (holiday-fixed 11 01 "Todos los Santos")
+                            (holiday-fixed 12 06 "Constitución")
+                            (holiday-fixed 12 25 "Navidad")
+                            ))
 
-   ;; Show column numbers in mode line and line numbers on window
-   (column-number-mode)
+  ;; Show column numbers in mode line and line numbers on window
+  (column-number-mode)
   ;; (global-display-line-numbers-mode t)
   ;;
   ;; ;; Disable line numbers for some modes
@@ -186,31 +208,31 @@ This section configures basic UI settings that remove unneeded elements to make 
   ;;                 deft-mode-hook
   ;;                 org-agenda-mode-hook))
   ;;   (add-hook mode (lambda () (display-line-numbers-mode 0))))
-   ;; Show line numbers only on prog modes
-   (add-hook 'prog-mode-hook 'display-line-numbers-mode)  
+  ;; Show line numbers only on prog modes
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode)  
 
-   ;; When something changes a file, automatically refresh the buffer containing it.
-   (global-auto-revert-mode t)
+  ;; When something changes a file, automatically refresh the buffer containing it.
+  (global-auto-revert-mode t)
 
-   ;; Visually indicate matching pairs of parentheses.
-   (show-paren-mode t)
+  ;; Visually indicate matching pairs of parentheses.
+  (show-paren-mode t)
 
-   ;; Insert closing parenthesis, bracket... pairs automatically
-   (electric-pair-mode 1)
-   (setq electric-pair-preserve-balance nil)
+  ;; Insert closing parenthesis, bracket... pairs automatically
+  (electric-pair-mode 1)
+  (setq electric-pair-preserve-balance nil)
 
-   ;; y-or-n answers
-   (fset 'yes-or-no-p 'y-or-n-p)	
+  ;; y-or-n answers
+  (fset 'yes-or-no-p 'y-or-n-p)	
 
-   ;; Set tab width to 4 spaces and Allman indentation (bsd) in C
-   (setq-default tab-width 4)
-   (setq-default indent-tabs-mode nil)
-   (setq indent-line-function 'insert-tab)
-   (setq c-default-style "bsd"
-         c-basic-offset 4)
+  ;; Set tab width to 4 spaces and Allman indentation (bsd) in C
+  (setq-default tab-width 4)
+  (setq-default indent-tabs-mode nil)
+  (setq indent-line-function 'insert-tab)
+  (setq c-default-style "bsd"
+        c-basic-offset 4)
 
-   ;; Kill the current buffer when selecting a new directory
-   (setq dired-kill-when-opening-new-dired-buffer t)
+  ;; Kill the current buffer when selecting a new directory
+  (setq dired-kill-when-opening-new-dired-buffer t)
 
 #+end_src
 
