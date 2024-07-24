@@ -132,17 +132,29 @@ Funtions to be used in the config file.
 
 #+begin_src emacs-lisp
   (defun pmdn/org-inline-css-hook (exporter)
-    "Insert custom inline css to automatically set the background of code to whatever theme I'm using's background."
+    "Insert custom inline css to automatically set the background of code to whatever theme I'm using's background. Also embed css into html file."
     (when (eq exporter 'html)
       (let* ((my-pre-bg (face-background 'default))
-             (my-pre-fg (face-foreground 'default)))
+             (my-pre-fg (face-foreground 'default))
+             (dir (ignore-errors (file-name-directory (buffer-file-name))))
+             (path (concat dir "style.css"))
+             (homestyle (or (null dir) (null (file-exists-p path))))
+             (final (if homestyle (concat org-directory "/src/readtheorg_theme/css/readtheorg.css") path)))
         (setq
          org-html-head-extra
          (concat
           org-html-head-extra
           (format "<style type=\"text/css\">\n pre.src {background-color: %s; color: %s;}</style>\n"
-                  my-pre-bg my-pre-fg))))))
-
+                  my-pre-bg my-pre-fg)))
+        (setq org-html-head-include-default-style nil)
+        (setq org-html-head (concat
+                           "<style type=\"text/css\">\n"
+                           "<!--/*--><![CDATA[/*><!--*/\n"
+                           (with-temp-buffer
+                             (insert-file-contents final)
+                             (buffer-string))
+                           "/*]]>*/-->\n"
+                           "</style>\n")))))
 #+end_src
 
 * Basic UI configuration
@@ -1829,6 +1841,26 @@ With Emacs 29.1 and above, =MuPDF= (installed via ~apt~) will convet pdf files i
     (doc-view-mupdf-use-svg t)
     (large-file-warning-threshold (* 50 (expt 2 20))))
 #+end_src
+
+* HTML embed images
+
+This code redefines how images are handled in HTML export to embed them in the code. Code is not tangled: Run this code before HTML export if wanting to make single file without needing external images. From [[https://www.reddit.com/r/orgmode/comments/7dyywu/creating_a_selfcontained_html/dq6dhv3][this Reddit comment]].
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (defun replace-in-string (what with in)
+    (replace-regexp-in-string (regexp-quote what) with in nil 'literal))
+
+  (defun org-html--format-image (source attributes info)
+    (progn
+      (setq source (replace-in-string "%20" " " source))
+      (format "<img src=\"data:image/%s;base64,%s\"%s />"
+              (or (file-name-extension source) "")
+              (base64-encode-string
+               (with-temp-buffer
+                 (insert-file-contents-literally source)
+                (buffer-string)))
+              (file-name-nondirectory source))))
+#+END_SRC
 
 * Finish line
 

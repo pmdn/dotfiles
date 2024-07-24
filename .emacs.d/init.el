@@ -76,16 +76,29 @@
     (find-file (nth (random (length files)) files))))
 
 (defun pmdn/org-inline-css-hook (exporter)
-  "Insert custom inline css to automatically set the background of code to whatever theme I'm using's background."
+  "Insert custom inline css to automatically set the background of code to whatever theme I'm using's background. Also embed css into html file."
   (when (eq exporter 'html)
     (let* ((my-pre-bg (face-background 'default))
-           (my-pre-fg (face-foreground 'default)))
+           (my-pre-fg (face-foreground 'default))
+           (dir (ignore-errors (file-name-directory (buffer-file-name))))
+           (path (concat dir "style.css"))
+           (homestyle (or (null dir) (null (file-exists-p path))))
+           (final (if homestyle (concat org-directory "/src/readtheorg_theme/css/readtheorg.css") path)))
       (setq
        org-html-head-extra
        (concat
         org-html-head-extra
         (format "<style type=\"text/css\">\n pre.src {background-color: %s; color: %s;}</style>\n"
-                my-pre-bg my-pre-fg))))))
+                my-pre-bg my-pre-fg)))
+      (setq org-html-head-include-default-style nil)
+      (setq org-html-head (concat
+                         "<style type=\"text/css\">\n"
+                         "<!--/*--><![CDATA[/*><!--*/\n"
+                         (with-temp-buffer
+                           (insert-file-contents final)
+                           (buffer-string))
+                         "/*]]>*/-->\n"
+                         "</style>\n")))))
 
 ;; UTF-8 everywhere
 (prefer-coding-system 'utf-8)
