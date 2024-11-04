@@ -780,6 +780,7 @@
            "* %^{Description} %^g\n Added: %U\n\n %?")
           ("b" "Bookmark (Clipboard)" entry (file+olp org-default-notes-file "Bookmarks")
            "* %(org-cliplink-capture) %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n- %?\n" :empty-lines 1 :prepend t)))
+  (add-hook 'org-capture-mode-hook #'org-id-get-create)
 
   ;; Set global key for capture
   (define-key global-map (kbd "C-c r")
