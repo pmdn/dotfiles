@@ -404,6 +404,10 @@
   :bind (("C-:" . avy-goto-char)
          ("C-M-:" . avy-goto-char-2)))
 
+;;Breadcrumb configuration
+(use-package breadcrumb
+  :hook (prog-mode . breadcrumb-local-mode))
+
 ;; Configure orderless
 (use-package orderless
   :ensure t
@@ -979,6 +983,15 @@
   :hook
   (org-mode . olivetti-mode)
   (markdown-mode . olivetti-mode))
+
+;;org-sticky-header configuration
+(use-package org-sticky-header
+   :hook (org-mode . org-sticky-header-mode)
+   :config
+   ;; Show full path in header
+   (setq org-sticky-header-full-path 'full)
+   ;; Use > instead of / as separator
+   (setq org-sticky-header-outline-path-separator " > "))
 
 ;; Eshell configuration
 (use-package eshell

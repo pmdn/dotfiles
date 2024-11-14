@@ -573,6 +573,16 @@ Default themes may be good options:
            ("C-M-:" . avy-goto-char-2)))
 #+end_src
 
+** Breadcrumb
+
+Breadcrumbs are sequences of short strings indicating where you are in some big tree-like maze that is probably your code. [[https://github.com/joaotavora/breadcrumb][Breadcrumb]] is a package for headerline indication of where you are in a large project.
+
+#+begin_src emacs-lisp
+  ;;Breadcrumb configuration
+  (use-package breadcrumb
+    :hook (prog-mode . breadcrumb-local-mode))
+#+end_src
+
 * Completion framework
 
 Completion in Emacs is key. Previously I used [[https://oremacs.com/swiper/][Ivy/Swiper/Counsel]] for the minibuffer and [[https://company-mode.github.io/][Company]] for in-buffer completion. Although they are nice and work perfectly, I have decided to go on with more /emacsy/ alternatives, that make use of built-in emacs capabilities instead of adding their own. This make them more scalable and easier to mantain. Below are some configuration examples, as well as some tutorials explaining the different functionalities of the packages.
@@ -1320,6 +1330,21 @@ This snippet adds a hook to =org-mode= buffers so that =pmdn/org-babel-tangle-co
     :hook
     (org-mode . olivetti-mode)
     (markdown-mode . olivetti-mode))
+#+end_src
+
+** Org stikcy header
+
+[[https://github.com/alphapapa/org-sticky-header][org-sticky-header]] shows a sticky bar at the top, showing the current org heading.
+
+#+begin_src emacs-lisp
+  ;;org-sticky-header configuration
+  (use-package org-sticky-header
+     :hook (org-mode . org-sticky-header-mode)
+     :config
+     ;; Show full path in header
+     (setq org-sticky-header-full-path 'full)
+     ;; Use > instead of / as separator
+     (setq org-sticky-header-outline-path-separator " > "))
 #+end_src
 
 * Eshell
