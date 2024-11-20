@@ -1888,6 +1888,23 @@ This code redefines how images are handled in HTML export to embed them in the c
               (file-name-nondirectory source))))
 #+END_SRC
 
+* AI with gptel
+
+[[https://github.com/karthink/gptel][gptel]] is a simple Large Language Model chat client for Emacs, with support for multiple models and backends. It works in the spirit of Emacs, available at any time and uniformly in any buffer.
+
+#+begin_src emacs-lisp
+  ;; Configure gptel
+  (use-package gptel
+    :config
+    (setq gptel-default-mode 'org-mode)
+    ;; default backend
+    (setq
+     gptel-model 'llama3.2
+     gptel-backend (gptel-make-ollama "Ollama"
+                     :host "localhost:11434"
+                     :stream t
+                     :models '(llama3.2))))
+#+end_src
 * Finish line
 
 #+begin_src emacs-lisp

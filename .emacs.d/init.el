@@ -1285,6 +1285,18 @@ more-helpful local prompt."
   (doc-view-mupdf-use-svg t)
   (large-file-warning-threshold (* 50 (expt 2 20))))
 
+;; Configure gptel
+(use-package gptel
+  :config
+  (setq gptel-default-mode 'org-mode)
+  ;; default backend
+  (setq
+   gptel-model 'llama3.2
+   gptel-backend (gptel-make-ollama "Ollama"
+                   :host "localhost:11434"
+                   :stream t
+                   :models '(llama3.2))))
+
 ;; Local Variables:
 ;; byte-compile-warnings: (not free-vars noruntime)
 ;; End:
