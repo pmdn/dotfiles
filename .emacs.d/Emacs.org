@@ -157,6 +157,26 @@ Funtions to be used in the config file.
                            "</style>\n")))))
 #+end_src
 
+#+begin_src emacs-lisp
+  (defun pmdn/remove-non-sentence-breaks (begin end)
+    "Remove line breaks in the region unless preceded by a period.
+  When called interactively, operates on the selected region.
+  BEGIN and END specify the region boundaries."
+    (interactive "r")
+    (save-excursion
+      (save-restriction
+        (narrow-to-region begin end)
+        (goto-char (point-min))
+        ;; Continue while we can find a newline
+        (while (re-search-forward "\n" nil t)
+          (save-excursion
+            ;; Check character before newline
+            (backward-char)
+            (unless (looking-back "\\." (- (point) 1))
+              ;; If not preceded by period, replace newline with space
+              (replace-match " ")))))))
+#+end_src
+
 * Basic UI configuration
 
 This section configures basic UI settings that remove unneeded elements to make Emacs look a lot more minimal and modern.  If you're just getting started in Emacs, the menu bar might be helpful so you can remove the =(menu-bar-mode -1)= line if you'd like to still see that.
@@ -307,7 +327,8 @@ In this section global key bindings are added.
   (global-set-key (kbd "C-c c") 'org-capture)
   (global-set-key (kbd "C-c l") 'org-store-link)
   (global-set-key (kbd "C-c e") 'pulsar-pulse-line)
-  
+  (global-set-key (kbd "C-c j") 'pmdn/remove-non-sentence-breaks)
+
 #+end_src
 
 * UI configurations

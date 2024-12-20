@@ -100,6 +100,24 @@
                          "/*]]>*/-->\n"
                          "</style>\n")))))
 
+(defun pmdn/remove-non-sentence-breaks (begin end)
+  "Remove line breaks in the region unless preceded by a period.
+When called interactively, operates on the selected region.
+BEGIN and END specify the region boundaries."
+  (interactive "r")
+  (save-excursion
+    (save-restriction
+      (narrow-to-region begin end)
+      (goto-char (point-min))
+      ;; Continue while we can find a newline
+      (while (re-search-forward "\n" nil t)
+        (save-excursion
+          ;; Check character before newline
+          (backward-char)
+          (unless (looking-back "\\." (- (point) 1))
+            ;; If not preceded by period, replace newline with space
+            (replace-match " ")))))))
+
 ;; UTF-8 everywhere
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
@@ -221,6 +239,7 @@
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c e") 'pulsar-pulse-line)
+(global-set-key (kbd "C-c j") 'pmdn/remove-non-sentence-breaks)
 
 (use-package doom-themes
  :init (load-theme 'doom-xcode t))
