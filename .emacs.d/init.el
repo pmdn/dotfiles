@@ -323,9 +323,7 @@ BEGIN and END specify the region boundaries."
 ;; Configure Doom Modeline
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode)
-  :custom ((doom-modeline-height 20)
-    (doom-modeline-buffer-file-name-style 'truncate-except-project)
-    (doom-modeline-bar-width 6)))
+  :custom ((doom-modeline-buffer-file-name-style 'truncate-except-project)))
 
 ;; Diminish minor modes
 (use-package diminish

@@ -437,9 +437,7 @@ The themes are very customisable and provide support for a very wide range of pa
   ;; Configure Doom Modeline
   (use-package doom-modeline
     :hook (after-init . doom-modeline-mode)
-    :custom ((doom-modeline-height 20)
-      (doom-modeline-buffer-file-name-style 'truncate-except-project)
-      (doom-modeline-bar-width 6)))
+    :custom ((doom-modeline-buffer-file-name-style 'truncate-except-project)))
 
 #+end_src
 ** Diminish  
