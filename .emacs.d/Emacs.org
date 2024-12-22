@@ -334,27 +334,57 @@ In this section global key bindings are added.
 * UI configurations
 
 ** Color theme
+[[https://protesilaos.com/emacs/modus-themes][modus-themes]] are highly accessible themes, conforming with the highest standard for colour contrast between background and foreground values (WCAG AAA). They also are optimised for users with red-green colour deficiency.
 
-Default themes may be good options:
-
-;(load-theme 'misterioso)
-
-[[https://github.com/hlissner/emacs-doom-themes][doom-themes]] is a great set of themes with a lot of variety and support for many different Emacs modes.  Taking a look at the [[https://github.com/hlissner/emacs-doom-themes/tree/screenshots][screenshots]] might help you decide which one you like best.  You can also run =M-x counsel-load-theme= to choose between them easily.
+The themes are very customisable and provide support for a very wide range of packages. Their manual is detailed so that new users can get started, while it also provides custom code for all sorts of more advanced customisations.
 
 #+begin_src emacs-lisp
-
-  (use-package doom-themes
-   :init (load-theme 'doom-xcode t))
-
+  ;; modus themes configuration
+  (use-package modus-themes
+    :ensure
+    :init
+    ;; Add all your customizations prior to loading the themes
+    ;; Remove the border
+    (setq modus-themes-common-palette-overrides
+          '((border-mode-line-active unspecified)
+            (border-mode-line-inactive unspecified)
+            (fringe unspecified)))
+    (setq modus-themes-italic-constructs t
+          modus-themes-bold-constructs t
+          modus-themes-variable-pitch-ui t
+          modus-themes-mixed-fonts t
+          modus-themes-headings
+          '((0 . (variable-pitch regular 1.2))
+            (1 . (variable-pitch regular 1.2))
+            (2 . (variable-pitch regular 1.1))
+            (3 . (variable-pitch regular 1.1))
+            (4 . (variable-pitch regular 1.1))
+            (5 . (variable-pitch regular 1.1)) 
+            (6 . (variable-pitch regular 1.1))
+            (7 . (variable-pitch regular 1.1)))))
 #+end_src
 
-[[https://github.com/owainlewis/emacs-color-themes][Emacs color themes]]  is a package of themes named after influential programmers. Spolsky is a good one.
+[[https://protesilaos.com/emacs/ef-themes][ef-themes]] are a collection of light and dark themes for GNU Emacs whose goal is to provide colorful ("pretty") yet legible options.
 
-#+BEGIN_SRC  emacs-lisp
+#+begin_src emacs-lisp
+  ;; ef themes configuration
+  (use-package ef-themes
+    :ensure t
+    :config
+    (setq ef-themes-variable-pitch-ui t
+        ef-themes-mixed-fonts t
+        ef-themes-headings
+        '((0 . (variable-pitch regular 1.2))
+          (1 . (variable-pitch regular 1.2))
+          (2 . (variable-pitch regular 1.1))
+          (3 . (variable-pitch regular 1.1))
+          (4 . (variable-pitch regular 1.1))
+          (5 . (variable-pitch regular 1.1)) 
+          (6 . (variable-pitch regular 1.1))
+          (7 . (variable-pitch regular 1.1))))
+    (load-theme 'ef-elea-dark t))
+#+end_src
 
-  (use-package sublime-themes)
-
-#+END_SRC
 
 ** Fonts
 

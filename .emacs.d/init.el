@@ -241,10 +241,46 @@ BEGIN and END specify the region boundaries."
 (global-set-key (kbd "C-c e") 'pulsar-pulse-line)
 (global-set-key (kbd "C-c j") 'pmdn/remove-non-sentence-breaks)
 
-(use-package doom-themes
- :init (load-theme 'doom-xcode t))
+;; modus themes configuration
+(use-package modus-themes
+  :ensure
+  :init
+  ;; Add all your customizations prior to loading the themes
+  ;; Remove the border
+  (setq modus-themes-common-palette-overrides
+        '((border-mode-line-active unspecified)
+          (border-mode-line-inactive unspecified)
+          (fringe unspecified)))
+  (setq modus-themes-italic-constructs t
+        modus-themes-bold-constructs t
+        modus-themes-variable-pitch-ui t
+        modus-themes-mixed-fonts t
+        modus-themes-headings
+        '((0 . (variable-pitch regular 1.2))
+          (1 . (variable-pitch regular 1.2))
+          (2 . (variable-pitch regular 1.1))
+          (3 . (variable-pitch regular 1.1))
+          (4 . (variable-pitch regular 1.1))
+          (5 . (variable-pitch regular 1.1)) 
+          (6 . (variable-pitch regular 1.1))
+          (7 . (variable-pitch regular 1.1)))))
 
-(use-package sublime-themes)
+;; ef themes configuration
+(use-package ef-themes
+  :ensure t
+  :config
+  (setq ef-themes-variable-pitch-ui t
+      ef-themes-mixed-fonts t
+      ef-themes-headings
+      '((0 . (variable-pitch regular 1.2))
+        (1 . (variable-pitch regular 1.2))
+        (2 . (variable-pitch regular 1.1))
+        (3 . (variable-pitch regular 1.1))
+        (4 . (variable-pitch regular 1.1))
+        (5 . (variable-pitch regular 1.1)) 
+        (6 . (variable-pitch regular 1.1))
+        (7 . (variable-pitch regular 1.1))))
+  (load-theme 'ef-elea-dark t))
 
 (cond ((eq system-type 'windows-nt)
      ;; Windows-specific code goes here.
