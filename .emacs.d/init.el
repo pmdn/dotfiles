@@ -213,6 +213,10 @@ BEGIN and END specify the region boundaries."
 (setq tab-bar-select-tab-modifiers '(meta));; fast selection
 (setq tab-bar-new-tab-to 'rightmost)       ;; placement of new tab
 (set-face-attribute 'tab-bar nil :foreground "DarkGray")
+;;To make ediff to be horizontally split
+(setq ediff-split-window-function 'split-window-horizontally)
+;;To make ediff operate on selected-frame
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 (setq user-full-name "Patxi Madina")
 (cond ((eq system-type 'windows-nt)
