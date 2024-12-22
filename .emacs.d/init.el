@@ -467,6 +467,13 @@ BEGIN and END specify the region boundaries."
 (use-package breadcrumb
   :hook (prog-mode . breadcrumb-local-mode))
 
+;; rainbow-mode configuration 
+(use-package rainbow-mode
+  :ensure t
+  :hook
+  (prog-mode . rainbow-mode)
+  (text-mode . rainbow-mode))
+
 ;; Configure orderless
 (use-package orderless
   :ensure t

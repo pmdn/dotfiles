@@ -389,7 +389,6 @@ The themes are very customisable and provide support for a very wide range of pa
     (load-theme 'ef-elea-dark t))
 #+end_src
 
-
 ** Fonts
 
 #+begin_src emacs-lisp
@@ -636,6 +635,19 @@ Breadcrumbs are sequences of short strings indicating where you are in some big 
   ;;Breadcrumb configuration
   (use-package breadcrumb
     :hook (prog-mode . breadcrumb-local-mode))
+#+end_src
+
+** Rainbow mode
+
+[[https://elpa.gnu.org/packages/rainbow-mode.html][rainbow-mode]] is a package to colorize color names in buffers.
+
+#+begin_src emacs-lisp
+  ;; rainbow-mode configuration 
+  (use-package rainbow-mode
+    :ensure t
+    :hook
+    (prog-mode . rainbow-mode)
+    (text-mode . rainbow-mode))
 #+end_src
 
 * Completion framework
