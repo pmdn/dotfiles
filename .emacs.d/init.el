@@ -318,7 +318,11 @@ BEGIN and END specify the region boundaries."
 (add-to-list 'default-frame-alist '(font . "Fira Mono-10"))
 
 ;; All the icons
-(use-package all-the-icons)
+(use-package all-the-icons
+  :ensure t)
+;; Nerd icons
+(use-package nerd-icons
+  :ensure t)
 
 ;; Configure Doom Modeline
 (use-package doom-modeline
@@ -342,33 +346,37 @@ BEGIN and END specify the region boundaries."
   :ensure t
   :config
   (dashboard-setup-startup-hook)
-                                        ; set the title
+  ; set the title
   (setq dashboard-banner-logo-title "Bienvenido a Emacs!")
-                                        ; set the banner
+  ; set the banner
   (setq dashboard-startup-banner "~/.emacs.d/emacs-splash.png")
   (setq dashboard-projects-backend 'project-el)
+  ; display icons on both GUI and terminal
+  (setq dashboard-display-icons-p t)
+  ; use `nerd-icons' package
+  (setq dashboard-icon-type 'nerd-icons)
   (setq dashboard-navigator-buttons
         `(;; line1
           ;; Shortcuts
-          ((,(all-the-icons-octicon "mark-github" :height 0.9 :v-adjust -0.1)
+          ((,(nerd-icons-octicon "nf-oct-mark_github" :height 1.0 :v-adjust 0.0)
             "Github"
             "Github repository"
             (lambda (&rest _) (browse-url "https://github.com/pmdn/dotfiles/tree/master/.emacs.d")))
-          (,(all-the-icons-octicon "tools" :height 0.9 :v-adjust -0.1)
+          (,(nerd-icons-octicon "nf-oct-tools" :height 1.0 :v-adjust 0.0)
             "Config"
             "Configuration file"
             (lambda (&rest _) (find-file (expand-file-name  "~/.emacs.d/Emacs.org"))))
-          (,(all-the-icons-octicon "rss" :height 1.2 :v-adjust -0.1)
+          (,(nerd-icons-octicon "nf-oct-rss" :height 0.9 :v-adjust 0.0)
             "Elfeed"
             "Go to rss feed"
             (lambda (&rest _) (elfeed))))))
   ; set the sections I'd like displayed and how many of each
   (setq dashboard-items '((recents . 7) (projects . 5) (bookmarks . 5) (agenda . 5)))
-  (setq dashboard-heading-icons '((recents   . "history")
-                              (bookmarks . "bookmark")
-                              (agenda    . "calendar")
-                              (projects  . "rocket")
-                              (registers . "database")))
+  (setq dashboard-heading-icons '((recents   . "nf-oct-history")
+                              (bookmarks . "nf-oct-bookmark")
+                              (agenda    . "nf-oct-calendar")
+                              (projects  . "nf-oct-rocket")
+                              (registers . "nf-oct-database")))
   (setq dashboard-startupify-list '(dashboard-insert-banner
                                 dashboard-insert-newline
                                 dashboard-insert-banner-title
@@ -388,9 +396,12 @@ BEGIN and END specify the region boundaries."
   ; use nice section icons
   (setq dashboard-set-heading-icons t)
   ; disable the snarky footer
-  (setq dashboard-set-footer nil)
-  ; use `all-the-icons' package
-  (setq dashboard-icon-type 'all-the-icons))
+  (setq dashboard-set-footer nil))
+
+;; nerd-icons in dired
+(use-package nerd-icons-dired
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
 
 ;;Dired-Sidebar configuration
 (use-package dired-sidebar
@@ -400,13 +411,6 @@ BEGIN and END specify the region boundaries."
   :config
   ;;(setq dired-sidebar-subtree-line-prefix "__")
   (setq dired-sidebar-theme 'ascii))
-
-;; all-the-icons in dired
-(use-package all-the-icons-dired
-  :hook
-  (dired-mode . all-the-icons-dired-mode)
-  :config
-  (setq all-the-icons-dired-monochrome nil))
 
 ;; pulsar configuration 
 (use-package pulsar
@@ -471,6 +475,11 @@ BEGIN and END specify the region boundaries."
   :hook
   (prog-mode . rainbow-mode)
   (text-mode . rainbow-mode))
+
+;; Configure nerd-icons-ibuffer
+(use-package nerd-icons-ibuffer
+  :ensure t
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
 
 ;; Configure orderless
 (use-package orderless
@@ -600,6 +609,14 @@ BEGIN and END specify the region boundaries."
   ;; enabled right away. Note that this forces loading the package.
   (marginalia-mode))
 
+;; Add icons to completion candidates using the built in completion metadata functions
+(use-package nerd-icons-completion
+  :after marginalia
+  :config
+  (nerd-icons-completion-mode)
+  :hook
+  ('marginalia-mode-hook . 'nerd-icons-completion-marginalia-setup))
+
 ;; Embark configuration
 (use-package embark
   :ensure t
@@ -653,6 +670,11 @@ BEGIN and END specify the region boundaries."
   ;; See also `corfu-excluded-modes'.
   :init
   (global-corfu-mode))
+
+;; Add icons to completions in corfu
+(use-package nerd-icons-corfu
+  :after corfu
+  :init (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
 ;; A few more useful configurations...
 (use-package emacs
@@ -995,15 +1017,46 @@ BEGIN and END specify the region boundaries."
   (org-cite-follow-processor 'citar)
   (org-cite-activate-processor 'citar)
   (citar-bibliography org-cite-global-bibliography)
+  :config
+  (defvar citar-indicator-notes-icons
+    (citar-indicator-create
+     :symbol (nerd-icons-mdicon
+              "nf-md-notebook"
+              :face 'nerd-icons-blue
+              :v-adjust -0.3)
+     :function #'citar-has-notes
+     :padding "  "
+     :tag "has:notes"))
+
+  (defvar citar-indicator-links-icons
+    (citar-indicator-create
+     :symbol (nerd-icons-octicon
+              "nf-oct-link"
+              :face 'nerd-icons-orange
+              :v-adjust -0.1)
+     :function #'citar-has-links
+     :padding "  "
+     :tag "has:links"))
+
+  (defvar citar-indicator-files-icons
+    (citar-indicator-create
+     :symbol (nerd-icons-faicon
+              "nf-fa-file"
+              :face 'nerd-icons-green
+              :v-adjust -0.1)
+     :function #'citar-has-files
+     :padding "  "
+     :tag "has:files"))
+
+  (setq citar-indicators
+        (list citar-indicator-files-icons
+              citar-indicator-notes-icons
+              citar-indicator-links-icons))
+  (setq citar-symbol-separator "  ")
   :bind
   (:map org-mode-map :package org ("C-c i" . #'org-cite-insert)))
 
-(setq citar-symbols
-      `((file ,(all-the-icons-faicon "file-o" :face 'all-the-icons-green :v-adjust -0.1) . " ")
-        (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
-        (link ,(all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01) . " ")))
-(setq citar-symbol-separator "  ")
-
+  ;; citar-denote package
   (use-package citar-denote
     :after (citar denote)
     :config
