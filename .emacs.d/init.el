@@ -1244,19 +1244,18 @@ more-helpful local prompt."
   :ensure t
   :bind (("C-x g" . magit-status)))
 
-;;Git gutter.Show git changes.
-(use-package git-gutter
+;; diff-hl to show VC changes
+(use-package diff-hl
   :ensure t
-  :defer 0.3
-  :diminish git-gutter-mode
-  :delight
-  :init (global-git-gutter-mode))
-
-(use-package git-gutter-fringe
   :config
-  (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
-  (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
-  (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
+  (global-diff-hl-mode)
+  ;;(diff-hl-flydiff-mode)
+  :hook
+  ((dired-mode . diff-hl-dired-mode)
+   (magit-pre-refresh . diff-hl-magit-pre-refresh)
+   (magit-post-refresh . diff-hl-magit-post-refresh))
+  :custom
+  (diff-hl-draw-borders nil))
 
 ;; Easier to see if parenthesis are well closed
 (use-package rainbow-delimiters

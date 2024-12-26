@@ -1662,27 +1662,25 @@ Making little Shells whenever I need them:
 
 #+END_SRC
 
-** GitGutter
+** Diff-hl
 
-[[https://github.com/emacsorphanage/git-gutter][GitGutter]] is a pluggin to show information about files in a git repository. [[https://ianyepan.github.io/posts/emacs-git-gutter/][Here]] is a modern looking config using [[https://github.com/emacsorphanage/git-gutter-fringe][git-gutter-fringe]].
 
-#+BEGIN_SRC emacs-lisp
+[[https://github.com/dgutov/diff-hl][diff-hl]] highlights uncommitted changes on the left side of the window (area also known as the "gutter"), allows you to jump between and revert them selectively.
 
-  ;;Git gutter.Show git changes.
-  (use-package git-gutter
+#+begin_src emacs-lisp
+  ;; diff-hl to show VC changes
+  (use-package diff-hl
     :ensure t
-    :defer 0.3
-    :diminish git-gutter-mode
-    :delight
-    :init (global-git-gutter-mode))
-
-  (use-package git-gutter-fringe
     :config
-    (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
-    (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
-    (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
-
-#+END_SRC
+    (global-diff-hl-mode)
+    ;;(diff-hl-flydiff-mode)
+    :hook
+    ((dired-mode . diff-hl-dired-mode)
+     (magit-pre-refresh . diff-hl-magit-pre-refresh)
+     (magit-post-refresh . diff-hl-magit-post-refresh))
+    :custom
+    (diff-hl-draw-borders nil))
+#+end_src
 
 ** Rainbow delimiter
 
