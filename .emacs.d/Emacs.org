@@ -197,7 +197,7 @@ This section configures basic UI settings that remove unneeded elements to make 
   (set-fringe-mode 10)        ; Give some breathing room
 
   ;; GIve some air in text mode by increasing margins
-  (add-hook 'text-mode-hook 'pmdn/set-margins)
+  ;;(add-hook 'text-mode-hook 'pmdn/set-margins)
 
   ;; Set up the visible bell
   (setq visible-bell t)
@@ -447,6 +447,7 @@ The themes are very customisable and provide support for a very wide range of pa
   ;; Configure Doom Modeline
   (use-package doom-modeline
     :hook (after-init . doom-modeline-mode)
+    :config (setq mode-line-right-align-edge 'right-fringe)
     :custom ((doom-modeline-buffer-file-name-style 'truncate-except-project)))
 #+end_src
 
@@ -1448,18 +1449,23 @@ This snippet adds a hook to =org-mode= buffers so that =pmdn/org-babel-tangle-co
 
 #+end_src
 
-** Olivetti
+** Writeroom
 
-[[https://github.com/rnkn/olivetti][Olivetti]] simple Emacs minor mode for a nice writing environment.
+[[https://github.com/joostkremers/writeroom-mode][Writeroom]] is a minor mode for Emacs that implements a distraction-free writing mode .
 
 #+begin_src emacs-lisp
-  ;; Olivetti configuration
-  (use-package olivetti
+  ;; Writeroom configuration
+  (use-package writeroom-mode
+    :defer t
     :config
-    (add-hook 'olivetti-mode-hook (lambda () (interactive) (setq olivetti-body-width 85)))
+    (setq writeroom-width             120
+          writeroom-fullscreen-effect nil
+          writeroom-maximize-window   nil
+          writeroom-mode-line         t)
     :hook
-    (org-mode . olivetti-mode)
-    (markdown-mode . olivetti-mode))
+    (text-mode . writeroom-mode)
+    (org-mode . writeroom-mode)
+    (markdown-mode . writeroom-mode))
 #+end_src
 
 ** Org stikcy header

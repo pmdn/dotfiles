@@ -132,7 +132,7 @@ BEGIN and END specify the region boundaries."
 (set-fringe-mode 10)        ; Give some breathing room
 
 ;; GIve some air in text mode by increasing margins
-(add-hook 'text-mode-hook 'pmdn/set-margins)
+;;(add-hook 'text-mode-hook 'pmdn/set-margins)
 
 ;; Set up the visible bell
 (setq visible-bell t)
@@ -329,6 +329,7 @@ BEGIN and END specify the region boundaries."
 ;; Configure Doom Modeline
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode)
+  :config (setq mode-line-right-align-edge 'right-fringe)
   :custom ((doom-modeline-buffer-file-name-style 'truncate-except-project)))
 
 ;; Diminish minor modes
@@ -1095,13 +1096,18 @@ BEGIN and END specify the region boundaries."
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
-;; Olivetti configuration
-(use-package olivetti
+;; Writeroom configuration
+(use-package writeroom-mode
+  :defer t
   :config
-  (add-hook 'olivetti-mode-hook (lambda () (interactive) (setq olivetti-body-width 85)))
+  (setq writeroom-width             120
+        writeroom-fullscreen-effect nil
+        writeroom-maximize-window   nil
+        writeroom-mode-line         t)
   :hook
-  (org-mode . olivetti-mode)
-  (markdown-mode . olivetti-mode))
+  (text-mode . writeroom-mode)
+  (org-mode . writeroom-mode)
+  (markdown-mode . writeroom-mode))
 
 ;;org-sticky-header configuration
 (use-package org-sticky-header
