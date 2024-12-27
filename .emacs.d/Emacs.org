@@ -1664,7 +1664,6 @@ Making little Shells whenever I need them:
 
 ** Diff-hl
 
-
 [[https://github.com/dgutov/diff-hl][diff-hl]] highlights uncommitted changes on the left side of the window (area also known as the "gutter"), allows you to jump between and revert them selectively.
 
 #+begin_src emacs-lisp
@@ -1672,10 +1671,10 @@ Making little Shells whenever I need them:
   (use-package diff-hl
     :ensure t
     :config
-    (global-diff-hl-mode)
     ;;(diff-hl-flydiff-mode)
     :hook
-    ((dired-mode . diff-hl-dired-mode)
+    ((after-init . global-diff-hl-mode)
+     (dired-mode . diff-hl-dired-mode)
      (magit-pre-refresh . diff-hl-magit-pre-refresh)
      (magit-post-refresh . diff-hl-magit-post-refresh))
     :custom

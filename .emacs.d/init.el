@@ -1248,10 +1248,10 @@ more-helpful local prompt."
 (use-package diff-hl
   :ensure t
   :config
-  (global-diff-hl-mode)
   ;;(diff-hl-flydiff-mode)
   :hook
-  ((dired-mode . diff-hl-dired-mode)
+  ((after-init . global-diff-hl-mode)
+   (dired-mode . diff-hl-dired-mode)
    (magit-pre-refresh . diff-hl-magit-pre-refresh)
    (magit-post-refresh . diff-hl-magit-post-refresh))
   :custom
