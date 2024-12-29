@@ -124,7 +124,7 @@ BEGIN and END specify the region boundaries."
 (scroll-bar-mode -1)        ; Disable visible scrollbar
 (tool-bar-mode -1)          ; Disable the toolbar
 (tooltip-mode -1)           ; Disable tooltips
-(set-fringe-mode 10)        ; Give some breathing room
+;; (set-fringe-mode 10)        ; Give some breathing room. Not needed with spacious-padding
 
 ;; GIve some air in text mode by increasing margins
 ;;(add-hook 'text-mode-hook 'pmdn/set-margins)
@@ -229,7 +229,7 @@ BEGIN and END specify the region boundaries."
 ;; Custom command stored on its own file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
-  (load custom-file))
+  (load custom-file 'noerror))
 ;; Back-up directories
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
@@ -480,6 +480,21 @@ BEGIN and END specify the region boundaries."
 (use-package nerd-icons-ibuffer
   :ensure t
   :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
+
+;; spacious-padding configuration
+(use-package spacious-padding
+  :ensure t
+  :custom
+  (spacious-padding-widths
+      '( :internal-border-width 15
+         :header-line-width 2
+         :mode-line-width 2
+         :tab-width 2
+         :right-divider-width 30
+         :scroll-bar-width 0
+         :fringe-width 8))
+  :config
+  (spacious-padding-mode 1))
 
 ;; Configure orderless
 (use-package orderless
