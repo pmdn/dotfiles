@@ -1099,17 +1099,27 @@ BEGIN and END specify the region boundaries."
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
 ;; Writeroom configuration
-(use-package writeroom-mode
-  :defer t
-  :config
-  (setq writeroom-width             120
-        writeroom-fullscreen-effect nil
-        writeroom-maximize-window   nil
-        writeroom-mode-line         t)
+;; (use-package writeroom-mode
+;;   :defer t
+;;   :config
+;;   (setq writeroom-width             120
+;;         writeroom-fullscreen-effect nil
+;;         writeroom-maximize-window   nil
+;;         writeroom-mode-line         t)
+;;   :hook
+;;   (text-mode . writeroom-mode)
+;;   (org-mode . writeroom-mode)
+;;   (markdown-mode . writeroom-mode))
+
+(use-package visual-fill-column
+  :ensure t
   :hook
-  (text-mode . writeroom-mode)
-  (org-mode . writeroom-mode)
-  (markdown-mode . writeroom-mode))
+  (text-mode . visual-fill-column-mode)
+  (org-mode . visual-fill-column-mode)
+  (markdown-mode . visual-fill-column-mode)
+  :custom
+  (visual-fill-column-center-text t)
+  (visual-fill-column-width 120))
 
 ;;org-sticky-header configuration
 (use-package org-sticky-header
