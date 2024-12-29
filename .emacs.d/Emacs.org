@@ -1944,11 +1944,12 @@ For Guile, [[https://gitlab.com/emacs-geiser/guile][geise-guile]] will be instal
 [[https://github.com/joaotavora/YASnippet][yasnippet]] is a template system for Emacs. It allows you to type an abbreviation and automatically expand it into function templates. Bundled language templates include: C, C++, C#, Perl, Python, Ruby, SQL, LaTeX, HTML, CSS and more.
 
 #+begin_src emacs-lisp
-;; yasnippet configuration
-(use-package yasnippet
-  :ensure t
-  :defer t
-  :init (yas-global-mode 1))
+  ;; yasnippet configuration
+  (use-package yasnippet
+    :ensure t
+    :demand t
+    :defer 5
+    :config (yas-global-mode))
 #+end_src
 
 [[https://github.com/AndreaCrotti/yasnippet-snippets][yasnippet-snippets]] contains the official collection of snippets for yasnippet.
