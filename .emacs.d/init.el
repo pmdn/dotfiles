@@ -48,14 +48,9 @@
   (setq right-margin-width 3))
 
 (defun pmdn/org-mode-setup ()
-  "Set basic org mode configuration."
+  "Set basic org mode configuration hooks."
   (org-indent-mode 0)
   (variable-pitch-mode 1)
-  (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
   (visual-line-mode 1))
 
 (defun pmdn/org-babel-tangle-config ()
@@ -746,7 +741,14 @@ BEGIN and END specify the region boundaries."
                   (org-level-6 . 1.1)
                   (org-level-7 . 1.1)
                   (org-level-8 . 1.1)))
-    (set-face-attribute (car face) nil :font "Fira Sans" :weight 'regular :height (cdr face))))
+    (set-face-attribute (car face) nil :font "Fira Sans" :weight 'regular :height (cdr face)))
+  ;; Set fixed pitch faces
+  (require 'org-indent)
+  (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+  (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
 
 (use-package org
   :pin elpa
