@@ -279,8 +279,6 @@ This section configures basic UI settings that remove unneeded elements to make 
   (setq ediff-window-setup-function 'ediff-setup-windows-plain)
   ;;To use project.el in non-versioned files
   (setq project-vc-extra-root-markers '(".project"))
-  ;;Prefer vertical splitting
-  (setq split-width-threshold 0)
 
 #+end_src
 

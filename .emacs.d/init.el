@@ -214,8 +214,6 @@ BEGIN and END specify the region boundaries."
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 ;;To use project.el in non-versioned files
 (setq project-vc-extra-root-markers '(".project"))
-;;Prefer vertical splitting
-(setq split-width-threshold 0)
 
 (setq user-full-name "Patxi Madina")
 (cond ((eq system-type 'windows-nt)
