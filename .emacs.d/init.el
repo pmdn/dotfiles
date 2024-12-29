@@ -1100,19 +1100,7 @@ BEGIN and END specify the region boundaries."
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
-;; Writeroom configuration
-;; (use-package writeroom-mode
-;;   :defer t
-;;   :config
-;;   (setq writeroom-width             120
-;;         writeroom-fullscreen-effect nil
-;;         writeroom-maximize-window   nil
-;;         writeroom-mode-line         t)
-;;   :hook
-;;   (text-mode . writeroom-mode)
-;;   (org-mode . writeroom-mode)
-;;   (markdown-mode . writeroom-mode))
-
+;; Visual fill column configuration
 (use-package visual-fill-column
   :ensure t
   :hook

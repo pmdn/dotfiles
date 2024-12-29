@@ -1452,24 +1452,12 @@ This snippet adds a hook to =org-mode= buffers so that =pmdn/org-babel-tangle-co
 
 #+end_src
 
-** Writeroom
+** Visual fill column
 
-[[https://github.com/joostkremers/writeroom-mode][Writeroom]] is a minor mode for Emacs that implements a distraction-free writing mode .
+[[https://codeberg.org/joostkremers/visual-fill-column][visual-fill-column]] is a small Emacs minor mode that mimics the effect of =fill-column= in =visual-line-mode= for a distraction-free writing mode.
 
 #+begin_src emacs-lisp
-  ;; Writeroom configuration
-  ;; (use-package writeroom-mode
-  ;;   :defer t
-  ;;   :config
-  ;;   (setq writeroom-width             120
-  ;;         writeroom-fullscreen-effect nil
-  ;;         writeroom-maximize-window   nil
-  ;;         writeroom-mode-line         t)
-  ;;   :hook
-  ;;   (text-mode . writeroom-mode)
-  ;;   (org-mode . writeroom-mode)
-  ;;   (markdown-mode . writeroom-mode))
-
+  ;; Visual fill column configuration
   (use-package visual-fill-column
     :ensure t
     :hook
