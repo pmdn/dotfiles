@@ -852,7 +852,7 @@ The DWIM behaviour of this command is as follows:
   (setq org-agenda-files
         (list
          (concat org-directory "/Notas.org")
-         (concat org-directory "/InboxMovil.org")))
+         (concat org-directory "/phone/InboxMovil.org")))
   (setq org-archive-location (concat org-directory "/Archivo.org::datetree/"))
 
   (require 'org-habit)
