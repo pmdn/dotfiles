@@ -1058,167 +1058,172 @@ Bookmark capture from:
 
 #+begin_src emacs-lisp
 
-  ;; Org mode configuration
+   ;; Org mode configuration
 
-  ;; Change font size for headings
-  (with-eval-after-load 'org-faces
-    ;; Increase the size of various headings
-    (set-face-attribute 'org-document-title nil :font "Fira Sans" :weight 'bold :height 1.3)
-    (dolist (face '((org-level-1 . 1.2)
-                    (org-level-2 . 1.1)
-                    (org-level-3 . 1.05)
-                    (org-level-4 . 1.0)
-                    (org-level-5 . 1.1)
-                    (org-level-6 . 1.1)
-                    (org-level-7 . 1.1)
-                    (org-level-8 . 1.1)))
-      (set-face-attribute (car face) nil :font "Fira Sans" :weight 'regular :height (cdr face)))
-    ;; Set fixed pitch faces
-    (require 'org-indent)
-    (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-    (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
+   ;; Change font size for headings
+   (with-eval-after-load 'org-faces
+     ;; Increase the size of various headings
+     (set-face-attribute 'org-document-title nil :font "Fira Sans" :weight 'bold :height 1.3)
+     (dolist (face '((org-level-1 . 1.2)
+                     (org-level-2 . 1.1)
+                     (org-level-3 . 1.05)
+                     (org-level-4 . 1.0)
+                     (org-level-5 . 1.1)
+                     (org-level-6 . 1.1)
+                     (org-level-7 . 1.1)
+                     (org-level-8 . 1.1)))
+       (set-face-attribute (car face) nil :font "Fira Sans" :weight 'regular :height (cdr face)))
+     ;; Set fixed pitch faces
+     (require 'org-indent)
+     (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+     (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+     (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
+     (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+     (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
 
-  (use-package org
-    :pin elpa
-    :hook (org-mode . pmdn/org-mode-setup)
-    :config
-    (setq org-babel-default-header-args
-          (cons '(:results . "output verbatim replace")
-                (assq-delete-all :results org-babel-default-header-args)))
-    (setq org-babel-lisp-eval-fn #'sly-eval)
-    (setq org-ellipsis " ▾")
-    ;;(setq org-adapt-indentation 'headline-data)
-    (setq org-hide-emphasis-markers t)
-    ;; Fix image width and show inline images
-    (setq org-image-actual-width 700)
-    (setq org-startup-with-inline-images t)
+   (use-package org
+     :pin elpa
+     :hook (org-mode . pmdn/org-mode-setup)
+     :config
+     (setq org-babel-default-header-args
+           (cons '(:results . "output verbatim replace")
+                 (assq-delete-all :results org-babel-default-header-args)))
+     (setq org-babel-lisp-eval-fn #'sly-eval)
+     (setq org-ellipsis " ▾")
+     ;;(setq org-adapt-indentation 'headline-data)
+     (setq org-hide-emphasis-markers t)
+     ;; Fix image width and show inline images
+     (setq org-image-actual-width 700)
+     (setq org-startup-with-inline-images t)
 
-    (setq org-agenda-start-with-log-mode t)
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-    (setq org-id-link-to-org-use-id 'use-existing)
-    (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.2))
+     (setq org-agenda-start-with-log-mode t)
+     (setq org-log-done 'time)
+     (setq org-log-into-drawer t)
+     (setq org-id-link-to-org-use-id 'use-existing)
+     (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.2))
 
-    (cond ((eq system-type 'windows-nt)
-           ;; Windows-specific code goes here.
-           (setq org-directory "C:/MGEP Dropbox/patxi madina hernandez/OrgFiles")
-           )
-          ((eq system-type 'gnu/linux)
-           ;; Linux-specific code goes here.
-           (setq org-directory "~/Sync/Sincronizadas/Notes/OrgFiles")
-           ))
-    
-    (setq org-agenda-files
-          (list
-           (concat org-directory "/Notas.org")
-           (concat org-directory "/InboxMovil.org")))
-    (setq org-archive-location (concat org-directory "/Archivo.org::datetree/"))
+     (cond ((eq system-type 'windows-nt)
+            ;; Windows-specific code goes here.
+            (setq org-directory "C:/MGEP Dropbox/patxi madina hernandez/OrgFiles")
+            )
+           ((eq system-type 'gnu/linux)
+            ;; Linux-specific code goes here.
+            (setq org-directory "~/Sync/Sincronizadas/Notes/OrgFiles")
+            ))
+     
+     (setq org-agenda-files
+           (list
+            (concat org-directory "/Notas.org")
+            (concat org-directory "/InboxMovil.org")))
+     (setq org-archive-location (concat org-directory "/Archivo.org::datetree/"))
 
-    (require 'org-habit)
-    (add-to-list 'org-modules 'org-habit)
-    (setq org-habit-graph-column 60)
+     (require 'org-habit)
+     (add-to-list 'org-modules 'org-habit)
+     (setq org-habit-graph-column 60)
 
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "ACTIVE(a!)" "WAITING(w@/!)" "DELEGATED(d@/!)" "|" "DONE(D!)" "CANCELLED(C@)")
-            (sequence "LEYENDO(y)" "|" "LEÍDO(i)")))
+     (setq org-todo-keywords
+           '((sequence "TODO(t)" "ACTIVE(a!)" "WAITING(w@/!)" "DELEGATED(d@/!)" "SOMEDAY(s!)" "|" "DONE(D!)" "CANCELLED(C@)")
+             (sequence "LEYENDO(y)" "|" "LEÍDO(i)")))
 
-    (setq org-todo-keyword-faces
-          '(("TODO".(:foreground "DarkSeaGreen" :weight bold))
-            ("ACTIVE".(:foreground "LightSeaGreen" :weight bold))
-            ("WAITING".(:foreground "peru" :weight bold))
-            ("DELEGATED".(:foreground "CornflowerBlue" :weight bold))
-            ("DONE".(:foreground "LightGrey" :weight bold))
-            ("CANCELLED".(:foreground "IndianRed" :weight bold))
-            ("LEYENDO".(:foreground "peru" :weight bold))
-            ("LEÍDO".(:foreground "DarkSeaGreen" :weight bold))))
+     (setq org-todo-keyword-faces
+           '(("TODO".(:foreground "DarkSeaGreen" :weight bold))
+             ("ACTIVE".(:foreground "LightSeaGreen" :weight bold))
+             ("WAITING".(:foreground "peru" :weight bold))
+             ("DELEGATED".(:foreground "CornflowerBlue" :weight bold))
+             ("SOMEDAY".(:foreground "dark violet" :weight bold))
+             ("DONE".(:foreground "LightGrey" :weight bold))
+             ("CANCELLED".(:foreground "IndianRed" :weight bold))
+             ("LEYENDO".(:foreground "peru" :weight bold))
+             ("LEÍDO".(:foreground "DarkSeaGreen" :weight bold))))
 
-    (setq org-refile-use-outline-path 'file)
-    (setq org-outline-path-complete-in-steps nil)
-    (setq org-refile-targets
-          '(("Archivo.org" :maxlevel . 1)
-            (org-agenda-files :maxlevel . 9)))
+     (setq org-refile-use-outline-path 'file)
+     (setq org-outline-path-complete-in-steps nil)
+     (setq org-refile-targets
+           '(("Archivo.org" :maxlevel . 1)
+             (org-agenda-files :maxlevel . 9)))
 
-    (setq org-log-refile 'note)
-    ;; Save Org buffers after refiling!
-    (advice-add 'org-refile :after 'org-save-all-org-buffers)
+     (setq org-log-refile 'note)
+     ;; Save Org buffers after refiling!
+     (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
-    (setq org-tag-alist
-          '((:startgroup)
-                                          ; Put mutually exclusive tags here
-            (:endgroup)
-            ("@errand" . ?E)
-            ("@home" . ?H)
-            ("@work" . ?W)
-            ("agenda" . ?a)
-            ("planning" . ?p)
-            ("publish" . ?P)
-            ("batch" . ?b)
-            ("note" . ?n)
-            ("idea" . ?i)))
+     (setq org-tag-alist
+           '((:startgroup)
+                                           ; Put mutually exclusive tags here
+             (:endgroup)
+             ("@errand" . ?E)
+             ("@home" . ?H)
+             ("@work" . ?W)
+             ("agenda" . ?a)
+             ("planning" . ?p)
+             ("publish" . ?P)
+             ("batch" . ?b)
+             ("note" . ?n)
+             ("idea" . ?i)))
 
-    ;; Configure custom agenda views
-    (setq org-tags-match-list-sublevels 'indented)
-    (setq org-agenda-custom-commands
-          '(("d" "Dashboard"
-             ((agenda "" ((org-deadline-warning-days 7)))
-              (todo "TODO" ((org-agenda-overriding-header "Todo Tasks")))
-              (todo "ACTIVE" ((org-agenda-overriding-header "Active Tasks")))
-              (todo "WAITING" ((org-agenda-overriding-header "Waiting Tasks")))
-              (todo "DELEGATED" ((org-agenda-overriding-header "Delegated Tasks")))))
+     ;; Configure custom agenda views
+     (setq org-tags-match-list-sublevels 'indented)
+     (setq org-agenda-custom-commands
+           '(("d" "Dashboard"
+              ((agenda "" ((org-deadline-warning-days 7)))
+               (todo "TODO" ((org-agenda-overriding-header "Todo Tasks")))
+               (todo "ACTIVE" ((org-agenda-overriding-header "Active Tasks")))
+               (todo "WAITING" ((org-agenda-overriding-header "Waiting Tasks")))
+               (todo "DELEGATED" ((org-agenda-overriding-header "Delegated Tasks")))
+               (todo "SOMEDAY" ((org-agenda-overriding-header "Someday Tasks")))))
 
-            ("w" "Workflow Status"
-             ((todo "TODO"
-                    ((org-agenda-overriding-header "Todo")
-                     (org-agenda-files org-agenda-files)))
-              (todo "ACTIVE"
-                    ((org-agenda-overriding-header "Active Tasks")
-                     (org-agenda-files org-agenda-files)))
-              (todo "WAITING"
-                    ((org-agenda-overriding-header "Waiting on External")
-                     (org-agenda-files org-agenda-files)))
-              (todo "DELEGATED"
-                    ((org-agenda-overriding-header "Delegated on External")
-                     (org-agenda-files org-agenda-files)))
-              (todo "DONE"
-                    ((org-agenda-overriding-header "Completed Tasks")
-                     (org-agenda-files org-agenda-files)))
-              (todo "CANCELLED"
-                    ((org-agenda-overriding-header "Cancelled Tasks")
-                     (org-agenda-files org-agenda-files)))))
+             ("w" "Workflow Status"
+              ((todo "TODO"
+                     ((org-agenda-overriding-header "Todo")
+                      (org-agenda-files org-agenda-files)))
+               (todo "ACTIVE"
+                     ((org-agenda-overriding-header "Active Tasks")
+                      (org-agenda-files org-agenda-files)))
+               (todo "WAITING"
+                     ((org-agenda-overriding-header "Waiting on External")
+                      (org-agenda-files org-agenda-files)))
+               (todo "DELEGATED"
+                     ((org-agenda-overriding-header "Delegated on External")
+                      (org-agenda-files org-agenda-files)))
+               (todo "SOMEDAY"
+                     ((org-agenda-overriding-header "Maybe do Someday")
+                      (org-agenda-files org-agenda-files)))
+               (todo "DONE"
+                     ((org-agenda-overriding-header "Completed Tasks")
+                      (org-agenda-files org-agenda-files)))
+               (todo "CANCELLED"
+                     ((org-agenda-overriding-header "Cancelled Tasks")
+                      (org-agenda-files org-agenda-files)))))
 
-            ("r" "Needs Refile"
-             ((tags
-               "refile"
-               ((org-agenda-overriding-header "To refile")
-                (org-tags-match-list-sublevels nil)))))))
+             ("r" "Needs Refile"
+              ((tags
+                "refile"
+                ((org-agenda-overriding-header "To refile")
+                 (org-tags-match-list-sublevels nil)))))))
 
-    ;; Capture templates
-    (setq org-default-notes-file (concat org-directory "/Notas.org"))
-    (setq org-capture-templates
-          `(("f" "Fast Note" entry (file+olp org-default-notes-file "Inbox")
-             "* %?\n  %U\n  %i" :empty-lines 1)
-            ("t" "Tasks" entry (file+olp org-default-notes-file "Inbox")
-             "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-            ("r" "Reads" entry (file+olp org-default-notes-file "Libros" "Lista Lectura")
-             "*** %\\1 %?\n :PROPERTIES:\n :Título: %^{Título}\n :Subtítulo: %^{Subtítulo}\n :Serie: %^{Serie}\n :Autor: %^{Autor [Apellido, Nombre]}\n :Año: %^{Año}\n :Categoría: %^{Categoría}\n :Puntuación: %^{Puntuación [1-5]}\n :Fecha: %^{Fecha Lectura [dd/mm/aaaa]}\n :Estado: %^{Estado|Leído|Leyendo|Pendiente}\n :END: \n" :empty-lines 1 :prepend t)
-            ("d" "Dailies" entry (file+datetree org-default-notes-file)
-             "* %^{Description} %^g\n Added: %U\n\n %?")
-            ("b" "Bookmark (Clipboard)" entry (file+olp org-default-notes-file "Bookmarks")
-             "* %(org-cliplink-capture) %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n- %?\n" :empty-lines 1 :prepend t)))
-    (add-hook 'org-capture-mode-hook #'org-id-get-create)
+     ;; Capture templates
+     (setq org-default-notes-file (concat org-directory "/Notas.org"))
+     (setq org-capture-templates
+           `(("f" "Fast Note" entry (file+olp org-default-notes-file "Inbox")
+              "* %?\n  %U\n  %i" :empty-lines 1)
+             ("t" "Tasks" entry (file+olp org-default-notes-file "Inbox")
+              "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+             ("r" "Reads" entry (file+olp org-default-notes-file "Libros" "Lista Lectura")
+              "*** %\\1 %?\n :PROPERTIES:\n :Título: %^{Título}\n :Subtítulo: %^{Subtítulo}\n :Serie: %^{Serie}\n :Autor: %^{Autor [Apellido, Nombre]}\n :Año: %^{Año}\n :Categoría: %^{Categoría}\n :Puntuación: %^{Puntuación [1-5]}\n :Fecha: %^{Fecha Lectura [dd/mm/aaaa]}\n :Estado: %^{Estado|Leído|Leyendo|Pendiente}\n :END: \n" :empty-lines 1 :prepend t)
+             ("d" "Dailies" entry (file+datetree org-default-notes-file)
+              "* %^{Description} %^g\n Added: %U\n\n %?")
+             ("b" "Bookmark (Clipboard)" entry (file+olp org-default-notes-file "Bookmarks")
+              "* %(org-cliplink-capture) %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n- %?\n" :empty-lines 1 :prepend t)))
+     (add-hook 'org-capture-mode-hook #'org-id-get-create)
 
-    ;; Set global key for capture
-    (define-key global-map (kbd "C-c r")
-      (lambda () (interactive) (org-capture nil "r")))
-    (define-key global-map (kbd "C-c t")
-      (lambda () (interactive) (org-capture nil "t")))
-    (define-key global-map (kbd "C-c b")
-      (lambda () (interactive) (org-capture nil "b")))
-    (define-key global-map (kbd "C-c d")
-      (lambda () (interactive) (org-capture nil "d"))))
+     ;; Set global key for capture
+     (define-key global-map (kbd "C-c r")
+       (lambda () (interactive) (org-capture nil "r")))
+     (define-key global-map (kbd "C-c t")
+       (lambda () (interactive) (org-capture nil "t")))
+     (define-key global-map (kbd "C-c b")
+       (lambda () (interactive) (org-capture nil "b")))
+     (define-key global-map (kbd "C-c d")
+       (lambda () (interactive) (org-capture nil "d"))))
 
 #+end_src
 

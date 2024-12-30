@@ -835,7 +835,7 @@ BEGIN and END specify the region boundaries."
   (setq org-habit-graph-column 60)
 
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "ACTIVE(a!)" "WAITING(w@/!)" "DELEGATED(d@/!)" "|" "DONE(D!)" "CANCELLED(C@)")
+        '((sequence "TODO(t)" "ACTIVE(a!)" "WAITING(w@/!)" "DELEGATED(d@/!)" "SOMEDAY(s!)" "|" "DONE(D!)" "CANCELLED(C@)")
           (sequence "LEYENDO(y)" "|" "LEÍDO(i)")))
 
   (setq org-todo-keyword-faces
@@ -843,6 +843,7 @@ BEGIN and END specify the region boundaries."
           ("ACTIVE".(:foreground "LightSeaGreen" :weight bold))
           ("WAITING".(:foreground "peru" :weight bold))
           ("DELEGATED".(:foreground "CornflowerBlue" :weight bold))
+          ("SOMEDAY".(:foreground "dark violet" :weight bold))
           ("DONE".(:foreground "LightGrey" :weight bold))
           ("CANCELLED".(:foreground "IndianRed" :weight bold))
           ("LEYENDO".(:foreground "peru" :weight bold))
@@ -880,7 +881,8 @@ BEGIN and END specify the region boundaries."
             (todo "TODO" ((org-agenda-overriding-header "Todo Tasks")))
             (todo "ACTIVE" ((org-agenda-overriding-header "Active Tasks")))
             (todo "WAITING" ((org-agenda-overriding-header "Waiting Tasks")))
-            (todo "DELEGATED" ((org-agenda-overriding-header "Delegated Tasks")))))
+            (todo "DELEGATED" ((org-agenda-overriding-header "Delegated Tasks")))
+            (todo "SOMEDAY" ((org-agenda-overriding-header "Someday Tasks")))))
 
           ("w" "Workflow Status"
            ((todo "TODO"
@@ -894,6 +896,9 @@ BEGIN and END specify the region boundaries."
                    (org-agenda-files org-agenda-files)))
             (todo "DELEGATED"
                   ((org-agenda-overriding-header "Delegated on External")
+                   (org-agenda-files org-agenda-files)))
+            (todo "SOMEDAY"
+                  ((org-agenda-overriding-header "Maybe do Someday")
                    (org-agenda-files org-agenda-files)))
             (todo "DONE"
                   ((org-agenda-overriding-header "Completed Tasks")
