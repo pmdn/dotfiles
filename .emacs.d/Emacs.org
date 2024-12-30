@@ -200,6 +200,13 @@ Funtions to be used in the config file.
     (pop-to-buffer buf)))
 #+end_src
 
+#+begin_src emacs-lisp
+  (defun pmdn/reload-emacs-configuration ()
+    "Reload the 'init.el' configuration file."
+    (interactive)
+    (load-file "~/.emacs.d/init.el"))
+#+end_src
+
 * Basic UI configuration
 
 This section configures basic UI settings that remove unneeded elements to make Emacs look a lot more minimal and modern.  If you're just getting started in Emacs, the menu bar might be helpful so you can remove the =(menu-bar-mode -1)= line if you'd like to still see that.

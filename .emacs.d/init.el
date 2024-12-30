@@ -139,6 +139,11 @@ BEGIN and END specify the region boundaries."
       (funcall (cdr (assoc mode-char pmdn/tmp-buffer-mode-alist))))
     (pop-to-buffer buf)))
 
+(defun pmdn/reload-emacs-configuration ()
+  "Reload the 'init.el' configuration file."
+  (interactive)
+  (load-file "~/.emacs.d/init.el"))
+
 ;; UTF-8 everywhere
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
