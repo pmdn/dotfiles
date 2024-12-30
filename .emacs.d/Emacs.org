@@ -173,31 +173,31 @@ Funtions to be used in the config file.
 #+end_src
 
 #+begin_src emacs-lisp
-(defcustom pmdn/tmp-buffer-mode-alist
-  '((?o . org-mode)
-    (?t . text-mode)
-    (?m . markdown-mode)
-    (?l . lisp-interaction-mode))
-  "List of major modes for temporary buffers and their hotkeys."
-  :type '(alist :key-type character :value-type symbol))
+  (defcustom pmdn/tmp-buffer-mode-alist
+    '((?o . org-mode)
+      (?t . text-mode)
+      (?m . markdown-mode)
+      (?l . lisp-interaction-mode))
+    "List of major modes for temporary buffers and their hotkeys."
+    :type '(alist :key-type character :value-type symbol))
 
-(defun pmdn/tmp-buffer-completion-table ()
-  "Create completion table for temporary buffer modes."
-  (mapcar (lambda (item)
-            (cons (format "%c: %s" (car item) (cdr item))
-                  (car item)))
-          pmdn/tmp-buffer-mode-alist))
+  (defun pmdn/tmp-buffer-completion-table ()
+    "Create completion table for temporary buffer modes."
+    (mapcar (lambda (item)
+              (cons (format "%c: %s" (car item) (cdr item))
+                    (car item)))
+            pmdn/tmp-buffer-mode-alist))
 
-(defun pmdn/tmp-buffer ()
-  "Open temporary buffer in specified major mode."
-  (interactive)
-  (let* ((completion-table (pmdn/tmp-buffer-completion-table))
-         (choice (completing-read "Select mode: " completion-table nil t))
-         (mode-char (cdr (assoc choice completion-table)))
-         (buf (generate-new-buffer "*tmp*")))
-    (with-current-buffer buf
-      (funcall (cdr (assoc mode-char pmdn/tmp-buffer-mode-alist))))
-    (pop-to-buffer buf)))
+  (defun pmdn/tmp-buffer ()
+    "Open temporary buffer in specified major mode."
+    (interactive)
+    (let* ((completion-table (pmdn/tmp-buffer-completion-table))
+           (choice (completing-read "Select mode: " completion-table nil t))
+           (mode-char (cdr (assoc choice completion-table)))
+           (buf (generate-new-buffer "*tmp*")))
+      (with-current-buffer buf
+        (funcall (cdr (assoc mode-char pmdn/tmp-buffer-mode-alist))))
+      (pop-to-buffer buf)))
 #+end_src
 
 #+begin_src emacs-lisp
