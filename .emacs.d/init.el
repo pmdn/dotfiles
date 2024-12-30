@@ -953,7 +953,8 @@ BEGIN and END specify the region boundaries."
     (python . t)
     (lisp . t)
     (scheme . t)
-    (shell . t)))
+    (shell . t)
+    (C .t)))
 
 (push '("conf-unix" . conf-unix) org-src-lang-modes)
 
@@ -966,6 +967,7 @@ BEGIN and END specify the region boundaries."
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("li" . "src lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("cc" . "src c"))
   ;; For more complicated expansions now ~tempo-define-template must be used. n: newline, p: point after expansion
   (tempo-define-template "org-header"
        '("#+TITLE: " p n
