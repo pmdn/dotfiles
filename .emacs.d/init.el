@@ -113,6 +113,32 @@ BEGIN and END specify the region boundaries."
             ;; If not preceded by period, replace newline with space
             (replace-match " ")))))))
 
+(defcustom pmdn/tmp-buffer-mode-alist
+  '((?o . org-mode)
+    (?t . text-mode)
+    (?m . markdown-mode)
+    (?l . lisp-interaction-mode))
+  "List of major modes for temporary buffers and their hotkeys."
+  :type '(alist :key-type character :value-type symbol))
+
+(defun pmdn/tmp-buffer-completion-table ()
+  "Create completion table for temporary buffer modes."
+  (mapcar (lambda (item)
+            (cons (format "%c: %s" (car item) (cdr item))
+                  (car item)))
+          pmdn/tmp-buffer-mode-alist))
+
+(defun pmdn/tmp-buffer ()
+  "Open temporary buffer in specified major mode."
+  (interactive)
+  (let* ((completion-table (pmdn/tmp-buffer-completion-table))
+         (choice (completing-read "Select mode: " completion-table nil t))
+         (mode-char (cdr (assoc choice completion-table)))
+         (buf (generate-new-buffer "*tmp*")))
+    (with-current-buffer buf
+      (funcall (cdr (assoc mode-char pmdn/tmp-buffer-mode-alist))))
+    (pop-to-buffer buf)))
+
 ;; UTF-8 everywhere
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
@@ -241,6 +267,7 @@ BEGIN and END specify the region boundaries."
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c e") 'pulsar-pulse-line)
 (global-set-key (kbd "C-c j") 'pmdn/remove-non-sentence-breaks)
+(global-set-key (kbd "C-c C-t") 'pmdn/tmp-buffer)
 
 ;; modus themes configuration
 (use-package modus-themes
