@@ -144,6 +144,30 @@ BEGIN and END specify the region boundaries."
   (interactive)
   (load-file "~/.emacs.d/init.el"))
 
+(defun pmdn/keyboard-quit-dwim ()
+  "Do-What-I-Mean behaviour for a general `keyboard-quit'from Prot.
+
+The generic `keyboard-quit' does not do the expected thing when
+the minibuffer is open.  Whereas we want it to close the
+minibuffer, even without explicitly focusing it.
+
+The DWIM behaviour of this command is as follows:
+
+- When the region is active, disable it.
+- When a minibuffer is open, but not focused, close the minibuffer.
+- When the Completions buffer is selected, close it.
+- In every other case use the regular `keyboard-quit'."
+  (interactive)
+  (cond
+   ((region-active-p)
+    (keyboard-quit))
+   ((derived-mode-p 'completion-list-mode)
+    (delete-completion-window))
+   ((> (minibuffer-depth) 0)
+    (abort-recursive-edit))
+   (t
+    (keyboard-quit))))
+
 ;; UTF-8 everywhere
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
@@ -273,6 +297,7 @@ BEGIN and END specify the region boundaries."
 (global-set-key (kbd "C-c e") 'pulsar-pulse-line)
 (global-set-key (kbd "C-c j") 'pmdn/remove-non-sentence-breaks)
 (global-set-key (kbd "C-c C-t") 'pmdn/tmp-buffer)
+(global-set-key (kbd "C-g") 'pmdn/keyboard-quit-dwim)
 
 ;; modus themes configuration
 (use-package modus-themes
