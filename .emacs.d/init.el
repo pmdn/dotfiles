@@ -852,7 +852,7 @@ The DWIM behaviour of this command is as follows:
   (setq org-agenda-files
         (list
          (concat org-directory "/Notas.org")
-         (concat org-directory "/phone/InboxMovil.org")))
+         (concat org-directory "/InboxMovil.org")))
   (setq org-archive-location (concat org-directory "/Archivo.org::datetree/"))
 
   (require 'org-habit)
@@ -932,6 +932,11 @@ The DWIM behaviour of this command is as follows:
                   ((org-agenda-overriding-header "Cancelled Tasks")
                    (org-agenda-files org-agenda-files)))))
 
+          ("b" "Bookmarks"
+           ((tags
+             "%bookmark"
+             ((org-agenda-overriding-header "Bookmark system")))))
+          
           ("r" "Needs Refile"
            ((tags
              "refile"
