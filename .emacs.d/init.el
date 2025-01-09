@@ -1427,8 +1427,7 @@ more-helpful local prompt."
 ;; markdown-mode configuration
 (use-package markdown-mode
   :ensure t
-  :mode ("\\.md\\'" . markdown-mode)
-  :hook (markdown-mode . auto-fill-mode))
+  :mode ("\\.md\\'" . markdown-mode))
 
 ;; csv-mode configuration
 (use-package csv-mode

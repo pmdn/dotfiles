@@ -1986,8 +1986,7 @@ For Guile, [[https://gitlab.com/emacs-geiser/guile][geise-guile]] will be instal
   ;; markdown-mode configuration
   (use-package markdown-mode
     :ensure t
-    :mode ("\\.md\\'" . markdown-mode)
-    :hook (markdown-mode . auto-fill-mode))
+    :mode ("\\.md\\'" . markdown-mode))
 #+end_src
 
 ** CSV
