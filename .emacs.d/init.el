@@ -168,6 +168,15 @@ The DWIM behaviour of this command is as follows:
    (t
     (keyboard-quit))))
 
+(defun pmdn/org-export-output-file-name-modified (orig-fun extension &optional subtreep pub-dir)
+  "Set org export directory, even when narrowing (otherwise, '#+EXPORT_FILE_NAME:' would be ok)"
+  (unless pub-dir
+    (setq pub-dir "exports")
+    (unless (file-directory-p pub-dir)
+      (make-directory pub-dir)))
+  (apply orig-fun extension subtreep pub-dir nil))
+(advice-add 'org-export-output-file-name :around #'pmdn/org-export-output-file-name-modified)
+
 ;; User interface
 (menu-bar-mode -1)          ; Disable the menu bar
 (scroll-bar-mode -1)        ; Disable visible scrollbar
