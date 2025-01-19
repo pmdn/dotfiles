@@ -250,13 +250,12 @@ The DWIM behaviour of this command is as follows:
 (setq tab-bar-close-button-show nil)       ;; hide tab close / X button
 (setq tab-bar-new-tab-choice "*dashboard*");; buffer to show in new tabs
 (setq tab-bar-tab-hints t)                 ;; show tab numbers
-(setq tab-bar-separator "")                ;; separator
+(setq tab-bar-separator " ")                ;; separator
 (setq tab-bar-format '(tab-bar-format-menu-bar
                        tab-bar-format-tabs
                        tab-bar-separator)) ;; elements to include in bar
 (setq tab-bar-select-tab-modifiers '(meta));; fast selection
 (setq tab-bar-new-tab-to 'rightmost)       ;; placement of new tab
-(set-face-attribute 'tab-bar nil :foreground "DarkGray")
 ;;To make ediff to be horizontally split
 (setq ediff-split-window-function 'split-window-horizontally)
 ;;To make ediff operate on selected-frame
