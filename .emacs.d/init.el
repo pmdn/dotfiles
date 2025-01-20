@@ -177,6 +177,12 @@ The DWIM behaviour of this command is as follows:
   (apply orig-fun extension subtreep pub-dir nil))
 (advice-add 'org-export-output-file-name :around #'pmdn/org-export-output-file-name-modified)
 
+;; UTF-8 everywhere
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+
 ;; User interface
 (menu-bar-mode -1)          ; Disable the menu bar
 (scroll-bar-mode -1)        ; Disable visible scrollbar
