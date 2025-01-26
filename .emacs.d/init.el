@@ -827,6 +827,9 @@ The DWIM behaviour of this command is as follows:
   (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
   (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
 
+;; Enable Markdown export
+(eval-after-load "org" '(require 'ox-md nil t))
+
 (use-package org
   :pin elpa
   :hook (org-mode . pmdn/org-mode-setup)
